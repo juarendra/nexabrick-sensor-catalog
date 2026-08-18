@@ -1,0 +1,956 @@
+{
+  "schemaVersion": 1,
+  "generatedFrom": {
+    "repository": "https://github.com/GSPETech/Nexabrick_Firmware",
+    "commit": "64431d906d3d5bec9e895d4d80c7a8bd6eb87956",
+    "auditedAt": "2026-08-18"
+  },
+  "variants": [
+    {
+      "key": "micro",
+      "name": "Nexabrick Micro",
+      "description": "Base firmware, single sensor support.",
+      "capacity": 1,
+      "registerModel": {
+        "slotCount": 1,
+        "registersPerSlot": 11,
+        "firstHoldingRegister": 40001
+      },
+      "protocols": [
+        { "name": "Modbus RTU", "status": "active" },
+        { "name": "CANbus", "status": "active" },
+        { "name": "MQTT", "status": "active" }
+      ],
+      "source": { "path": "Nexabrick Micro/main/slave.cpp" }
+    },
+    {
+      "key": "micro-rnd",
+      "name": "Nexabrick Micro RND",
+      "description": "R&D branch with newest sensors.",
+      "capacity": 1,
+      "registerModel": {
+        "slotCount": 1,
+        "registersPerSlot": 12,
+        "firstHoldingRegister": 40001
+      },
+      "protocols": [
+        { "name": "Modbus RTU", "status": "active" },
+        { "name": "CANbus", "status": "active" },
+        { "name": "MQTT", "status": "active" }
+      ],
+      "source": { "path": "Nexabrick Micro RND/main/slave.cpp" }
+    },
+    {
+      "key": "micro-duo",
+      "name": "Nexabrick Micro Duo",
+      "description": "Dual-sensor capable firmware.",
+      "capacity": 2,
+      "registerModel": {
+        "slotCount": 2,
+        "registersPerSlot": 11,
+        "firstHoldingRegister": 40001
+      },
+      "protocols": [
+        { "name": "Modbus RTU", "status": "active" },
+        { "name": "CANbus", "status": "active" },
+        { "name": "MQTT", "status": "active" }
+      ],
+      "source": { "path": "Nexabrick Micro Duo/main/slave.cpp" }
+    },
+    {
+      "key": "ccu",
+      "name": "Nexabrick CCU",
+      "description": "Coordinator Control Unit with multi-sensor support.",
+      "capacity": 10,
+      "registerModel": {
+        "slotCount": 10,
+        "registersPerSlot": 10,
+        "firstHoldingRegister": 40001
+      },
+      "protocols": [
+        { "name": "Modbus RTU", "status": "active" },
+        { "name": "CANbus", "status": "active" },
+        { "name": "MQTT", "status": "active" },
+        { "name": "LoRa", "status": "active" },
+        { "name": "Zigbee", "status": "active" },
+        { "name": "SNMP", "status": "incomplete" },
+        { "name": "Modbus-TCP", "status": "incomplete" }
+      ],
+      "source": { "path": "Nexabrick CCU/main/slave.cpp" }
+    },
+    {
+      "key": "micro-modular",
+      "name": "Nexabrick Micro Modular",
+      "description": "Per-slot MCU modules running specific sensors.",
+      "capacity": 1,
+      "registerModel": {
+        "slotCount": 1,
+        "registersPerSlot": null,
+        "firstHoldingRegister": null
+      },
+      "protocols": [
+        { "name": "TBUS UART", "status": "active" }
+      ],
+      "source": { "path": "Nexabrick Micro Modular/README.md" }
+    }
+  ],
+  "auxiliarySystems": [
+    {
+      "id": 999,
+      "slug": "battery-monitor",
+      "displayName": "Always-On Battery Monitor",
+      "softwareName": "battery_monitor",
+      "aliases": [],
+      "category": "power",
+      "summary": "Sistem pembacaan tegangan baterai yang selalu aktif di semua varian.",
+      "purpose": "Memantau status daya internal tanpa menghabiskan slot ID sensor utama.",
+      "selectable": false,
+      "deviceType": "auxiliary",
+      "physicalParts": [
+        {
+          "manufacturer": "N/A",
+          "part": "ADC1 CH0",
+          "role": "voltage reader",
+          "officialUrl": null
+        }
+      ],
+      "measurements": [
+        { "key": "voltage_v", "label": "Voltage", "unit": "V" },
+        { "key": "percent", "label": "Percent", "unit": "%" },
+        { "key": "adc_mv", "label": "ADC raw", "unit": "mV" }
+      ],
+      "variantSupport": {
+        "micro": { "status": "auxiliary", "component": "components/battery_monitor", "mqttDeviceName": "Sensor_Battery" },
+        "micro-rnd": { "status": "auxiliary", "component": "components/battery_monitor", "mqttDeviceName": "Sensor_Battery" },
+        "micro-duo": { "status": "auxiliary", "component": "components/battery_monitor", "mqttDeviceName": "Sensor_Battery" },
+        "ccu": { "status": "auxiliary", "component": "components/battery_monitor", "mqttDeviceName": "Sensor_Battery" }
+      },
+      "confidence": "confirmed",
+      "conflicts": [],
+      "evidence": [
+        { "type": "firmware", "path": "Nexabrick Micro RND/main/slave.cpp", "lines": "2245-2287" }
+      ]
+    }
+  ],
+  "devices": [
+    {
+      "id": 0,
+      "slug": "no-sensor",
+      "displayName": "No Sensor",
+      "softwareName": "No_Sensor",
+      "aliases": [],
+      "category": "sentinel",
+      "summary": "ID khusus untuk menandakan slot kosong atau belum terkonfigurasi.",
+      "purpose": "Menghentikan proses inisialisasi agar MCU tidak membaca pin kosong.",
+      "selectable": true,
+      "deviceType": "sentinel",
+      "physicalParts": [],
+      "measurements": [],
+      "variantSupport": {
+        "micro": { "status": "active" },
+        "micro-rnd": { "status": "active" },
+        "micro-duo": { "status": "active" },
+        "ccu": { "status": "unsupported" },
+        "micro-modular": { "status": "unsupported" }
+      },
+      "confidence": "confirmed",
+      "conflicts": [
+        "CCU tidak mendefinisikan ID 0 dalam listSensors-nya secara implisit, namun parsing NVS menolaknya."
+      ],
+      "evidence": [
+        { "type": "firmware", "path": "Nexabrick Micro RND/main/slave.cpp", "lines": "187" }
+      ]
+    },
+    {
+      "id": 1,
+      "slug": "bme680",
+      "displayName": "BME680 Environmental Sensor",
+      "softwareName": "BME680",
+      "aliases": [],
+      "category": "environmental",
+      "summary": "Sensor komprehensif untuk suhu, kelembaban, tekanan, dan gas resistance.",
+      "purpose": "Mengukur kualitas udara ruangan dan lingkungan umum.",
+      "selectable": true,
+      "deviceType": "sensor",
+      "physicalParts": [
+        {
+          "manufacturer": "Bosch",
+          "part": "BME680",
+          "role": "environmental sensor",
+          "officialUrl": "https://www.bosch-sensortec.com/products/environmental-sensors/gas-sensors/bme680/"
+        }
+      ],
+      "measurements": [
+        { "key": "temperature", "label": "Temperature", "unit": "C" },
+        { "key": "humidity", "label": "Humidity", "unit": "%" },
+        { "key": "pressure", "label": "Pressure", "unit": "hPa" },
+        { "key": "gas_resistance", "label": "Gas Resistance", "unit": "Ohm" }
+      ],
+      "variantSupport": {
+        "micro": { "status": "active", "task": "readingSensorBME680", "component": "components/bme680", "mqttDeviceName": "RADING BME680", "interfaces": [{"bus":"I2C","address":"0x77"}] },
+        "micro-rnd": { "status": "active", "task": "readingSensorBME680", "component": "components/bme680", "mqttDeviceName": "Sensor_EnvGas_BME680", "interfaces": [{"bus":"I2C","address":"0x77"}] },
+        "micro-duo": { "status": "active", "task": "readingSensorBME680", "component": "components/bme680", "mqttDeviceName": "RADING BME680", "interfaces": [{"bus":"I2C","address":"0x77"}] },
+        "ccu": { "status": "active", "task": "readingSensorBME680", "component": "components/bme680", "mqttDeviceName": "BME680_Sensor", "interfaces": [{"bus":"I2C","address":"0x77"}] },
+        "micro-modular": { "status": "unsupported" }
+      },
+      "confidence": "confirmed",
+      "conflicts": [],
+      "evidence": [
+        { "type": "firmware", "path": "Nexabrick Micro RND/main/slave.cpp", "lines": "1242-1311" }
+      ]
+    },
+    {
+      "id": 2,
+      "slug": "sht21-si7021",
+      "displayName": "Si7021 / SHT21 Temperature & Humidity",
+      "softwareName": "SHT21",
+      "aliases": ["Si7021"],
+      "category": "environmental",
+      "summary": "Sensor suhu dan kelembaban presisi menggunakan driver Si7021.",
+      "purpose": "Pembacaan iklim dasar dengan modul I2C standar.",
+      "selectable": true,
+      "deviceType": "sensor",
+      "physicalParts": [
+        {
+          "manufacturer": "Silicon Labs",
+          "part": "Si7021",
+          "role": "sensor",
+          "officialUrl": "https://www.silabs.com/sensors/humidity/si7021"
+        }
+      ],
+      "measurements": [
+        { "key": "temperature", "label": "Temperature", "unit": "C" },
+        { "key": "humidity", "label": "Humidity", "unit": "%" }
+      ],
+      "variantSupport": {
+        "micro": { "status": "active", "task": "readingSensorSHT21", "component": "components/si7021", "mqttDeviceName": "RADING SHT21", "interfaces": [{"bus":"I2C","address":"0x40"}] },
+        "micro-rnd": { "status": "active", "task": "readingSensorSHT21", "component": "components/si7021", "mqttDeviceName": "Sensor_TempHum_SHT21", "interfaces": [{"bus":"I2C","address":"0x40"}] },
+        "micro-duo": { "status": "active", "task": "readingSensorSHT21", "component": "components/si7021", "mqttDeviceName": "RADING SHT21", "interfaces": [{"bus":"I2C","address":"0x40"}] },
+        "ccu": { "status": "active", "task": "readingSensorSHT21", "component": "components/si7021", "mqttDeviceName": "SHT_Sensor", "interfaces": [{"bus":"I2C","address":"0x40"}] },
+        "micro-modular": { "status": "unsupported" }
+      },
+      "confidence": "confirmed",
+      "conflicts": [
+        "Nama di UI adalah SHT21, namun driver dan implementasi code aktualnya memanggil API si7021."
+      ],
+      "evidence": [
+        { "type": "firmware", "path": "Nexabrick Micro RND/main/slave.cpp", "lines": "986-1042" }
+      ]
+    },
+    {
+      "id": 3,
+      "slug": "dry-contact",
+      "displayName": "Dry Contact",
+      "softwareName": "Drycontact",
+      "aliases": [],
+      "category": "digital-io",
+      "summary": "Input digital pasif menggunakan GPIO standar.",
+      "purpose": "Deteksi saklar, limit switch, atau sinyal relay pasif eksternal.",
+      "selectable": true,
+      "deviceType": "sensor",
+      "physicalParts": [
+        {
+          "manufacturer": "N/A",
+          "part": "Generic GPIO",
+          "role": "input",
+          "officialUrl": null
+        }
+      ],
+      "measurements": [
+        { "key": "state", "label": "State", "unit": "enum" }
+      ],
+      "variantSupport": {
+        "micro": { "status": "active", "task": "readingGPIO", "component": "components/button", "mqttDeviceName": "GPIO READING", "interfaces": [{"bus":"GPIO","address":"32"}] },
+        "micro-rnd": { "status": "active", "task": "readingGPIO", "component": "components/button", "mqttDeviceName": "Sensor_DryContact_GPIO", "interfaces": [{"bus":"GPIO","address":"32"}] },
+        "micro-duo": { "status": "active", "task": "readingGPIO", "component": "components/button", "mqttDeviceName": "GPIO READING", "interfaces": [{"bus":"GPIO","address":"32"}] },
+        "ccu": { "status": "active", "task": "readingGPIO", "component": "components/button", "mqttDeviceName": "GPIO_Input", "interfaces": [{"bus":"GPIO","address":"12"}] },
+        "micro-modular": { "status": "unsupported" }
+      },
+      "confidence": "confirmed",
+      "conflicts": [
+        "Collision PIN: Di Micro RND, pin untuk DryContact, Waterleak, dan MotionSensor semuanya menggunakan GPIO32 secara hardcoded."
+      ],
+      "evidence": [
+        { "type": "firmware", "path": "Nexabrick Micro RND/main/slave.cpp", "lines": "155" }
+      ]
+    },
+    {
+      "id": 4,
+      "slug": "dht22-am2301",
+      "displayName": "DHT22 / AM2301 Temperature & Humidity",
+      "softwareName": "DHT22",
+      "aliases": ["AM2301"],
+      "category": "environmental",
+      "summary": "Sensor suhu dan kelembaban murah dengan komunikasi one-wire.",
+      "purpose": "Pemantauan suhu dasar.",
+      "selectable": true,
+      "deviceType": "sensor",
+      "physicalParts": [
+        {
+          "manufacturer": "Aosong",
+          "part": "DHT22",
+          "role": "sensor",
+          "officialUrl": "https://cdn-shop.adafruit.com/datasheets/DHT22.pdf"
+        }
+      ],
+      "measurements": [
+        { "key": "temperature", "label": "Temperature", "unit": "C" },
+        { "key": "humidity", "label": "Humidity", "unit": "%" }
+      ],
+      "variantSupport": {
+        "micro": { "status": "active", "task": "readingSensorDHT22", "component": "components/dht", "mqttDeviceName": "RADING DHT22", "interfaces": [{"bus":"OneWire","address":"25"}] },
+        "micro-rnd": { "status": "active", "task": "readingSensorDHT22", "component": "components/dht", "mqttDeviceName": "Sensor_TempHum_DHT22", "interfaces": [{"bus":"OneWire","address":"25"}] },
+        "micro-duo": { "status": "active", "task": "readingSensorDHT22", "component": "components/dht", "mqttDeviceName": "RADING DHT22", "interfaces": [{"bus":"OneWire","address":"22"}] },
+        "ccu": { "status": "active", "task": "readingSensorDHT22", "component": "components/dht", "mqttDeviceName": "Sensor_DHT22", "interfaces": [{"bus":"OneWire","address":"32"}] },
+        "micro-modular": { "status": "unsupported" }
+      },
+      "confidence": "firmware-confirmed",
+      "conflicts": [
+        "Identitas rancu: UI memakai nama DHT22 namun konstanta C/C++ dikompile menggunakan tipe AM2301.",
+        "Implementasi GPIO pin secara tidak sengaja menggunakan makro I2C SCL, bukan pin dedicated."
+      ],
+      "evidence": [
+        { "type": "firmware", "path": "Nexabrick Micro RND/main/slave.cpp", "lines": "255" },
+        { "type": "firmware", "path": "Nexabrick Micro RND/main/slave.cpp", "lines": "912-953" }
+      ]
+    },
+    {
+      "id": 5,
+      "slug": "water-leak",
+      "displayName": "Water Leak Input",
+      "softwareName": "Waterleak",
+      "aliases": [],
+      "category": "digital-io",
+      "summary": "Deteksi kebocoran air via probe digital.",
+      "purpose": "Sistem peringatan dini kebocoran pada lantai server/ruang mesin.",
+      "selectable": true,
+      "deviceType": "sensor",
+      "physicalParts": [
+        {
+          "manufacturer": "N/A",
+          "part": "Generic Probe",
+          "role": "input",
+          "officialUrl": null
+        }
+      ],
+      "measurements": [
+        { "key": "state", "label": "State", "unit": "enum" }
+      ],
+      "variantSupport": {
+        "micro": { "status": "active", "task": "readingGPIO", "component": "components/button", "mqttDeviceName": "GPIO READING", "interfaces": [{"bus":"GPIO","address":"32"}] },
+        "micro-rnd": { "status": "active", "task": "readingGPIO", "component": "components/button", "mqttDeviceName": "Sensor_DryContact_GPIO", "interfaces": [{"bus":"GPIO","address":"32"}] },
+        "micro-duo": { "status": "active", "task": "readingGPIO", "component": "components/button", "mqttDeviceName": "GPIO READING", "interfaces": [{"bus":"GPIO","address":"32"}] },
+        "ccu": { "status": "active", "task": "readingGPIO", "component": "components/button", "mqttDeviceName": "GPIO_Input", "interfaces": [{"bus":"GPIO","address":"12"}] },
+        "micro-modular": { "status": "unsupported" }
+      },
+      "confidence": "confirmed",
+      "conflicts": [
+        "MQTT pada Micro RND terkirim sebagai 'Sensor_DryContact_GPIO' sehingga identitas alarm tidak terbedakan."
+      ],
+      "evidence": [
+        { "type": "firmware", "path": "Nexabrick Micro RND/main/slave.cpp", "lines": "156" }
+      ]
+    },
+    {
+      "id": 6,
+      "slug": "motion-input",
+      "displayName": "Motion Input",
+      "softwareName": "MotionSensor",
+      "aliases": ["PIR"],
+      "category": "digital-io",
+      "summary": "Deteksi gerak menggunakan modul digital PIR (Passive Infrared).",
+      "purpose": "Deteksi kehadiran dasar dan keamanan.",
+      "selectable": true,
+      "deviceType": "sensor",
+      "physicalParts": [
+        {
+          "manufacturer": "N/A",
+          "part": "PIR Module",
+          "role": "input",
+          "officialUrl": null
+        }
+      ],
+      "measurements": [
+        { "key": "state", "label": "State", "unit": "enum" }
+      ],
+      "variantSupport": {
+        "micro": { "status": "active", "task": "readingGPIO", "component": "components/button", "mqttDeviceName": "GPIO READING", "interfaces": [{"bus":"GPIO","address":"32"}] },
+        "micro-rnd": { "status": "active", "task": "readingGPIO", "component": "components/button", "mqttDeviceName": "Sensor_DryContact_GPIO", "interfaces": [{"bus":"GPIO","address":"32"}] },
+        "micro-duo": { "status": "active", "task": "readingGPIO", "component": "components/button", "mqttDeviceName": "GPIO READING", "interfaces": [{"bus":"GPIO","address":"32"}] },
+        "ccu": { "status": "active", "task": "readingGPIO", "component": "components/button", "mqttDeviceName": "GPIO_Input", "interfaces": [{"bus":"GPIO","address":"12"}] },
+        "micro-modular": { "status": "unsupported" }
+      },
+      "confidence": "confirmed",
+      "conflicts": [
+        "MQTT pada Micro RND terkirim sebagai 'Sensor_DryContact_GPIO'."
+      ],
+      "evidence": [
+        { "type": "firmware", "path": "Nexabrick Micro RND/main/slave.cpp", "lines": "157" }
+      ]
+    },
+    {
+      "id": 7,
+      "slug": "mpu6050",
+      "displayName": "MPU6050 IMU",
+      "softwareName": "accelGyro",
+      "aliases": [],
+      "category": "motion",
+      "summary": "Modul inersia 6-axis (Accelerometer + Gyroscope).",
+      "purpose": "Analisa getaran presisi dan rotasi.",
+      "selectable": true,
+      "deviceType": "sensor",
+      "physicalParts": [
+        {
+          "manufacturer": "InvenSense",
+          "part": "MPU6050",
+          "role": "IMU",
+          "officialUrl": "https://invensense.tdk.com/products/motion-tracking/6-axis/mpu-6050/"
+        }
+      ],
+      "measurements": [
+        { "key": "accel_x", "label": "Accel X", "unit": "g" },
+        { "key": "accel_y", "label": "Accel Y", "unit": "g" },
+        { "key": "accel_z", "label": "Accel Z", "unit": "g" },
+        { "key": "rotation_x", "label": "Gyro X", "unit": "rad/s" },
+        { "key": "rotation_y", "label": "Gyro Y", "unit": "rad/s" },
+        { "key": "rotation_z", "label": "Gyro Z", "unit": "rad/s" },
+        { "key": "temperature", "label": "Die Temp", "unit": "C" }
+      ],
+      "variantSupport": {
+        "micro": { "status": "active", "task": "readingSensorMPU6050", "component": "components/mpu6050", "mqttDeviceName": "Acceleration...", "interfaces": [{"bus":"I2C","address":"0x68/0x69"}] },
+        "micro-rnd": { "status": "active", "task": "readingSensorMPU6050", "component": "components/mpu6050", "mqttDeviceName": "Sensor_IMU_MPU6050", "interfaces": [{"bus":"I2C","address":"0x68/0x69"}] },
+        "micro-duo": { "status": "active", "task": "readingSensorMPU6050", "component": "components/mpu6050", "mqttDeviceName": "Acceleration...", "interfaces": [{"bus":"I2C","address":"0x68/0x69"}] },
+        "ccu": { "status": "active", "task": "readingSensorMPU6050", "component": "components/mpu6050", "mqttDeviceName": "Sensor_MPU6050", "interfaces": [{"bus":"I2C","address":"0x68/0x69"}] },
+        "micro-modular": { "status": "unsupported" }
+      },
+      "confidence": "confirmed",
+      "conflicts": [
+        "Pada versi Micro/Duo/CCU, register modbus diisikan cast float secara mentah ke uint16_t, sehingga nilai akselerasi (±2g) kehilangan desimal. Ini telah diperbaiki hanya di Micro RND."
+      ],
+      "evidence": [
+        { "type": "firmware", "path": "Nexabrick Micro RND/main/slave.cpp", "lines": "844-910" }
+      ]
+    },
+    {
+      "id": 8,
+      "slug": "tsl2561",
+      "displayName": "TSL2561 Ambient Light",
+      "softwareName": "luxSensor",
+      "aliases": [],
+      "category": "light",
+      "summary": "Sensor intensitas cahaya digital.",
+      "purpose": "Mengukur Lux cahaya ruangan.",
+      "selectable": true,
+      "deviceType": "sensor",
+      "physicalParts": [
+        {
+          "manufacturer": "AMS/TAOS",
+          "part": "TSL2561",
+          "role": "light sensor",
+          "officialUrl": "https://cdn-shop.adafruit.com/datasheets/TSL2561.pdf"
+        }
+      ],
+      "measurements": [
+        { "key": "lux", "label": "Illuminance", "unit": "Lux" }
+      ],
+      "variantSupport": {
+        "micro": { "status": "active", "task": "readingSensorTSL2561", "component": "components/tsl2561", "mqttDeviceName": "RADING TSL2561", "interfaces": [{"bus":"I2C","address":"0x39"}] },
+        "micro-rnd": { "status": "active", "task": "readingSensorTSL2561", "component": "components/tsl2561", "mqttDeviceName": "Sensor_Light_TSL2561", "interfaces": [{"bus":"I2C","address":"0x39"}] },
+        "micro-duo": { "status": "active", "task": "readingSensorTSL2561", "component": "components/tsl2561", "mqttDeviceName": "RADING TSL2561", "interfaces": [{"bus":"I2C","address":"0x39"}] },
+        "ccu": { "status": "active", "task": "readingSensorTSL2561", "component": "components/tsl2561", "mqttDeviceName": "TSL2561", "interfaces": [{"bus":"I2C","address":"0x39"}] },
+        "micro-modular": { "status": "unsupported" }
+      },
+      "confidence": "confirmed",
+      "conflicts": [],
+      "evidence": [
+        { "type": "firmware", "path": "Nexabrick Micro RND/main/slave.cpp", "lines": "712-752" }
+      ]
+    },
+    {
+      "id": 9,
+      "slug": "sht3x",
+      "displayName": "SHT3x Temperature & Humidity",
+      "softwareName": "SHT3x",
+      "aliases": ["SHT30", "SHT31", "SHT35"],
+      "category": "environmental",
+      "summary": "Sensor iklim seri SHT3x yang andal.",
+      "purpose": "Akurasi medium tinggi untuk data logistik / farmasi.",
+      "selectable": true,
+      "deviceType": "sensor",
+      "physicalParts": [
+        {
+          "manufacturer": "Sensirion",
+          "part": "SHT3x",
+          "role": "sensor",
+          "officialUrl": "https://sensirion.com/products/catalog/SHT31-DIS-B"
+        }
+      ],
+      "measurements": [
+        { "key": "temperature", "label": "Temperature", "unit": "C" },
+        { "key": "humidity", "label": "Humidity", "unit": "%" }
+      ],
+      "variantSupport": {
+        "micro": { "status": "active", "task": "readingSensorSHT3x", "component": "components/sht3x", "mqttDeviceName": "RADING SHT3x", "interfaces": [{"bus":"I2C","address":"0x77"}] },
+        "micro-rnd": { "status": "active", "task": "readingSensorSHT3x", "component": "components/sht3x", "mqttDeviceName": "Sensor_TempHum_SHT3x", "interfaces": [{"bus":"I2C","address":"0x44"}] },
+        "micro-duo": { "status": "active", "task": "readingSensorSHT3x", "component": "components/sht3x", "mqttDeviceName": "RADING SHT3x", "interfaces": [{"bus":"I2C","address":"0x77"}] },
+        "ccu": { "status": "active", "task": "readingSensorSHT3x", "component": "components/sht3x", "mqttDeviceName": "SHT_Sensor", "interfaces": [{"bus":"I2C","address":"0x77"}] },
+        "micro-modular": { "status": "unsupported" }
+      },
+      "confidence": "firmware-confirmed",
+      "conflicts": [
+        "Kecuali RND yang baru diperbaiki, versi firmware lainnya memaksakan alamat I2C 0x77 ke SHT3x yang merupakan address BME680, sehingga tidak akan bekerja tanpa perbaikan address."
+      ],
+      "evidence": [
+        { "type": "firmware", "path": "Nexabrick Micro RND/main/slave.cpp", "lines": "1044-1097" }
+      ]
+    },
+    {
+      "id": 10,
+      "slug": "sht4x",
+      "displayName": "SHT4x Temperature & Humidity",
+      "softwareName": "SHT4x",
+      "aliases": ["SHT40", "SHT41"],
+      "category": "environmental",
+      "summary": "Sensor iklim low-power generasi terbaru dari Sensirion.",
+      "purpose": "Akurasi ultra tinggi dengan konsumsi daya rendah.",
+      "selectable": true,
+      "deviceType": "sensor",
+      "physicalParts": [
+        {
+          "manufacturer": "Sensirion",
+          "part": "SHT4x",
+          "role": "sensor",
+          "officialUrl": "https://sensirion.com/products/catalog/SHT40-AD1B"
+        }
+      ],
+      "measurements": [
+        { "key": "temperature", "label": "Temperature", "unit": "C" },
+        { "key": "humidity", "label": "Humidity", "unit": "%" }
+      ],
+      "variantSupport": {
+        "micro": { "status": "active", "task": "readingSensorSHT4x", "component": "components/sht4x", "mqttDeviceName": "RADING SHT4x", "interfaces": [{"bus":"I2C","address":"0x44"}] },
+        "micro-rnd": { "status": "active", "task": "readingSensorSHT4x", "component": "components/sht4x", "mqttDeviceName": "Sensor_TempHum_SHT4x", "interfaces": [{"bus":"I2C","address":"0x44"}] },
+        "micro-duo": { "status": "active", "task": "readingSensorSHT4x", "component": "components/sht4x", "mqttDeviceName": "RADING SHT4x", "interfaces": [{"bus":"I2C","address":"0x44"}] },
+        "ccu": { "status": "active", "task": "readingSensorSHT4x", "component": "components/sht4x", "mqttDeviceName": "SHT_Sensor", "interfaces": [{"bus":"I2C","address":"0x44"}] },
+        "micro-modular": { "status": "unsupported" }
+      },
+      "confidence": "confirmed",
+      "conflicts": [],
+      "evidence": [
+        { "type": "firmware", "path": "Nexabrick Micro RND/main/slave.cpp", "lines": "1099-1150" }
+      ]
+    },
+    {
+      "id": 11,
+      "slug": "ld2410",
+      "displayName": "LD2410 Presence Radar",
+      "softwareName": "LD2410",
+      "aliases": ["Radar"],
+      "category": "presence",
+      "summary": "Sensor radar mmWave untuk deteksi presensi dan nafas.",
+      "purpose": "Mendeteksi okupansi ruangan tanpa butuh gerakan besar.",
+      "selectable": true,
+      "deviceType": "sensor",
+      "physicalParts": [
+        {
+          "manufacturer": "Hi-Link",
+          "part": "LD2410",
+          "role": "radar",
+          "officialUrl": "https://hlktech.net/index.php?id=1095"
+        }
+      ],
+      "measurements": [
+        { "key": "state", "label": "Target State", "unit": "enum" },
+        { "key": "motion_dist", "label": "Motion Dist", "unit": "cm" },
+        { "key": "rest_dist", "label": "Rest Dist", "unit": "cm" }
+      ],
+      "variantSupport": {
+        "micro": { "status": "active", "task": "readingSensorLD2410", "component": "components/ld2410_radar", "mqttDeviceName": "Sensor_Radar_LD2410", "interfaces": [{"bus":"I2C","address":"0x12"}] },
+        "micro-rnd": { "status": "active", "task": "readingSensorLD2410", "component": "components/ld2410_radar", "mqttDeviceName": "Sensor_Radar_LD2410", "interfaces": [{"bus":"I2C","address":"0x12"}] },
+        "micro-duo": { "status": "incomplete", "task": "readingSensorLD2410", "component": "components/ld2410_radar", "mqttDeviceName": "None", "interfaces": [{"bus":"I2C","address":"0x12"}] },
+        "ccu": { "status": "active", "task": "readingSensorLD2410", "component": "components/ld2410_radar", "mqttDeviceName": "LD2410_Radar", "interfaces": [{"bus":"UART","address":"256000 bps"}] },
+        "micro-modular": { "status": "unsupported" }
+      },
+      "confidence": "unresolved",
+      "conflicts": [
+        "Implementasi transport sangat berantakan: CCU dan komponen helper memakai protocol aslinya (UART 256000bps), sementara Micro/RND/Duo secara sengaja membaca dari STM32 I2C bridge di alamat 0x12 yang modulnya tidak terdokumentasi.",
+        "Modbus register mapping dibiarkan kosong di sebagian besar firmware."
+      ],
+      "evidence": [
+        { "type": "firmware", "path": "Nexabrick Micro RND/main/slave.cpp", "lines": "1152-1240" },
+        { "type": "firmware", "path": "Nexabrick CCU/main/slave.cpp", "lines": "2776-2852" }
+      ]
+    },
+    {
+      "id": 13,
+      "slug": "sm9333",
+      "displayName": "SM9333 Pressure & Temperature",
+      "softwareName": "SM9333",
+      "aliases": ["SM9332"],
+      "category": "pressure",
+      "summary": "Sensor tekanan udara/gas presisi.",
+      "purpose": "Aplikasi pneumatik dan pengukuran tekanan ruang medium.",
+      "selectable": true,
+      "deviceType": "sensor",
+      "physicalParts": [
+        {
+          "manufacturer": "SMI / TE",
+          "part": "SM9333",
+          "role": "pressure sensor",
+          "officialUrl": "https://www.te.com/en/products/sensors/pressure-sensors.html"
+        }
+      ],
+      "measurements": [
+        { "key": "pressure", "label": "Pressure", "unit": "Pa" },
+        { "key": "temperature", "label": "Temperature", "unit": "C" }
+      ],
+      "variantSupport": {
+        "micro": { "status": "incomplete", "task": "readingSensorSM9333", "component": "components/sm9333", "mqttDeviceName": "Sensor_Air_Pressure_1", "interfaces": [{"bus":"I2C","address":"0x6C"}] },
+        "micro-rnd": { "status": "active", "task": "readingSensorSM9333", "component": "components/sm9333", "mqttDeviceName": "Sensor_Pressure_SM9333", "interfaces": [{"bus":"I2C","address":"0x6C"}] },
+        "micro-duo": { "status": "incomplete", "task": "readingSensorSM9333", "component": "components/sm9333", "mqttDeviceName": "Sensor_Air_Pressure_1", "interfaces": [{"bus":"I2C","address":"0x6C"}] },
+        "ccu": { "status": "active", "task": "readingSensorSM9333", "component": "components/sm9333", "mqttDeviceName": "SM9333", "interfaces": [{"bus":"I2C","address":"0x6C"}] },
+        "micro-modular": { "status": "unsupported" }
+      },
+      "confidence": "firmware-confirmed",
+      "conflicts": [
+        "Ada kesalahan dokumentasi lama yang menamainya sebagai 'Smoke sensor' serta README yang mengeja 'sm9332'."
+      ],
+      "evidence": [
+        { "type": "firmware", "path": "Nexabrick Micro RND/main/slave.cpp", "lines": "662-710" }
+      ]
+    },
+    {
+      "id": 14,
+      "slug": "d6f-w04a1",
+      "displayName": "D6F-W04A1 Airflow",
+      "softwareName": "D6F_W04A1",
+      "aliases": [],
+      "category": "airflow",
+      "summary": "Sensor kecepatan angin dan flow udara berbasis analog.",
+      "purpose": "Deteksi ventilasi udara dalam saluran HVAC/server.",
+      "selectable": true,
+      "deviceType": "sensor",
+      "physicalParts": [
+        {
+          "manufacturer": "Omron",
+          "part": "D6F-W04A1",
+          "role": "analog flow sensor",
+          "officialUrl": "https://components.omron.com/us-en/products/sensors/MEMS-flow-sensors/D6F-W"
+        }
+      ],
+      "measurements": [
+        { "key": "flow_ms", "label": "Air Flow", "unit": "m/s" }
+      ],
+      "variantSupport": {
+        "micro": { "status": "declared-only", "task": "readingSensorD6F_W04A1", "component": "components/d6f_w04a1", "mqttDeviceName": "Sensor_Air_Pressure_1", "interfaces": [{"bus":"ADC","address":"GPIO34"}] },
+        "micro-rnd": { "status": "declared-only", "task": "readingSensorD6F_W04A1", "component": "components/d6f_w04a1", "mqttDeviceName": "Sensor_Airflow_D6F_W04A1", "interfaces": [{"bus":"ADC","address":"GPIO34"}] },
+        "micro-duo": { "status": "declared-only", "task": "readingSensorD6F_W04A1", "component": "components/d6f_w04a1", "mqttDeviceName": "Sensor_Air_Pressure_1", "interfaces": [{"bus":"ADC","address":"GPIO34"}] },
+        "ccu": { "status": "active", "task": "readingSensorD6F_W04A1", "component": "components/d6f_w04a1", "mqttDeviceName": "Sensor_Air_Pressure_1", "interfaces": [{"bus":"ADC","address":"GPIO34"}] },
+        "micro-modular": { "status": "unsupported" }
+      },
+      "confidence": "confirmed",
+      "conflicts": [
+        "Tidak tersambung ke `app_main` dispatch di hampir semua varian selain CCU.",
+        "MQTT label pada CCU menyesatkan ('Sensor_Air_Pressure_1')."
+      ],
+      "evidence": [
+        { "type": "firmware", "path": "Nexabrick Micro RND/components/d6f_w04a1/d6f_w04a1.h", "lines": "11" },
+        { "type": "firmware", "path": "Nexabrick CCU/main/slave.cpp", "lines": "1613-1653" }
+      ]
+    },
+    {
+      "id": 15,
+      "slug": "sps30",
+      "displayName": "SPS30 Particulate Matter",
+      "softwareName": "SPS30",
+      "aliases": [],
+      "category": "air-quality",
+      "summary": "Sensor optikal kualitas udara untuk partikel debu mikro.",
+      "purpose": "Deteksi polusi PM2.5 dan ukuran partikel secara akurat.",
+      "selectable": true,
+      "deviceType": "sensor",
+      "physicalParts": [
+        {
+          "manufacturer": "Sensirion",
+          "part": "SPS30",
+          "role": "PM sensor",
+          "officialUrl": "https://sensirion.com/products/catalog/SPS30"
+        }
+      ],
+      "measurements": [
+        { "key": "pm1_0", "label": "PM1.0", "unit": "ug/m3" },
+        { "key": "pm2_5", "label": "PM2.5", "unit": "ug/m3" },
+        { "key": "pm4_0", "label": "PM4.0", "unit": "ug/m3" },
+        { "key": "pm10_0", "label": "PM10.0", "unit": "ug/m3" }
+      ],
+      "variantSupport": {
+        "micro": { "status": "active", "task": "readingSensorSPS30", "component": "components/sps30", "mqttDeviceName": "SPS30 PM:", "interfaces": [{"bus":"I2C","address":"0x69"}] },
+        "micro-rnd": { "status": "active", "task": "readingSensorSPS30", "component": "components/sps30", "mqttDeviceName": "Sensor_AirQuality_SPS30", "interfaces": [{"bus":"I2C","address":"0x69"}] },
+        "micro-duo": { "status": "active", "task": "readingSensorSPS30", "component": "components/sps30", "mqttDeviceName": "SPS30 PM:", "interfaces": [{"bus":"I2C","address":"0x69"}] },
+        "ccu": { "status": "active", "task": "readingSensorSPS30", "component": "components/sps30", "mqttDeviceName": "SPS30 PM:", "interfaces": [{"bus":"I2C","address":"0x69"}] },
+        "micro-modular": { "status": "unsupported" }
+      },
+      "confidence": "confirmed",
+      "conflicts": [],
+      "evidence": [
+        { "type": "firmware", "path": "Nexabrick Micro RND/main/slave.cpp", "lines": "381-430" }
+      ]
+    },
+    {
+      "id": 16,
+      "slug": "sdp810",
+      "displayName": "SDP810 Differential Pressure",
+      "softwareName": "SDP810",
+      "aliases": [],
+      "category": "pressure",
+      "summary": "Sensor pengukur perbedaan dua titik tekanan udara.",
+      "purpose": "Sistem clean room, monitoring filter udara.",
+      "selectable": true,
+      "deviceType": "sensor",
+      "physicalParts": [
+        {
+          "manufacturer": "Sensirion",
+          "part": "SDP810-500Pa",
+          "role": "pressure sensor",
+          "officialUrl": "https://sensirion.com/products/catalog/SDP810-500Pa"
+        }
+      ],
+      "measurements": [
+        { "key": "diff_pressure", "label": "Diff Pressure", "unit": "Pa" },
+        { "key": "temperature", "label": "Temperature", "unit": "C" }
+      ],
+      "variantSupport": {
+        "micro": { "status": "active", "task": "readingSensorSDP810", "component": "components/sdp810", "mqttDeviceName": "SDP810", "interfaces": [{"bus":"I2C","address":"0x25"}] },
+        "micro-rnd": { "status": "active", "task": "readingSensorSDP810", "component": "components/sdp810", "mqttDeviceName": "Sensor_DiffPressure_SDP810", "interfaces": [{"bus":"I2C","address":"0x25"}] },
+        "micro-duo": { "status": "active", "task": "readingSensorSDP810", "component": "components/sdp810", "mqttDeviceName": "SDP810", "interfaces": [{"bus":"I2C","address":"0x25"}] },
+        "ccu": { "status": "active", "task": "readingSensorSDP810", "component": "components/sdp810", "mqttDeviceName": "SDP810_Sensor", "interfaces": [{"bus":"I2C","address":"0x25"}] },
+        "micro-modular": { "status": "unsupported" }
+      },
+      "confidence": "confirmed",
+      "conflicts": [
+        "Hanya Micro RND yang menyimpan temperature minus secara benar; varian lainnya membuang tanda (absolute) sebelum dikirim ke Modbus."
+      ],
+      "evidence": [
+        { "type": "firmware", "path": "Nexabrick Micro RND/main/slave.cpp", "lines": "672-720" }
+      ]
+    },
+    {
+      "id": 18,
+      "slug": "fs3000",
+      "displayName": "FS3000 Air Velocity",
+      "softwareName": "FS3000",
+      "aliases": [],
+      "category": "airflow",
+      "summary": "Sensor kecepatan udara I2C.",
+      "purpose": "Sistem manajemen udara pada data center.",
+      "selectable": true,
+      "deviceType": "sensor",
+      "physicalParts": [
+        {
+          "manufacturer": "Renesas",
+          "part": "FS3000-1005",
+          "role": "velocity sensor",
+          "officialUrl": "https://www.renesas.com/us/en/products/sensor-products/flow-sensors/fs3000-air-velocity-sensor-module"
+        }
+      ],
+      "measurements": [
+        { "key": "velocity", "label": "Velocity", "unit": "m/s" }
+      ],
+      "variantSupport": {
+        "micro": { "status": "active", "task": "readingSensorFS3000", "component": "components/fs3000", "mqttDeviceName": "FS3000", "interfaces": [{"bus":"I2C","address":"0x28"}] },
+        "micro-rnd": { "status": "active", "task": "readingSensorFS3000", "component": "components/fs3000", "mqttDeviceName": "Sensor_Airflow_FS3000", "interfaces": [{"bus":"I2C","address":"0x28"}] },
+        "micro-duo": { "status": "active", "task": "readingSensorFS3000", "component": "components/fs3000", "mqttDeviceName": "FS3000", "interfaces": [{"bus":"I2C","address":"0x28"}] },
+        "ccu": { "status": "active", "task": "readingSensorFS3000", "component": "components/fs3000", "mqttDeviceName": "FS3000_Sensor", "interfaces": [{"bus":"I2C","address":"0x28"}] },
+        "micro-modular": { "status": "unsupported" }
+      },
+      "confidence": "confirmed",
+      "conflicts": [],
+      "evidence": [
+        { "type": "firmware", "path": "Nexabrick Micro RND/main/slave.cpp", "lines": "722-776" }
+      ]
+    },
+    {
+      "id": 19,
+      "slug": "icp10111",
+      "displayName": "ICP-10111 Barometric Pressure",
+      "softwareName": "ICP10111",
+      "aliases": [],
+      "category": "pressure",
+      "summary": "Sensor absolut barometrik piezo-resistif.",
+      "purpose": "Altimeter dan pemantauan tekanan udara ruangan (Weather station).",
+      "selectable": true,
+      "deviceType": "sensor",
+      "physicalParts": [
+        {
+          "manufacturer": "TDK InvenSense",
+          "part": "ICP-10111",
+          "role": "barometric sensor",
+          "officialUrl": "https://invensense.tdk.com/products/icp-10111/"
+        }
+      ],
+      "measurements": [
+        { "key": "pressure", "label": "Pressure", "unit": "Pa" },
+        { "key": "temperature", "label": "Temperature", "unit": "C" }
+      ],
+      "variantSupport": {
+        "micro": { "status": "active", "task": "readingSensorICP10111", "component": "components/icp10111", "mqttDeviceName": "ICP10111", "interfaces": [{"bus":"I2C","address":"0x63"}] },
+        "micro-rnd": { "status": "active", "task": "readingSensorICP10111", "component": "components/icp10111", "mqttDeviceName": "Sensor_TempPressure_ICP10111", "interfaces": [{"bus":"I2C","address":"0x63"}] },
+        "micro-duo": { "status": "active", "task": "readingSensorICP10111", "component": "components/icp10111", "mqttDeviceName": "ICP10111", "interfaces": [{"bus":"I2C","address":"0x63"}] },
+        "ccu": { "status": "active", "task": "readingSensorICP10111", "component": "components/icp10111", "mqttDeviceName": "ICP10111_Sensor", "interfaces": [{"bus":"I2C","address":"0x63"}] },
+        "micro-modular": { "status": "unsupported" }
+      },
+      "confidence": "confirmed",
+      "conflicts": [
+        "Tekanan Pa secara normal mencapai 100000+ Pa, sehingga memotong nilai 16-bit Modbus saat ini. Overflow tidak ditangani oleh firmware."
+      ],
+      "evidence": [
+        { "type": "firmware", "path": "Nexabrick Micro RND/main/slave.cpp", "lines": "622-670" }
+      ]
+    },
+    {
+      "id": 20,
+      "slug": "tibbit-gpio",
+      "displayName": "TIBBIT GPIO Relay",
+      "softwareName": "GPIO_Relay",
+      "aliases": ["Tibbit"],
+      "category": "digital-io",
+      "summary": "Modul ekspansi I/O digital yang memiliki address I2C dinamis.",
+      "purpose": "Akses pin digital tambahan dan kontrol relay secara remote.",
+      "selectable": true,
+      "deviceType": "sensor",
+      "physicalParts": [
+        {
+          "manufacturer": "N/A",
+          "part": "TIBBIT Module",
+          "role": "I/O controller",
+          "officialUrl": null
+        }
+      ],
+      "measurements": [
+        { "key": "inputs", "label": "Inputs 0-3", "unit": "bit" },
+        { "key": "outputs", "label": "Output Mask", "unit": "bit" }
+      ],
+      "variantSupport": {
+        "micro": { "status": "active", "task": "readingSensorTIBBITGPIO", "component": "components/tibbit", "mqttDeviceName": "TIBBIT_GPIO", "interfaces": [{"bus":"I2C","address":"0x0C"}] },
+        "micro-rnd": { "status": "active", "task": "readingSensorTIBBITGPIO", "component": "components/tibbit", "mqttDeviceName": "TIBBIT_GPIO", "interfaces": [{"bus":"I2C","address":"0x0C"}] },
+        "micro-duo": { "status": "active", "task": "readingSensorTIBBITGPIO", "component": "components/tibbit", "mqttDeviceName": "TIBBIT_GPIO", "interfaces": [{"bus":"I2C","address":"0x0C"}] },
+        "ccu": { "status": "active", "task": "readingSensorTIBBITGPIO", "component": "components/tibbit", "mqttDeviceName": "TIBBIT_GPIO", "interfaces": [{"bus":"I2C","address":"0x0C"}] },
+        "micro-modular": { "status": "unsupported" }
+      },
+      "confidence": "firmware-confirmed",
+      "conflicts": [
+        "CCU juga memiliki FXL6408 expander di I2C 0x43 yang berjalan background, jangan dikacaukan dengan TIBBIT sensor ini."
+      ],
+      "evidence": [
+        { "type": "firmware", "path": "Nexabrick Micro RND/main/slave.cpp", "lines": "2333-2390" }
+      ]
+    },
+    {
+      "id": 21,
+      "slug": "opt3007",
+      "displayName": "OPT3007 Ambient Light",
+      "softwareName": "OPT3007YMFR",
+      "aliases": ["OPT300"],
+      "category": "light",
+      "summary": "Sensor intensitas cahaya ultra presisi I2C.",
+      "purpose": "Pengukuran pencahayaan akurat.",
+      "selectable": true,
+      "deviceType": "sensor",
+      "physicalParts": [
+        {
+          "manufacturer": "Texas Instruments",
+          "part": "OPT3007",
+          "role": "light sensor",
+          "officialUrl": "https://www.ti.com/product/OPT3007"
+        }
+      ],
+      "measurements": [
+        { "key": "lux", "label": "Lux", "unit": "Lux" }
+      ],
+      "variantSupport": {
+        "micro": { "status": "ui-only" },
+        "micro-rnd": { "status": "declared-only" },
+        "micro-duo": { "status": "ui-only" },
+        "ccu": { "status": "active", "task": "readingSensorOPT3007", "component": "components/opt3007ymfr", "mqttDeviceName": "OPT3007_LUX", "interfaces": [{"bus":"I2C","address":"0x45"}] },
+        "micro-modular": { "status": "unsupported" }
+      },
+      "confidence": "confirmed",
+      "conflicts": [
+        "ID ini bocor ke dalam listSensors Micro/Duo/RND dan web config-nya, meskipun komponen code aslinya hanya dikompilasi pada CCU."
+      ],
+      "evidence": [
+        { "type": "firmware", "path": "Nexabrick CCU/components/opt3007ymfr/opt3007ymfr.h", "lines": "38" },
+        { "type": "firmware", "path": "Nexabrick CCU/main/slave.cpp", "lines": "1022-1060" }
+      ]
+    },
+    {
+      "id": 25,
+      "slug": "iaq-combo",
+      "displayName": "IAQ Combo",
+      "softwareName": "IAQCombo",
+      "aliases": [],
+      "category": "composite-air-quality",
+      "summary": "Modul komposit 3-in-1 untuk pengukuran kualitas udara paling lengkap.",
+      "purpose": "Indoor Air Quality, clean room, smart building.",
+      "selectable": true,
+      "deviceType": "composite",
+      "physicalParts": [
+        { "manufacturer": "Sensirion", "part": "SPS30", "role": "PM sensor", "officialUrl": "https://sensirion.com/products/catalog/SPS30" },
+        { "manufacturer": "Sensirion", "part": "SHT40", "role": "T/RH compensation", "officialUrl": "https://sensirion.com/products/catalog/SHT40-AD1B" },
+        { "manufacturer": "Sensirion", "part": "SGP41", "role": "VOC & NOx sensor", "officialUrl": "https://sensirion.com/products/catalog/SGP41" }
+      ],
+      "measurements": [
+        { "key": "pm2_5", "label": "PM2.5", "unit": "ug/m3" },
+        { "key": "voc_index", "label": "VOC Index", "unit": "idx" },
+        { "key": "nox_index", "label": "NOx Index", "unit": "idx" },
+        { "key": "temperature", "label": "Temperature", "unit": "C" }
+      ],
+      "variantSupport": {
+        "micro": { "status": "unsupported" },
+        "micro-rnd": { "status": "active", "task": "readingSensorIAQCombo", "component": "components/iaq_combo", "mqttDeviceName": "Sensor_IAQ_Combo", "interfaces": [{"bus":"I2C","address":"0x69 + 0x44 + 0x59"}] },
+        "micro-duo": { "status": "unsupported" },
+        "ccu": { "status": "unsupported" },
+        "micro-modular": { "status": "unsupported" }
+      },
+      "confidence": "confirmed",
+      "conflicts": [],
+      "evidence": [
+        { "type": "firmware", "path": "Nexabrick Micro RND/main/slave.cpp", "lines": "1845-1970" },
+        { "type": "header", "path": "Nexabrick Micro RND/components/iaq_combo/iaq_combo.h", "lines": "4" }
+      ]
+    },
+    {
+      "id": 38,
+      "slug": "thermal-busbar",
+      "displayName": "Thermal Busbar",
+      "softwareName": "ThermalBusbar",
+      "aliases": ["Tibbit 118"],
+      "category": "composite-thermal",
+      "summary": "Sensor suhu 4-channel untuk kabel daya/busbar menggunakan thermopile NTC.",
+      "purpose": "Deteksi hotspot dan kondisi abnormal daya tinggi di panel surya/kelistrikan.",
+      "selectable": true,
+      "deviceType": "composite",
+      "physicalParts": [
+        { "manufacturer": "Texas Instruments", "part": "ADS122C04", "role": "24-bit ADC array", "officialUrl": "https://www.ti.com/product/ADS122C04" }
+      ],
+      "measurements": [
+        { "key": "obj_temp", "label": "Object Temperatures (x4)", "unit": "C" },
+        { "key": "amb_temp", "label": "Ambient Temperatures (x4)", "unit": "C" }
+      ],
+      "variantSupport": {
+        "micro": { "status": "active", "task": "readingSensorThermalBusbar", "component": "components/thermal_ads122c04", "mqttDeviceName": "Sensor_Thermal_Busbar_118", "interfaces": [{"bus":"I2C","address":"0x40"}] },
+        "micro-rnd": { "status": "active", "task": "readingSensorThermalBusbar", "component": "components/thermal_ads122c04", "mqttDeviceName": "Sensor_Thermal_Busbar_118", "interfaces": [{"bus":"I2C","address":"0x40"}] },
+        "micro-duo": { "status": "active", "task": "readingSensorThermalBusbar", "component": "components/thermal_ads122c04", "mqttDeviceName": "Sensor_Thermal_Busbar_118", "interfaces": [{"bus":"I2C","address":"0x40"}] },
+        "ccu": { "status": "active", "task": "readingSensorThermalBusbar", "component": "components/thermal_ads122c04", "mqttDeviceName": "Sensor_Thermal_Busbar_118", "interfaces": [{"bus":"I2C","address":"0x40"}] },
+        "micro-modular": { "status": "unsupported" }
+      },
+      "confidence": "confirmed",
+      "conflicts": [
+        "Faktor linear object_to_c 1000.0 hanya placeholder kalibrasi (menunggu validasi perangkat keras fisik)."
+      ],
+      "evidence": [
+        { "type": "firmware", "path": "Nexabrick Micro RND/main/slave.cpp", "lines": "2722-2771" }
+      ]
+    }
+  ]
+}
