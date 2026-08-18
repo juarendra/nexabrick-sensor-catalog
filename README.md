@@ -9,6 +9,8 @@ Repositori ini adalah _source-of-truth_ publik yang memetakan modul IC fisik den
 
 Website dibangun tanpa frontend framework (pure HTML/CSS/JS) agar mudah dikembangkan dan diaudit. Sumber data tunggalnya berada di `data/catalog.json`.
 
+Setiap perangkat juga memiliki identitas PCB Tibbit bila dapat dibuktikan dari schematic/BOM pada arsip hardware. Nomor PCB bukan sensor ID: sebagai contoh, sensor ID 21 OPT3007 menggunakan PCB `#48`. Mapping yang belum dapat dibuktikan ditampilkan sebagai `PCB —`, bukan ditebak dari kesamaan angka.
+
 ## Cara Kerja Update Data
 
 Katalog ini mencerminkan snapshot kode firmware yang sebenarnya. Aturan untuk berkontribusi:

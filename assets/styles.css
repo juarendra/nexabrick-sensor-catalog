@@ -394,6 +394,21 @@ input[type="text"]::placeholder { color: var(--text-muted); }
   border-radius: 4px;
 }
 .card-badges { display: flex; gap: var(--space-1); }
+.pcb-badge {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--cyan);
+  background: rgba(71, 213, 220, 0.09);
+  border: 1px solid rgba(71, 213, 220, 0.24);
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+.pcb-badge.unresolved {
+  color: var(--text-muted);
+  background: var(--surface-raised);
+  border-color: var(--border);
+}
 .badge {
   font-size: 0.65rem;
   text-transform: uppercase;
@@ -527,6 +542,58 @@ input[type="text"]::placeholder { color: var(--text-muted); }
   border-bottom: 1px solid var(--border);
   padding-bottom: var(--space-2);
   margin-bottom: var(--space-4);
+}
+
+.pcb-dossier {
+  display: grid;
+  grid-template-columns: 88px 1fr;
+  gap: var(--space-4);
+  align-items: stretch;
+}
+.pcb-number-block {
+  min-height: 82px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-sm);
+  background: rgba(71, 213, 220, 0.09);
+  border: 1px solid rgba(71, 213, 220, 0.24);
+  color: var(--cyan);
+  font-family: var(--font-mono);
+  font-size: 1.35rem;
+  font-weight: 600;
+}
+.pcb-number-block.unresolved {
+  background: var(--surface);
+  border-color: var(--border);
+  color: var(--text-muted);
+}
+.pcb-info-block {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+}
+.pcb-name {
+  display: block;
+  color: var(--text);
+  font-weight: 600;
+  font-size: 0.875rem;
+  margin-bottom: var(--space-1);
+}
+.pcb-confidence {
+  display: inline-flex;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.pcb-note {
+  display: block;
+  margin-top: var(--space-2);
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  line-height: 1.45;
 }
 
 .stack-list { display: flex; flex-direction: column; gap: var(--space-3); }

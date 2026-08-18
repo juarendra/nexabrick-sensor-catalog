@@ -60,6 +60,23 @@ catalog.devices.forEach((d, i) => {
   else slugs.add(d.slug);
 
   if (!d.summary) fail(path, 'Missing Indonesian summary');
+
+  if (!d.pcb || typeof d.pcb !== 'object') {
+    fail(`${path}.pcb`, 'Missing PCB mapping object');
+  } else {
+    if (!['confirmed', 'probable', 'unresolved'].includes(d.pcb.confidence)) {
+      fail(`${path}.pcb.confidence`, `Invalid PCB confidence ${d.pcb.confidence}`);
+    }
+    if (d.pcb.number !== null && !/^#\d{2,3}$/.test(d.pcb.number)) {
+      fail(`${path}.pcb.number`, 'Must be null or format #NN/#NNN');
+    }
+    if (d.pcb.number !== null && (!d.pcb.name || !d.pcb.sourcePath)) {
+      fail(`${path}.pcb`, 'Numbered PCB requires name and sourcePath');
+    }
+    if (d.pcb.sourcePath && (d.pcb.sourcePath.includes(':\\') || d.pcb.sourcePath.startsWith('/'))) {
+      fail(`${path}.pcb.sourcePath`, 'Absolute paths forbidden');
+    }
+  }
   
   if (!['sentinel', 'sensor', 'digital-io', 'composite'].includes(d.deviceType)) {
     fail(path, `Invalid deviceType ${d.deviceType}`);

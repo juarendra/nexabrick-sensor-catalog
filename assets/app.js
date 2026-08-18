@@ -211,6 +211,8 @@ function render() {
         d.slug.includes(term) ||
         d.displayName.toLowerCase().includes(term) ||
         d.softwareName.toLowerCase().includes(term) ||
+        (d.pcb?.number || '').toLowerCase().includes(term) ||
+        (d.pcb?.name || '').toLowerCase().includes(term) ||
         (d.aliases || []).some(a => a.toLowerCase().includes(term)) ||
         d.category.includes(term) ||
         (d.physicalParts || []).some(p => p.part.toLowerCase().includes(term) || p.manufacturer.toLowerCase().includes(term));
@@ -238,6 +240,8 @@ function render() {
     els.grid.innerHTML = filtered.map(d => {
       const color = catColors[d.category] || 'var(--cat-default)';
       const isSel = d.id === state.selectedId ? 'selected' : '';
+      const pcbNumber = d.pcb?.number || '—';
+      const pcbClass = d.pcb?.number ? '' : 'unresolved';
       
       // Determine overall best status for badge
       let overall = 'uns'; let oLbl = 'Unsupported';
@@ -266,6 +270,7 @@ function render() {
               <span class="cat-marker" style="background: ${color}" title="${formatEnum(d.category)}"></span>
             </div>
             <div class="card-badges">
+              <span class="pcb-badge ${pcbClass}" title="Nomor PCB Tibbit">PCB ${escape(pcbNumber)}</span>
               <span class="badge ${overall}">${oLbl}</span>
             </div>
           </div>
@@ -315,6 +320,18 @@ window.openDetail = function(id, pushState = true) {
   swEl.onclick = () => copyText(d.softwareName);
   
   document.getElementById('detail-purpose').textContent = d.purpose || d.summary;
+
+  const pcb = d.pcb || {};
+  const pcbResolved = Boolean(pcb.number);
+  document.getElementById('detail-pcb').innerHTML = `
+    <div class="pcb-number-block ${pcbResolved ? '' : 'unresolved'}">${pcbResolved ? escape(pcb.number) : '—'}</div>
+    <div class="pcb-info-block">
+      <span class="pcb-name">${pcbResolved ? escape(pcb.name) : 'PCB belum teridentifikasi'}</span>
+      <span class="pcb-confidence">${escape(pcb.confidence || 'unresolved')}</span>
+      ${pcb.note ? `<span class="pcb-note">${escape(pcb.note)}</span>` : ''}
+      ${pcb.sourcePath ? `<span class="pcb-note"><strong>Evidence:</strong> ${escape(pcb.sourcePath)}</span>` : ''}
+    </div>
+  `;
   
   // Conflicts
   const confEl = document.getElementById('detail-conflicts');
