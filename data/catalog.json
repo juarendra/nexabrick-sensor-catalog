@@ -278,7 +278,7 @@
     {
       "id": 1,
       "slug": "bme680",
-      "displayName": "BME680 Environmental Sensor",
+      "displayName": "Environmental Sensor",
       "softwareName": "BME680",
       "aliases": [],
       "category": "environmental",
@@ -389,7 +389,7 @@
     {
       "id": 2,
       "slug": "sht21-si7021",
-      "displayName": "Si7021 / SHT21 Temperature & Humidity",
+      "displayName": "Temperature & Humidity",
       "softwareName": "SHT21",
       "aliases": [
         "Si7021"
@@ -494,7 +494,7 @@
     {
       "id": 3,
       "slug": "dry-contact",
-      "displayName": "Dry Contact",
+      "displayName": "Dry Contact Input",
       "softwareName": "Drycontact",
       "aliases": [],
       "category": "digital-io",
@@ -591,7 +591,7 @@
     {
       "id": 4,
       "slug": "dht22-am2301",
-      "displayName": "DHT22 / AM2301 Temperature & Humidity",
+      "displayName": "Temperature & Humidity",
       "softwareName": "DHT22",
       "aliases": [
         "AM2301"
@@ -899,7 +899,7 @@
     {
       "id": 7,
       "slug": "mpu6050",
-      "displayName": "MPU6050 IMU",
+      "displayName": "Inertial Measurement Unit (IMU)",
       "softwareName": "accelGyro",
       "aliases": [],
       "category": "motion",
@@ -1027,7 +1027,7 @@
     {
       "id": 8,
       "slug": "tsl2561",
-      "displayName": "TSL2561 Ambient Light",
+      "displayName": "Ambient Light Sensor",
       "softwareName": "luxSensor",
       "aliases": [],
       "category": "light",
@@ -1123,7 +1123,7 @@
     {
       "id": 9,
       "slug": "sht3x",
-      "displayName": "SHT3x Temperature & Humidity",
+      "displayName": "Temperature & Humidity",
       "softwareName": "SHT3x",
       "aliases": [
         "SHT30",
@@ -1229,7 +1229,7 @@
     {
       "id": 10,
       "slug": "sht4x",
-      "displayName": "SHT4x Temperature & Humidity",
+      "displayName": "Temperature & Humidity",
       "softwareName": "SHT4x",
       "aliases": [
         "SHT40",
@@ -1332,7 +1332,7 @@
     {
       "id": 11,
       "slug": "ld2410",
-      "displayName": "LD2410 Presence Radar",
+      "displayName": "Presence Radar",
       "softwareName": "LD2410",
       "aliases": [
         "Radar"
@@ -1448,7 +1448,7 @@
     {
       "id": 12,
       "slug": "adxl345",
-      "displayName": "ADXL345 Accelerometer",
+      "displayName": "Accelerometer",
       "softwareName": "ADXL345",
       "aliases": [],
       "category": "motion",
@@ -1559,7 +1559,7 @@
     {
       "id": 13,
       "slug": "sm9333",
-      "displayName": "SM9333 Pressure & Temperature",
+      "displayName": "Pressure & Temperature",
       "softwareName": "SM9333",
       "aliases": [
         "SM9332"
@@ -1664,7 +1664,7 @@
     {
       "id": 14,
       "slug": "d6f-w04a1",
-      "displayName": "D6F-W04A1 Airflow",
+      "displayName": "Airflow Sensor",
       "softwareName": "D6F_W04A1",
       "aliases": [],
       "category": "airflow",
@@ -1768,7 +1768,7 @@
     {
       "id": 15,
       "slug": "sps30",
-      "displayName": "SPS30 Particulate Matter",
+      "displayName": "Particulate Matter Sensor",
       "softwareName": "SPS30",
       "aliases": [],
       "category": "air-quality",
@@ -1878,7 +1878,7 @@
     {
       "id": 16,
       "slug": "sdp810",
-      "displayName": "SDP810 Differential Pressure",
+      "displayName": "Differential Pressure",
       "softwareName": "SDP810",
       "aliases": [],
       "category": "pressure",
@@ -1980,7 +1980,7 @@
     {
       "id": 17,
       "slug": "lis3dhtr",
-      "displayName": "LIS3DHTR Accelerometer",
+      "displayName": "Accelerometer",
       "softwareName": "LIS3DHTR",
       "aliases": [],
       "category": "motion",
@@ -2086,7 +2086,7 @@
     {
       "id": 18,
       "slug": "fs3000",
-      "displayName": "FS3000 Air Velocity",
+      "displayName": "Air Velocity Sensor",
       "softwareName": "FS3000",
       "aliases": [],
       "category": "airflow",
@@ -2181,7 +2181,7 @@
     {
       "id": 19,
       "slug": "icp10111",
-      "displayName": "ICP-10111 Barometric Pressure",
+      "displayName": "Barometric Pressure",
       "softwareName": "ICP10111",
       "aliases": [],
       "category": "pressure",
@@ -2283,7 +2283,7 @@
     {
       "id": 20,
       "slug": "tibbit-gpio",
-      "displayName": "TIBBIT GPIO Relay",
+      "displayName": "GPIO Relay",
       "softwareName": "GPIO_Relay",
       "aliases": [
         "Tibbit"
@@ -2388,7 +2388,7 @@
     {
       "id": 21,
       "slug": "opt3007",
-      "displayName": "OPT3007 Ambient Light",
+      "displayName": "Ambient Light Sensor",
       "softwareName": "OPT3007YMFR",
       "aliases": [
         "OPT300"
@@ -2465,7 +2465,7 @@
     {
       "id": 22,
       "slug": "yfb6-water-flow",
-      "displayName": "YF-B6 Water Flow",
+      "displayName": "Water Flow Sensor",
       "softwareName": "Waterflow",
       "aliases": [],
       "category": "airflow",
@@ -2559,7 +2559,7 @@
     {
       "id": 23,
       "slug": "rn8209d",
-      "displayName": "RN8209D Energy Meter",
+      "displayName": "Energy Meter",
       "softwareName": "RN8209D",
       "aliases": [],
       "category": "energy",
@@ -2658,7 +2658,7 @@
     {
       "id": 24,
       "slug": "ina228",
-      "displayName": "INA228 Power Monitor",
+      "displayName": "Power Monitor",
       "softwareName": "INA228",
       "aliases": [],
       "category": "energy",
@@ -2752,7 +2752,7 @@
     {
       "id": 25,
       "slug": "iaq-combo",
-      "displayName": "IAQ Combo",
+      "displayName": "Indoor Air Quality (IAQ) Combo",
       "softwareName": "IAQCombo",
       "aliases": [],
       "category": "composite-air-quality",
@@ -3097,7 +3097,7 @@
     {
       "id": 29,
       "slug": "adpd188bi",
-      "displayName": "ADPD188BI Optical Smoke Detector",
+      "displayName": "Optical Smoke Detector",
       "softwareName": "SmokeADPD188BI",
       "aliases": [],
       "category": "air-quality",
@@ -3181,7 +3181,7 @@
     {
       "id": 30,
       "slug": "fdc1004",
-      "displayName": "FDC1004 Liquid Level",
+      "displayName": "Liquid Level Sensor",
       "softwareName": "LiquidLevelFDC1004",
       "aliases": [],
       "category": "level",
@@ -3265,7 +3265,7 @@
     {
       "id": 31,
       "slug": "a02yyuw",
-      "displayName": "A02YYUW Ultrasonic Distance",
+      "displayName": "Ultrasonic Distance",
       "softwareName": "DistanceA02YYUW",
       "aliases": [],
       "category": "distance",
@@ -3523,7 +3523,7 @@
     {
       "id": 34,
       "slug": "mr24hpc1-uart",
-      "displayName": "MR24HPC1 Human Presence UART",
+      "displayName": "Human Presence (UART)",
       "softwareName": "HumanPressenceUART",
       "aliases": [],
       "category": "presence",
@@ -3597,7 +3597,7 @@
     {
       "id": 35,
       "slug": "mr24hpc1-i2c",
-      "displayName": "MR24HPC1 Human Presence I2C",
+      "displayName": "Human Presence (I2C)",
       "softwareName": "HumanPressenceI2C",
       "aliases": [],
       "category": "presence",
@@ -3673,7 +3673,7 @@
     {
       "id": 36,
       "slug": "ws2812b",
-      "displayName": "WS2812B LED Strip",
+      "displayName": "RGB LED Strip",
       "softwareName": "WS2812BLED",
       "aliases": [],
       "category": "actuator",
@@ -3742,7 +3742,7 @@
     {
       "id": 37,
       "slug": "kx134",
-      "displayName": "KX134 Vibration Sensor",
+      "displayName": "Vibration Sensor",
       "softwareName": "KX134",
       "aliases": [],
       "category": "motion",
