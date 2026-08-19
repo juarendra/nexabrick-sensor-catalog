@@ -78,11 +78,11 @@ catalog.devices.forEach((d, i) => {
     }
   }
   
-  if (!['sentinel', 'sensor', 'digital-io', 'composite'].includes(d.deviceType)) {
+  if (!['sentinel', 'sensor', 'digital-io', 'composite', 'actuator'].includes(d.deviceType)) {
     fail(path, `Invalid deviceType ${d.deviceType}`);
   }
 
-  if (d.deviceType !== 'sentinel' && d.deviceType !== 'digital-io') {
+  if (d.deviceType !== 'sentinel' && d.deviceType !== 'digital-io' && d.deviceType !== 'actuator') {
     if (!Array.isArray(d.physicalParts) || d.physicalParts.length === 0) {
       fail(`${path}.physicalParts`, 'Missing manufacturer/part/role');
     }

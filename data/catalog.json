@@ -1446,6 +1446,117 @@
       }
     },
     {
+      "id": 12,
+      "slug": "adxl345",
+      "displayName": "ADXL345 Accelerometer",
+      "softwareName": "ADXL345",
+      "aliases": [],
+      "category": "motion",
+      "summary": "Akselerometer 3-axis untuk deteksi getaran dan orientasi.",
+      "purpose": "Deteksi aktivitas mesin atau perubahan posisi perangkat.",
+      "selectable": true,
+      "deviceType": "sensor",
+      "physicalParts": [
+        {
+          "manufacturer": "Analog Devices",
+          "part": "ADXL345",
+          "role": "accelerometer",
+          "officialUrl": "https://www.analog.com/en/products/adxl345.html"
+        }
+      ],
+      "measurements": [
+        {
+          "key": "x",
+          "label": "X Acceleration",
+          "unit": "raw"
+        },
+        {
+          "key": "y",
+          "label": "Y Acceleration",
+          "unit": "raw"
+        },
+        {
+          "key": "z",
+          "label": "Z Acceleration",
+          "unit": "raw"
+        },
+        {
+          "key": "change",
+          "label": "Orientation Change",
+          "unit": "flag"
+        }
+      ],
+      "variantSupport": {
+        "micro": {
+          "status": "active",
+          "task": "readingSensorADXL345",
+          "component": "components/adxl345",
+          "mqttDeviceName": "Sensor_Vibration_ADXL345",
+          "interfaces": [
+            {
+              "bus": "I2C",
+              "address": "0x1D"
+            }
+          ]
+        },
+        "micro-rnd": {
+          "status": "active",
+          "task": "readingSensorADXL345",
+          "component": "components/adxl345",
+          "mqttDeviceName": "Sensor_Vibration_ADXL345",
+          "interfaces": [
+            {
+              "bus": "I2C",
+              "address": "0x1D"
+            }
+          ]
+        },
+        "micro-duo": {
+          "status": "active",
+          "task": "readingSensorADXL345",
+          "component": "components/adxl345",
+          "mqttDeviceName": "Sensor_Vibration_1",
+          "interfaces": [
+            {
+              "bus": "I2C",
+              "address": "0x1D"
+            }
+          ]
+        },
+        "ccu": {
+          "status": "active",
+          "task": "readingSensorADXL345",
+          "component": "components/adxl345",
+          "mqttDeviceName": "Sensor_Vibration_1",
+          "interfaces": [
+            {
+              "bus": "I2C",
+              "address": "0x1D"
+            }
+          ]
+        },
+        "micro-modular": {
+          "status": "unsupported"
+        }
+      },
+      "confidence": "confirmed",
+      "conflicts": [],
+      "evidence": [
+        {
+          "type": "firmware",
+          "path": "Nexabrick Micro RND/main/slave.cpp",
+          "lines": "908-990"
+        }
+      ],
+      "pcb": {
+        "number": null,
+        "name": null,
+        "confidence": "unresolved",
+        "sourcePath": null,
+        "note": "Belum ditemukan PCB bernomor yang dapat dipetakan secara andal."
+      }
+    },
+    {
       "id": 13,
       "slug": "sm9333",
       "displayName": "SM9333 Pressure & Temperature",
@@ -1867,6 +1978,112 @@
       }
     },
     {
+      "id": 17,
+      "slug": "lis3dhtr",
+      "displayName": "LIS3DHTR Accelerometer",
+      "softwareName": "LIS3DHTR",
+      "aliases": [],
+      "category": "motion",
+      "summary": "Akselerometer 3-axis ultra low-power.",
+      "purpose": "Deteksi gerak presisi dan free-fall.",
+      "selectable": true,
+      "deviceType": "sensor",
+      "physicalParts": [
+        {
+          "manufacturer": "STMicroelectronics",
+          "part": "LIS3DHTR",
+          "role": "accelerometer",
+          "officialUrl": "https://www.st.com/en/mems-and-sensors/lis3dh.html"
+        }
+      ],
+      "measurements": [
+        {
+          "key": "x",
+          "label": "X Acceleration",
+          "unit": "mg"
+        },
+        {
+          "key": "y",
+          "label": "Y Acceleration",
+          "unit": "mg"
+        },
+        {
+          "key": "z",
+          "label": "Z Acceleration",
+          "unit": "mg"
+        }
+      ],
+      "variantSupport": {
+        "micro": {
+          "status": "active",
+          "task": "readingSensorLIS3DHTR",
+          "component": "components/lis3dhtr",
+          "mqttDeviceName": "LIS3DHTR Accel",
+          "interfaces": [
+            {
+              "bus": "I2C",
+              "address": "0x19"
+            }
+          ]
+        },
+        "micro-rnd": {
+          "status": "active",
+          "task": "readingSensorLIS3DHTR",
+          "component": "components/lis3dhtr",
+          "mqttDeviceName": "Sensor_Accel_LIS3DHTR",
+          "interfaces": [
+            {
+              "bus": "I2C",
+              "address": "0x19"
+            }
+          ]
+        },
+        "micro-duo": {
+          "status": "active",
+          "task": "readingSensorLIS3DHTR",
+          "component": "components/lis3dhtr",
+          "mqttDeviceName": "LIS3DHTR Accel",
+          "interfaces": [
+            {
+              "bus": "I2C",
+              "address": "0x19"
+            }
+          ]
+        },
+        "ccu": {
+          "status": "active",
+          "task": "readingSensorLIS3DHTR",
+          "component": "components/lis3dhtr",
+          "mqttDeviceName": "LIS3DHTR_Accelerometer",
+          "interfaces": [
+            {
+              "bus": "I2C",
+              "address": "0x19"
+            }
+          ]
+        },
+        "micro-modular": {
+          "status": "unsupported"
+        }
+      },
+      "confidence": "confirmed",
+      "conflicts": [],
+      "evidence": [
+        {
+          "type": "firmware",
+          "path": "Nexabrick Micro RND/main/slave.cpp",
+          "lines": "450-498"
+        }
+      ],
+      "pcb": {
+        "number": "#53",
+        "name": "3-Axis Accelerometer",
+        "confidence": "probable",
+        "sourcePath": "#53 [1B SLOT] 3-AXIS ACCELEROMETER/sch-pcb/BOM/Bill Of Materials #53 3-AXIS ACCELEROMETER.csv",
+        "note": null
+      }
+    },
+    {
       "id": 18,
       "slug": "fs3000",
       "displayName": "FS3000 Air Velocity",
@@ -2246,6 +2463,293 @@
       }
     },
     {
+      "id": 22,
+      "slug": "yfb6-water-flow",
+      "displayName": "YF-B6 Water Flow",
+      "softwareName": "Waterflow",
+      "aliases": [],
+      "category": "airflow",
+      "summary": "Sensor laju aliran air menggunakan efek Hall.",
+      "purpose": "Mengukur debit dan volume akumulatif air pada pipa.",
+      "selectable": true,
+      "deviceType": "sensor",
+      "physicalParts": [
+        {
+          "manufacturer": "N/A",
+          "part": "YF-B6",
+          "role": "pulse sensor",
+          "officialUrl": null
+        }
+      ],
+      "measurements": [
+        {
+          "key": "flow_rate",
+          "label": "Flow Rate",
+          "unit": "L/s"
+        },
+        {
+          "key": "volume",
+          "label": "Accumulated Volume",
+          "unit": "L"
+        }
+      ],
+      "variantSupport": {
+        "micro": {
+          "status": "incomplete",
+          "task": "readingSensorYFB6",
+          "component": "components/esp-wtrflw",
+          "mqttDeviceName": "YFB6_Waterflow",
+          "interfaces": [
+            {
+              "bus": "GPIO",
+              "address": "14"
+            }
+          ]
+        },
+        "micro-rnd": {
+          "status": "active",
+          "task": "readingSensorYFB6",
+          "component": "components/esp-wtrflw",
+          "mqttDeviceName": "Sensor_Waterflow_YFB6",
+          "interfaces": [
+            {
+              "bus": "GPIO",
+              "address": "14"
+            }
+          ]
+        },
+        "micro-duo": {
+          "status": "incomplete",
+          "task": "readingSensorYFB6",
+          "component": "components/esp-wtrflw",
+          "mqttDeviceName": "YFB6_Waterflow",
+          "interfaces": [
+            {
+              "bus": "GPIO",
+              "address": "14"
+            }
+          ]
+        },
+        "ccu": {
+          "status": "unsupported"
+        },
+        "micro-modular": {
+          "status": "unsupported"
+        }
+      },
+      "confidence": "firmware-confirmed",
+      "conflicts": [
+        "Task dijalankan dengan NULL parameter untuk Modbus di beberapa varian, kecuali yang sudah di-patch."
+      ],
+      "evidence": [
+        {
+          "type": "firmware",
+          "path": "Nexabrick Micro RND/main/slave.cpp",
+          "lines": "1519-1560"
+        }
+      ],
+      "pcb": {
+        "number": null,
+        "name": null,
+        "confidence": "unresolved",
+        "sourcePath": null,
+        "note": "Belum ditemukan PCB bernomor yang dapat dipetakan secara andal."
+      }
+    },
+    {
+      "id": 23,
+      "slug": "rn8209d",
+      "displayName": "RN8209D Energy Meter",
+      "softwareName": "RN8209D",
+      "aliases": [],
+      "category": "energy",
+      "summary": "IC metering energi satu fasa presisi tinggi.",
+      "purpose": "Pemantauan daya listrik AC, tegangan, arus, dan Power Factor.",
+      "selectable": true,
+      "deviceType": "sensor",
+      "physicalParts": [
+        {
+          "manufacturer": "Renergy",
+          "part": "RN8209D",
+          "role": "energy meter IC",
+          "officialUrl": null
+        }
+      ],
+      "measurements": [
+        {
+          "key": "irms_A",
+          "label": "Current (RMS)",
+          "unit": "A"
+        },
+        {
+          "key": "urms_V",
+          "label": "Voltage (RMS)",
+          "unit": "V"
+        },
+        {
+          "key": "active_W",
+          "label": "Active Power",
+          "unit": "W"
+        },
+        {
+          "key": "apparent_VA",
+          "label": "Apparent Power",
+          "unit": "VA"
+        },
+        {
+          "key": "pf",
+          "label": "Power Factor",
+          "unit": ""
+        },
+        {
+          "key": "freq",
+          "label": "Frequency",
+          "unit": "Hz"
+        },
+        {
+          "key": "energy",
+          "label": "Energy",
+          "unit": "Wh"
+        }
+      ],
+      "variantSupport": {
+        "micro": {
+          "status": "unsupported"
+        },
+        "micro-rnd": {
+          "status": "active",
+          "task": "readingSensorRN8209D",
+          "component": "components/rn8209d",
+          "mqttDeviceName": "Sensor_Energy_RN8209D",
+          "interfaces": [
+            {
+              "bus": "UART",
+              "address": "9600 8E2"
+            }
+          ]
+        },
+        "micro-duo": {
+          "status": "unsupported"
+        },
+        "ccu": {
+          "status": "unsupported"
+        },
+        "micro-modular": {
+          "status": "unsupported"
+        }
+      },
+      "confidence": "confirmed",
+      "conflicts": [],
+      "evidence": [
+        {
+          "type": "firmware",
+          "path": "Nexabrick Micro RND/main/slave.cpp",
+          "lines": "1678-1736"
+        }
+      ],
+      "pcb": {
+        "number": "#108",
+        "name": "Energy Meter AC",
+        "confidence": "probable",
+        "sourcePath": "#108 [1A+1B SLOT] ENERGY METER AC/sch-pcb/BOM/[BOM] #108 [1A+1B SLOT] ENERGY METER AC.csv",
+        "note": null
+      }
+    },
+    {
+      "id": 24,
+      "slug": "ina228",
+      "displayName": "INA228 Power Monitor",
+      "softwareName": "INA228",
+      "aliases": [],
+      "category": "energy",
+      "summary": "Monitor arus dan daya DC tegangan tinggi dengan resolusi 20-bit.",
+      "purpose": "Pemantauan daya dan baterai -48 VDC BTS telko.",
+      "selectable": true,
+      "deviceType": "sensor",
+      "physicalParts": [
+        {
+          "manufacturer": "Texas Instruments",
+          "part": "INA228",
+          "role": "power monitor",
+          "officialUrl": "https://www.ti.com/product/INA228"
+        }
+      ],
+      "measurements": [
+        {
+          "key": "voltage_v",
+          "label": "Voltage",
+          "unit": "V"
+        },
+        {
+          "key": "current_a",
+          "label": "Current",
+          "unit": "A"
+        },
+        {
+          "key": "power_w",
+          "label": "Power",
+          "unit": "W"
+        },
+        {
+          "key": "energy_wh",
+          "label": "Energy",
+          "unit": "Wh"
+        },
+        {
+          "key": "charge_ah",
+          "label": "Charge",
+          "unit": "Ah"
+        },
+        {
+          "key": "temperature_c",
+          "label": "Die Temp",
+          "unit": "C"
+        }
+      ],
+      "variantSupport": {
+        "micro": {
+          "status": "unsupported"
+        },
+        "micro-rnd": {
+          "status": "active",
+          "task": "readingSensorINA228",
+          "component": "components/ina228",
+          "mqttDeviceName": "Sensor_Power_INA228",
+          "interfaces": [
+            {
+              "bus": "I2C",
+              "address": "0x40"
+            }
+          ]
+        },
+        "micro-duo": {
+          "status": "unsupported"
+        },
+        "ccu": {
+          "status": "unsupported"
+        },
+        "micro-modular": {
+          "status": "unsupported"
+        }
+      },
+      "confidence": "confirmed",
+      "conflicts": [],
+      "evidence": [
+        {
+          "type": "firmware",
+          "path": "Nexabrick Micro RND/main/slave.cpp",
+          "lines": "1738-1856"
+        }
+      ],
+      "pcb": {
+        "number": "#109",
+        "name": "Energy Meter DC",
+        "confidence": "probable",
+        "sourcePath": "#109 [1A+1B SLOT] ENERGY METER DC/sch-pcb/BOM/[BOM] #109 [1A+1B SLOT] ENERGY METER DC.csv",
+        "note": null
+      }
+    },
+    {
       "id": 25,
       "slug": "iaq-combo",
       "displayName": "IAQ Combo",
@@ -2344,6 +2848,1006 @@
         "confidence": "probable",
         "sourcePath": "#110 [1A+1B SLOT] TVOC  Indoor Air Quality (IAQ) Combo/sch-pcb/BOM/[BOM] #110 [1A+1B SLOT] TVOC  Indoor Air Quality (IAQ) Combo.csv",
         "note": "BOM PCB memuat SHT4x dan SGP41; SPS30 pada kontrak firmware kemungkinan perangkat eksternal."
+      }
+    },
+    {
+      "id": 26,
+      "slug": "corrosion-condensation",
+      "displayName": "Corrosion & Condensation",
+      "softwareName": "CorrosionCondensation",
+      "aliases": [],
+      "category": "environmental",
+      "summary": "Pemantauan korosifitas udara dan kondensasi dengan electrode.",
+      "purpose": "Perlindungan equipment IT dari korosi tingkat mikro dan kondensasi uap.",
+      "selectable": true,
+      "deviceType": "composite",
+      "physicalParts": [
+        {
+          "manufacturer": "Texas Instruments",
+          "part": "ADS112C04",
+          "role": "ADC untuk elektroda korosi",
+          "officialUrl": "https://www.ti.com/product/ADS112C04"
+        },
+        {
+          "manufacturer": "NXP",
+          "part": "PCA9536",
+          "role": "GPIO Expander heater",
+          "officialUrl": "https://www.nxp.com/products/interfaces/ic-spi-i3c-interface-devices/4-bit-ic-bus-and-smbus-io-port:PCA9536"
+        },
+        {
+          "manufacturer": "Sensirion",
+          "part": "SHT4x",
+          "role": "Sensor temperatur/RH area PCB",
+          "officialUrl": "https://sensirion.com/products/catalog/SHT40-AD1B"
+        }
+      ],
+      "measurements": [
+        {
+          "key": "corrosion",
+          "label": "Corrosion Index",
+          "unit": ""
+        },
+        {
+          "key": "condensation",
+          "label": "Condensation Alert",
+          "unit": "flag"
+        },
+        {
+          "key": "ntc_temp",
+          "label": "NTC Temperature",
+          "unit": "C"
+        }
+      ],
+      "variantSupport": {
+        "micro": {
+          "status": "unsupported"
+        },
+        "micro-rnd": {
+          "status": "active",
+          "task": "readingSensorCorrosionCondensation",
+          "component": "components/corrosion_condensation",
+          "mqttDeviceName": "Sensor_Corrosion_Condensation_111",
+          "interfaces": [
+            {
+              "bus": "I2C",
+              "address": "0x40 + 0x41 + 0x44"
+            }
+          ]
+        },
+        "micro-duo": {
+          "status": "unsupported"
+        },
+        "ccu": {
+          "status": "unsupported"
+        },
+        "micro-modular": {
+          "status": "unsupported"
+        }
+      },
+      "confidence": "confirmed",
+      "conflicts": [],
+      "evidence": [
+        {
+          "type": "firmware",
+          "path": "Nexabrick Micro RND/main/slave.cpp",
+          "lines": "1983-2093"
+        },
+        {
+          "type": "header",
+          "path": "Nexabrick Micro RND/components/corrosion_condensation/corrosion_condensation.h",
+          "lines": "14"
+        }
+      ],
+      "pcb": {
+        "number": "#111",
+        "name": "Corrosion Condensation Sensor",
+        "confidence": "confirmed",
+        "sourcePath": "#111 [1A+1B SLOT] Corrosion  Condensation Sensor/sch-pcb/BOM/[BOM] #111 [1A+1B SLOT] Corrosion  Condensation Sensor.csv",
+        "note": null
+      }
+    },
+    {
+      "id": 27,
+      "slug": "loadcell-4-wire",
+      "displayName": "4-Wire Load Cell",
+      "softwareName": "LoadCell4Wire",
+      "aliases": [],
+      "category": "pressure",
+      "summary": "Pembaca load cell / strain gauge jembatan penuh tipe 4-kabel.",
+      "purpose": "Aplikasi timbangan industri.",
+      "selectable": true,
+      "deviceType": "sensor",
+      "physicalParts": [
+        {
+          "manufacturer": "Texas Instruments",
+          "part": "ADS122C04",
+          "role": "24-bit ADC",
+          "officialUrl": "https://www.ti.com/product/ADS122C04"
+        }
+      ],
+      "measurements": [
+        {
+          "key": "weight",
+          "label": "Weight",
+          "unit": "w"
+        },
+        {
+          "key": "voltage_v",
+          "label": "Voltage",
+          "unit": "V"
+        },
+        {
+          "key": "tare_offset",
+          "label": "Tare Offset",
+          "unit": "raw"
+        }
+      ],
+      "variantSupport": {
+        "micro": {
+          "status": "unsupported"
+        },
+        "micro-rnd": {
+          "status": "active",
+          "task": "readingSensorLoadCell4Wire",
+          "component": "components/loadcell_ads122c04",
+          "mqttDeviceName": "Sensor_LoadCell_4Wire_112",
+          "interfaces": [
+            {
+              "bus": "I2C",
+              "address": "0x40"
+            }
+          ]
+        },
+        "micro-duo": {
+          "status": "unsupported"
+        },
+        "ccu": {
+          "status": "unsupported"
+        },
+        "micro-modular": {
+          "status": "unsupported"
+        }
+      },
+      "confidence": "confirmed",
+      "conflicts": [],
+      "evidence": [
+        {
+          "type": "firmware",
+          "path": "Nexabrick Micro RND/main/slave.cpp",
+          "lines": "2099-2244"
+        }
+      ],
+      "pcb": {
+        "number": "#112",
+        "name": "Load Cell Sensor",
+        "confidence": "confirmed",
+        "sourcePath": "#112 [1A+1B SLOT] LOAD CELL SENSOR/sch-pcb/BOM/[BOM] #112 [1A+1B SLOT] LOAD CELL SENSOR.csv",
+        "note": "PCB yang sama melayani 4-Wire dan 6-Wire (ID 27 dan 28) berdasarkan konfigurasi kabel eksternal."
+      }
+    },
+    {
+      "id": 28,
+      "slug": "loadcell-6-wire",
+      "displayName": "6-Wire Load Cell",
+      "softwareName": "LoadCell6Wire",
+      "aliases": [],
+      "category": "pressure",
+      "summary": "Pembaca load cell dengan sense kabel referensi (6-wire).",
+      "purpose": "Aplikasi timbangan industri presisi tinggi yang jarak kabelnya panjang.",
+      "selectable": true,
+      "deviceType": "sensor",
+      "physicalParts": [
+        {
+          "manufacturer": "Texas Instruments",
+          "part": "ADS122C04",
+          "role": "24-bit ADC",
+          "officialUrl": "https://www.ti.com/product/ADS122C04"
+        }
+      ],
+      "measurements": [
+        {
+          "key": "weight",
+          "label": "Weight",
+          "unit": "w"
+        }
+      ],
+      "variantSupport": {
+        "micro": {
+          "status": "unsupported"
+        },
+        "micro-rnd": {
+          "status": "active",
+          "task": "readingSensorLoadCell6Wire",
+          "component": "components/loadcell_ads122c04",
+          "mqttDeviceName": "Sensor_LoadCell_6Wire_112",
+          "interfaces": [
+            {
+              "bus": "I2C",
+              "address": "0x40"
+            }
+          ]
+        },
+        "micro-duo": {
+          "status": "unsupported"
+        },
+        "ccu": {
+          "status": "unsupported"
+        },
+        "micro-modular": {
+          "status": "unsupported"
+        }
+      },
+      "confidence": "confirmed",
+      "conflicts": [],
+      "evidence": [
+        {
+          "type": "firmware",
+          "path": "Nexabrick Micro RND/main/slave.cpp",
+          "lines": "2099-2244"
+        }
+      ],
+      "pcb": {
+        "number": "#112",
+        "name": "Load Cell Sensor",
+        "confidence": "confirmed",
+        "sourcePath": "#112 [1A+1B SLOT] LOAD CELL SENSOR/sch-pcb/BOM/[BOM] #112 [1A+1B SLOT] LOAD CELL SENSOR.csv",
+        "note": "Berbagi PCB yang sama dengan ID 27."
+      }
+    },
+    {
+      "id": 29,
+      "slug": "adpd188bi",
+      "displayName": "ADPD188BI Optical Smoke Detector",
+      "softwareName": "SmokeADPD188BI",
+      "aliases": [],
+      "category": "air-quality",
+      "summary": "Modul detektor asap optik dengan panjang gelombang ganda (Blue + IR).",
+      "purpose": "Sistem peringatan kebakaran dini tanpa sumber radioaktif.",
+      "selectable": true,
+      "deviceType": "sensor",
+      "physicalParts": [
+        {
+          "manufacturer": "Analog Devices",
+          "part": "ADPD188BI",
+          "role": "optical smoke detector",
+          "officialUrl": "https://www.analog.com/en/products/adpd188bi.html"
+        }
+      ],
+      "measurements": [
+        {
+          "key": "slotA",
+          "label": "Slot A (Blue)",
+          "unit": "counts"
+        },
+        {
+          "key": "slotB",
+          "label": "Slot B (IR)",
+          "unit": "counts"
+        },
+        {
+          "key": "smoke",
+          "label": "Smoke Level",
+          "unit": "counts"
+        },
+        {
+          "key": "alarm",
+          "label": "Alarm",
+          "unit": "flag"
+        }
+      ],
+      "variantSupport": {
+        "micro": {
+          "status": "unsupported"
+        },
+        "micro-rnd": {
+          "status": "active",
+          "task": "readingSensorADPD188BI",
+          "component": "components/adpd188bi",
+          "mqttDeviceName": "Sensor_ADPD188BI",
+          "interfaces": [
+            {
+              "bus": "I2C",
+              "address": "0x64"
+            }
+          ]
+        },
+        "micro-duo": {
+          "status": "unsupported"
+        },
+        "ccu": {
+          "status": "unsupported"
+        },
+        "micro-modular": {
+          "status": "unsupported"
+        }
+      },
+      "confidence": "confirmed",
+      "conflicts": [],
+      "evidence": [
+        {
+          "type": "firmware",
+          "path": "Nexabrick Micro RND/main/slave.cpp",
+          "lines": "2411-2474"
+        }
+      ],
+      "pcb": {
+        "number": "#113",
+        "name": "Smoke Detector",
+        "confidence": "confirmed",
+        "sourcePath": "#113 [1A+1B SLOT] SMOKE DETECTOR/sch-pcb/BOM/[BOM] #113 [1A+1B SLOT] SMOKE DETECTOR.csv",
+        "note": null
+      }
+    },
+    {
+      "id": 30,
+      "slug": "fdc1004",
+      "displayName": "FDC1004 Liquid Level",
+      "softwareName": "LiquidLevelFDC1004",
+      "aliases": [],
+      "category": "level",
+      "summary": "Sensor level zat cair berbasis konverter kapasitansi ke digital.",
+      "purpose": "Deteksi level air/minyak secara non-kontak.",
+      "selectable": true,
+      "deviceType": "sensor",
+      "physicalParts": [
+        {
+          "manufacturer": "Texas Instruments",
+          "part": "FDC1004",
+          "role": "capacitance converter",
+          "officialUrl": "https://www.ti.com/product/FDC1004"
+        }
+      ],
+      "measurements": [
+        {
+          "key": "cin1",
+          "label": "Level Cap",
+          "unit": "pF"
+        },
+        {
+          "key": "cin2",
+          "label": "Liq Ref",
+          "unit": "pF"
+        },
+        {
+          "key": "cin3",
+          "label": "Env Ref",
+          "unit": "pF"
+        },
+        {
+          "key": "level",
+          "label": "Calculated Level",
+          "unit": "%"
+        }
+      ],
+      "variantSupport": {
+        "micro": {
+          "status": "unsupported"
+        },
+        "micro-rnd": {
+          "status": "active",
+          "task": "readingSensorFDC1004",
+          "component": "components/fdc1004",
+          "mqttDeviceName": "Sensor_FDC1004_Level",
+          "interfaces": [
+            {
+              "bus": "I2C",
+              "address": "0x50"
+            }
+          ]
+        },
+        "micro-duo": {
+          "status": "unsupported"
+        },
+        "ccu": {
+          "status": "unsupported"
+        },
+        "micro-modular": {
+          "status": "unsupported"
+        }
+      },
+      "confidence": "confirmed",
+      "conflicts": [],
+      "evidence": [
+        {
+          "type": "firmware",
+          "path": "Nexabrick Micro RND/main/slave.cpp",
+          "lines": "2485-2545"
+        }
+      ],
+      "pcb": {
+        "number": "#114",
+        "name": "Liquid Level Sensor",
+        "confidence": "confirmed",
+        "sourcePath": "#114 [1A+1B SLOT] LIQUID LEVEL SENSOR/sch-pcb/BOM/[BOM] #114 [1A+1B SLOT] LIQUID LEVEL SENSOR.csv",
+        "note": null
+      }
+    },
+    {
+      "id": 31,
+      "slug": "a02yyuw",
+      "displayName": "A02YYUW Ultrasonic Distance",
+      "softwareName": "DistanceA02YYUW",
+      "aliases": [],
+      "category": "distance",
+      "summary": "Sensor ultrasonik tahan air/waterproof.",
+      "purpose": "Deteksi jarak obyek solid atau level air untuk tangki industri.",
+      "selectable": true,
+      "deviceType": "sensor",
+      "physicalParts": [
+        {
+          "manufacturer": "DFRobot",
+          "part": "A02YYUW",
+          "role": "ultrasonic module",
+          "officialUrl": "https://wiki.dfrobot.com/A02YYUW_Waterproof_Ultrasonic_Sensor_SKU_SEN0311"
+        }
+      ],
+      "measurements": [
+        {
+          "key": "distance",
+          "label": "Distance",
+          "unit": "mm"
+        },
+        {
+          "key": "in_range",
+          "label": "In Range",
+          "unit": "flag"
+        }
+      ],
+      "variantSupport": {
+        "micro": {
+          "status": "unsupported"
+        },
+        "micro-rnd": {
+          "status": "active",
+          "task": "readingSensorA02YYUW",
+          "component": "components/a02yyuw",
+          "mqttDeviceName": "Sensor_A02YYUW",
+          "interfaces": [
+            {
+              "bus": "UART",
+              "address": "9600"
+            }
+          ]
+        },
+        "micro-duo": {
+          "status": "unsupported"
+        },
+        "ccu": {
+          "status": "unsupported"
+        },
+        "micro-modular": {
+          "status": "unsupported"
+        }
+      },
+      "confidence": "confirmed",
+      "conflicts": [],
+      "evidence": [
+        {
+          "type": "firmware",
+          "path": "Nexabrick Micro RND/main/slave.cpp",
+          "lines": "2554-2598"
+        }
+      ],
+      "pcb": {
+        "number": "#115",
+        "name": "Liquid Level Ultrasonic Sensor",
+        "confidence": "probable",
+        "sourcePath": "#115 [1A+1B SLOT] LIQUID LEVEL ULTRASONIC SENSOR/sch-pcb/BOM/[BOM] #115 [1A+1B SLOT] LIQUID LEVEL ULTRASONIC SENSOR.csv",
+        "note": "Eksternal probe A02YYUW. PCB hanya menangani isolator UART ADuM1201."
+      }
+    },
+    {
+      "id": 32,
+      "slug": "noise-acoustic",
+      "displayName": "Noise / Acoustic Module",
+      "softwareName": "NoiseAcoustic",
+      "aliases": [],
+      "category": "environmental",
+      "summary": "Modul monitor intensitas kebisingan suara dalam dB SPL.",
+      "purpose": "Deteksi bising server room atau alarm lingkungan akustik.",
+      "selectable": true,
+      "deviceType": "composite",
+      "physicalParts": [
+        {
+          "manufacturer": "Silicon Labs",
+          "part": "EFR32BG22",
+          "role": "per-slot MCU",
+          "officialUrl": "https://www.silabs.com/wireless/bluetooth/efr32bg22-series-2-socs"
+        },
+        {
+          "manufacturer": "Infineon",
+          "part": "IM69D130",
+          "role": "PDM Microphone",
+          "officialUrl": "https://www.infineon.com/cms/en/product/sensor/mems-microphones/im69d130/"
+        }
+      ],
+      "measurements": [
+        {
+          "key": "db_spl",
+          "label": "Sound Level",
+          "unit": "dB SPL"
+        },
+        {
+          "key": "peak",
+          "label": "Peak Hold",
+          "unit": "dB SPL"
+        },
+        {
+          "key": "alert",
+          "label": "Alert Status",
+          "unit": "flag"
+        }
+      ],
+      "variantSupport": {
+        "micro": {
+          "status": "unsupported"
+        },
+        "micro-rnd": {
+          "status": "active",
+          "task": "readingSensorNoiseAcoustic",
+          "component": "components/noise_acoustic",
+          "mqttDeviceName": "Sensor_Noise",
+          "interfaces": [
+            {
+              "bus": "UART",
+              "address": "115200"
+            }
+          ]
+        },
+        "micro-duo": {
+          "status": "unsupported"
+        },
+        "ccu": {
+          "status": "unsupported"
+        },
+        "micro-modular": {
+          "status": "active",
+          "task": "app_process_action",
+          "component": "Nexabrick Micro Modular/#116 [1A+1B SLOT] NOISE ACOUSTIC SENSOR",
+          "mqttDeviceName": null,
+          "interfaces": [
+            {
+              "bus": "PDM",
+              "address": "Mic"
+            }
+          ]
+        }
+      },
+      "confidence": "confirmed",
+      "conflicts": [],
+      "evidence": [
+        {
+          "type": "firmware",
+          "path": "Nexabrick Micro RND/main/slave.cpp",
+          "lines": "2609-2655"
+        },
+        {
+          "type": "firmware",
+          "path": "Nexabrick Micro Modular/#116 [1A+1B SLOT] NOISE ACOUSTIC SENSOR/src/app.c",
+          "lines": "1-100"
+        }
+      ],
+      "pcb": {
+        "number": "#116",
+        "name": "Noise Acoustic Sensor",
+        "confidence": "confirmed",
+        "sourcePath": "#116 [1A+1B SLOT] NOISE ACOUSTIC SENSOR/sch-pcb/BOM/[BOM] #116 [1A+1B SLOT] NOISE ACOUSTIC SENSOR.csv",
+        "note": null
+      }
+    },
+    {
+      "id": 33,
+      "slug": "real-tvoc",
+      "displayName": "Real TVOC Combo",
+      "softwareName": "RealTVOC",
+      "aliases": [],
+      "category": "composite-air-quality",
+      "summary": "Komposit real TVOC electrochemical dan temperatur.",
+      "purpose": "Deteksi Gas/VOC nyata secara kuantitatif (ppb).",
+      "selectable": true,
+      "deviceType": "composite",
+      "physicalParts": [
+        {
+          "manufacturer": "Winsen",
+          "part": "ZE40B-TVOC",
+          "role": "gas sensor",
+          "officialUrl": "https://www.winsen-sensor.com/sensors/voc-sensor/ze40b-tvoc.html"
+        },
+        {
+          "manufacturer": "Sensirion",
+          "part": "SHT41",
+          "role": "temperature/humidity",
+          "officialUrl": "https://sensirion.com/products/catalog/SHT41-AD1B"
+        }
+      ],
+      "measurements": [
+        {
+          "key": "tvoc_ppb",
+          "label": "TVOC",
+          "unit": "ppb"
+        },
+        {
+          "key": "temperature",
+          "label": "Temperature",
+          "unit": "C"
+        },
+        {
+          "key": "humidity",
+          "label": "Humidity",
+          "unit": "%"
+        }
+      ],
+      "variantSupport": {
+        "micro": {
+          "status": "unsupported"
+        },
+        "micro-rnd": {
+          "status": "active",
+          "task": "readingSensorRealTVOC",
+          "component": "components/ze40b_tvoc",
+          "mqttDeviceName": "Sensor_RealTVOC",
+          "interfaces": [
+            {
+              "bus": "UART+I2C",
+              "address": "9600"
+            }
+          ]
+        },
+        "micro-duo": {
+          "status": "unsupported"
+        },
+        "ccu": {
+          "status": "unsupported"
+        },
+        "micro-modular": {
+          "status": "unsupported"
+        }
+      },
+      "confidence": "confirmed",
+      "conflicts": [],
+      "evidence": [
+        {
+          "type": "firmware",
+          "path": "Nexabrick Micro RND/main/slave.cpp",
+          "lines": "2784-2847"
+        }
+      ],
+      "pcb": {
+        "number": "#117",
+        "name": "Real TVOC ZE40B-TVOC",
+        "confidence": "confirmed",
+        "sourcePath": "#117 [1A+1B SLOT] REAL TVOC  ZE40B-TVOC/sch-pcb/BOM/[BOM] #117 [1A+1B SLOT] REAL TVOC  ZE40B-TVOC.csv",
+        "note": null
+      }
+    },
+    {
+      "id": 34,
+      "slug": "mr24hpc1-uart",
+      "displayName": "MR24HPC1 Human Presence UART",
+      "softwareName": "HumanPressenceUART",
+      "aliases": [],
+      "category": "presence",
+      "summary": "Sensor radar statis presisi 24GHz antarmuka UART.",
+      "purpose": "Deteksi detak jantung, nafas, atau keberadaan tanpa pergerakan.",
+      "selectable": true,
+      "deviceType": "sensor",
+      "physicalParts": [
+        {
+          "manufacturer": "Seeed Studio",
+          "part": "MR24HPC1",
+          "role": "24GHz radar",
+          "officialUrl": "https://wiki.seeedstudio.com/Radar_MR24HPC1/"
+        }
+      ],
+      "measurements": [
+        {
+          "key": "motion_energy",
+          "label": "Motion Energy",
+          "unit": "val"
+        },
+        {
+          "key": "rest_energy",
+          "label": "Rest Energy",
+          "unit": "val"
+        }
+      ],
+      "variantSupport": {
+        "micro": {
+          "status": "active",
+          "task": "readingSensorMR24HPC1UART",
+          "component": "inline",
+          "mqttDeviceName": "MR24_Radar",
+          "interfaces": [
+            {
+              "bus": "UART",
+              "address": "115200"
+            }
+          ]
+        },
+        "micro-rnd": {
+          "status": "unsupported"
+        },
+        "micro-duo": {
+          "status": "unsupported"
+        },
+        "ccu": {
+          "status": "unsupported"
+        },
+        "micro-modular": {
+          "status": "unsupported"
+        }
+      },
+      "confidence": "firmware-confirmed",
+      "conflicts": [],
+      "evidence": [
+        {
+          "type": "firmware",
+          "path": "Nexabrick Micro/main/slave.cpp",
+          "lines": "1576-1617"
+        }
+      ],
+      "pcb": {
+        "number": null,
+        "name": null,
+        "confidence": "unresolved",
+        "sourcePath": null,
+        "note": "Kemungkinan di PCB #99 namun BOM hardware tidak menuliskan MR24HPC1 melainkan 102010388."
+      }
+    },
+    {
+      "id": 35,
+      "slug": "mr24hpc1-i2c",
+      "displayName": "MR24HPC1 Human Presence I2C",
+      "softwareName": "HumanPressenceI2C",
+      "aliases": [],
+      "category": "presence",
+      "summary": "Sensor radar presisi melalui bridge I2C.",
+      "purpose": "Sama seperti UART, dibelokkan melalui interface I2C.",
+      "selectable": true,
+      "deviceType": "sensor",
+      "physicalParts": [
+        {
+          "manufacturer": "Seeed Studio",
+          "part": "MR24HPC1",
+          "role": "24GHz radar",
+          "officialUrl": "https://wiki.seeedstudio.com/Radar_MR24HPC1/"
+        }
+      ],
+      "measurements": [
+        {
+          "key": "motion_energy",
+          "label": "Motion Energy",
+          "unit": "val"
+        },
+        {
+          "key": "rest_energy",
+          "label": "Rest Energy",
+          "unit": "val"
+        }
+      ],
+      "variantSupport": {
+        "micro": {
+          "status": "active",
+          "task": "readingSensorMR24HPC1I2C",
+          "component": "inline",
+          "mqttDeviceName": "MR24_Radar",
+          "interfaces": [
+            {
+              "bus": "I2C",
+              "address": "0x12"
+            }
+          ]
+        },
+        "micro-rnd": {
+          "status": "unsupported"
+        },
+        "micro-duo": {
+          "status": "unsupported"
+        },
+        "ccu": {
+          "status": "unsupported"
+        },
+        "micro-modular": {
+          "status": "unsupported"
+        }
+      },
+      "confidence": "firmware-confirmed",
+      "conflicts": [
+        "Secara firmware identik parsing struct dengan UART, namun alamat 0x12 mengindikasikan mikrokontroler perantara I2C-ke-UART yang tidak terdokumentasi vendor asli."
+      ],
+      "evidence": [
+        {
+          "type": "firmware",
+          "path": "Nexabrick Micro/main/slave.cpp",
+          "lines": "1631-1689"
+        }
+      ],
+      "pcb": {
+        "number": null,
+        "name": null,
+        "confidence": "unresolved",
+        "sourcePath": null,
+        "note": "Belum ditemukan dokumentasi board spesifik I2C bridge ini."
+      }
+    },
+    {
+      "id": 36,
+      "slug": "ws2812b",
+      "displayName": "WS2812B LED Strip",
+      "softwareName": "WS2812BLED",
+      "aliases": [],
+      "category": "actuator",
+      "summary": "Aktuator strip lampu LED warna RGB cerdas.",
+      "purpose": "Indikator visual peringatan warna-warni untuk ruangan data center.",
+      "selectable": true,
+      "deviceType": "actuator",
+      "physicalParts": [
+        {
+          "manufacturer": "Worldsemi",
+          "part": "WS2812B",
+          "role": "RGB LED",
+          "officialUrl": "http://www.worldsemi.com/Certifications/WS2812B.html"
+        }
+      ],
+      "measurements": [
+        {
+          "key": "color",
+          "label": "LED State/Color",
+          "unit": "enum"
+        }
+      ],
+      "variantSupport": {
+        "micro": {
+          "status": "active",
+          "task": "readingSensorWS2812BLED",
+          "component": "components/ws2812b",
+          "mqttDeviceName": "WS2812B",
+          "interfaces": [
+            {
+              "bus": "OneWire",
+              "address": "13"
+            }
+          ]
+        },
+        "micro-rnd": {
+          "status": "unsupported"
+        },
+        "micro-duo": {
+          "status": "unsupported"
+        },
+        "ccu": {
+          "status": "unsupported"
+        },
+        "micro-modular": {
+          "status": "unsupported"
+        }
+      },
+      "confidence": "confirmed",
+      "conflicts": [],
+      "evidence": [
+        {
+          "type": "firmware",
+          "path": "Nexabrick Micro/main/slave.cpp",
+          "lines": "1711-1741"
+        }
+      ],
+      "pcb": {
+        "number": null,
+        "name": null,
+        "confidence": "unresolved",
+        "sourcePath": null,
+        "note": "Hanya interface data; LED strip berada di eksternal board."
+      }
+    },
+    {
+      "id": 37,
+      "slug": "kx134",
+      "displayName": "KX134 Vibration Sensor",
+      "softwareName": "KX134",
+      "aliases": [],
+      "category": "motion",
+      "summary": "Sensor akselerasi tinggi (High-g IMU) dan monitor guncangan presisi.",
+      "purpose": "Peringatan dini gempa dan benturan berat.",
+      "selectable": true,
+      "deviceType": "sensor",
+      "physicalParts": [
+        {
+          "manufacturer": "Kionix",
+          "part": "KX134-1211",
+          "role": "vibration sensor",
+          "officialUrl": "https://kionix.com/product/KX134-1211"
+        }
+      ],
+      "measurements": [
+        {
+          "key": "x",
+          "label": "X Acceleration",
+          "unit": "counts"
+        },
+        {
+          "key": "y",
+          "label": "Y Acceleration",
+          "unit": "counts"
+        },
+        {
+          "key": "z",
+          "label": "Z Acceleration",
+          "unit": "counts"
+        },
+        {
+          "key": "vib",
+          "label": "Vibration Flag",
+          "unit": "flag"
+        }
+      ],
+      "variantSupport": {
+        "micro": {
+          "status": "active",
+          "task": "readingSensorKX134",
+          "component": "components/kx134",
+          "mqttDeviceName": "Sensor_KX134",
+          "interfaces": [
+            {
+              "bus": "I2C",
+              "address": "0x1E"
+            }
+          ]
+        },
+        "micro-rnd": {
+          "status": "active",
+          "task": "readingSensorKX134",
+          "component": "components/kx134",
+          "mqttDeviceName": "Sensor_KX134",
+          "interfaces": [
+            {
+              "bus": "I2C",
+              "address": "0x1E"
+            }
+          ]
+        },
+        "micro-duo": {
+          "status": "active",
+          "task": "readingSensorKX134",
+          "component": "components/kx134",
+          "mqttDeviceName": "Sensor_KX134",
+          "interfaces": [
+            {
+              "bus": "I2C",
+              "address": "0x1E"
+            }
+          ]
+        },
+        "ccu": {
+          "status": "active",
+          "task": "readingSensorKX134",
+          "component": "components/kx134",
+          "mqttDeviceName": "Sensor_KX134",
+          "interfaces": [
+            {
+              "bus": "I2C",
+              "address": "0x1E"
+            }
+          ]
+        },
+        "micro-modular": {
+          "status": "unsupported"
+        }
+      },
+      "confidence": "confirmed",
+      "conflicts": [],
+      "evidence": [
+        {
+          "type": "firmware",
+          "path": "Nexabrick Micro RND/main/slave.cpp",
+          "lines": "2685-2741"
+        }
+      ],
+      "pcb": {
+        "number": "#93",
+        "name": "Data Center Vibration Sensor",
+        "confidence": "probable",
+        "sourcePath": "#93 [1B SLOT ]  DATA CENTER VIBRATION SENSOR/sch-pcb/BOM/[BOM] #93 DATA CENTER VIBRATION SENSOR.csv",
+        "note": null
       }
     },
     {
