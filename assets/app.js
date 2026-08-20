@@ -52,6 +52,7 @@ async function init() {
     state.catalog = await res.json();
     
     setupUI();
+    renderStats();
     parseURL();
 
     // Global keyboard
@@ -125,6 +126,15 @@ async function init() {
     els.grid.innerHTML = '';
     els.error.style.display = 'block';
   }
+}
+
+function renderStats() {
+  const devices = state.catalog.devices.length;
+  const categories = new Set(state.catalog.devices.map(d => d.category)).size;
+  const variants = state.catalog.variants.length;
+  document.getElementById('stat-devices').textContent = devices;
+  document.getElementById('stat-categories').textContent = categories;
+  document.getElementById('stat-variants').textContent = variants;
 }
 
 const VALID_STATUSES = new Set(['active', 'incomplete', 'declared-only', 'ui-only', 'unsupported', 'reserved', 'auxiliary', 'actuator', 'unresolved']);

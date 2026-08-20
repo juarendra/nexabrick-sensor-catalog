@@ -220,6 +220,27 @@ input[type="text"]::placeholder { color: var(--text-muted); }
 }
 .hero-actions { display: flex; gap: var(--space-4); flex-wrap: wrap; }
 
+.hero-stats {
+  display: flex;
+  gap: var(--space-6);
+  margin-top: var(--space-6);
+  flex-wrap: wrap;
+}
+.hero-stat { display: flex; flex-direction: column; gap: var(--space-1); }
+.stat-value {
+  font-family: var(--font-mono);
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--accent);
+  line-height: 1;
+}
+.stat-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
 .hero-variants {
   flex: 0 1 400px;
   display: flex;
