@@ -3973,7 +3973,7 @@
     {
       "id": 1001,
       "slug": "tibbit-01",
-      "displayName": "Tibbit #01 Four GPIO 3V3",
+      "displayName": "Four 3v3 GPIO",
       "softwareName": "Tibbit_FourGpio",
       "aliases": [
         "#01",
@@ -3986,6 +3986,12 @@
       "selectable": false,
       "deviceType": "digital-io",
       "physicalParts": [
+        {
+          "manufacturer": "GSPETech",
+          "part": "GPIO Modular",
+          "role": "Modular I/O board",
+          "officialUrl": null
+        },
         {
           "manufacturer": "STMicroelectronics",
           "part": "STM32F030F4P6",
@@ -4045,7 +4051,7 @@
     {
       "id": 1002,
       "slug": "tibbit-02",
-      "displayName": "Tibbit #02 Two Isolated Open Collector Output POS",
+      "displayName": "Two Isolated Open Collector Output POS",
       "softwareName": "Tibbit_TwoIsolatedOut",
       "aliases": [
         "#02",
@@ -4057,6 +4063,12 @@
       "selectable": false,
       "deviceType": "actuator",
       "physicalParts": [
+        {
+          "manufacturer": "GSPETech",
+          "part": "Isolated OC Output Modular",
+          "role": "Modular I/O board",
+          "officialUrl": null
+        },
         {
           "manufacturer": "STMicroelectronics",
           "part": "STM32F030F4P6",
@@ -4122,7 +4134,7 @@
     {
       "id": 1003,
       "slug": "tibbit-04",
-      "displayName": "Tibbit #04 Four Dry Contacts Inputs",
+      "displayName": "Four Dry Contacts Inputs",
       "softwareName": "Tibbit_FourDryContact",
       "aliases": [
         "#04",
@@ -4134,6 +4146,12 @@
       "selectable": false,
       "deviceType": "sensor",
       "physicalParts": [
+        {
+          "manufacturer": "GSPETech",
+          "part": "Dry Contacts Input Modular",
+          "role": "Modular I/O board",
+          "officialUrl": null
+        },
         {
           "manufacturer": "STMicroelectronics",
           "part": "STM32F030F4P6",
@@ -4199,7 +4217,7 @@
     {
       "id": 1004,
       "slug": "tibbit-06",
-      "displayName": "Tibbit #06 Four Isolated Inputs Comm Cathode",
+      "displayName": "Four Isolated Inputs Comm Cathode",
       "softwareName": "Tibbit_FourIsolatedIn",
       "aliases": [
         "#06",
@@ -4211,6 +4229,12 @@
       "selectable": false,
       "deviceType": "sensor",
       "physicalParts": [
+        {
+          "manufacturer": "GSPETech",
+          "part": "Isolated Inputs Modular",
+          "role": "Modular I/O board",
+          "officialUrl": null
+        },
         {
           "manufacturer": "STMicroelectronics",
           "part": "STM32F030F4P6",
@@ -4276,7 +4300,7 @@
     {
       "id": 1005,
       "slug": "tibbit-09",
-      "displayName": "Tibbit #09 Two Low-Power Relay",
+      "displayName": "Two Low-Power Relay",
       "softwareName": "Tibbit_TwoLowPowerRelay",
       "aliases": [
         "#09",
@@ -4288,6 +4312,12 @@
       "selectable": false,
       "deviceType": "actuator",
       "physicalParts": [
+        {
+          "manufacturer": "GSPETech",
+          "part": "Low-Power Relay Modular",
+          "role": "Modular I/O board",
+          "officialUrl": null
+        },
         {
           "manufacturer": "STMicroelectronics",
           "part": "STM32F030F4P6",
@@ -4347,7 +4377,7 @@
     {
       "id": 1006,
       "slug": "tibbit-12",
-      "displayName": "Tibbit #12 Four PWM Open Drain 24V 3A",
+      "displayName": "Four PWM Open Drain 24V 3A",
       "softwareName": "Tibbit_FourPwm24v3a",
       "aliases": [
         "#12",
@@ -4359,6 +4389,12 @@
       "selectable": false,
       "deviceType": "actuator",
       "physicalParts": [
+        {
+          "manufacturer": "GSPETech",
+          "part": "PWM Open Drain Modular",
+          "role": "Modular I/O board",
+          "officialUrl": null
+        },
         {
           "manufacturer": "STMicroelectronics",
           "part": "STM32F030F4P6",
