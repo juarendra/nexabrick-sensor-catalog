@@ -1,8 +1,11 @@
+import { escape, formatEnum, normalize, filterDevices, parseIdParam, sanitizeCategory } from './lib.mjs';
+
 const state = {
   catalog: null,
   filters: { status: [], category: [] },
   search: '',
-  selectedId: null
+  selectedId: null,
+  variant: null
 };
 
 // UI Elements
@@ -49,7 +52,6 @@ async function init() {
     
     setupUI();
     parseURL();
-    render();
     
     // Global keyboard
     document.addEventListener('keydown', (e) => {
@@ -76,6 +78,14 @@ async function init() {
   }
 }
 
+const VALID_STATUSES = new Set(['active', 'incomplete', 'declared-only', 'ui-only', 'unsupported', 'reserved', 'auxiliary', 'actuator', 'unresolved']);
+const BADGE_STATUS = {
+  active: ['act', 'Active'],
+  incomplete: ['warn', 'Incomplete'],
+  'declared-only': ['warn', 'Declared Only'],
+  auxiliary: ['aux', 'Auxiliary']
+};
+
 function setupUI() {
   // Source badge
   if (state.catalog.generatedFrom) {
@@ -85,8 +95,9 @@ function setupUI() {
   }
 
   // Variant plates
-  els.variantPlates.innerHTML = state.catalog.variants.filter(v => v.key !== 'micro-modular').map(v => `
-    <button class="variant-plate" data-vk="${v.key}">
+  const visibleVariants = state.catalog.variants.filter(v => v.key !== 'micro-modular');
+  els.variantPlates.innerHTML = visibleVariants.map(v => `
+    <button class="variant-plate" type="button" data-vk="${escape(v.key)}" aria-pressed="${state.variant === v.key ? 'true' : 'false'}">
       <div class="vp-main">
         <span class="vp-name">${escape(v.name)}</span>
         <span class="vp-desc">${escape(v.description)}</span>
@@ -94,6 +105,20 @@ function setupUI() {
       <span class="vp-stat">${v.capacity} dev</span>
     </button>
   `).join('');
+
+  // Variant plate click -> toggle variant filter
+  els.variantPlates.addEventListener('click', (e) => {
+    const plate = e.target.closest('.variant-plate');
+    if (!plate) return;
+    const vk = plate.dataset.vk;
+    state.variant = state.variant === vk ? null : vk;
+    updateURL();
+    render();
+    document.querySelectorAll('.variant-plate').forEach(p => {
+      p.classList.toggle('active', p.dataset.vk === state.variant);
+      p.setAttribute('aria-pressed', String(p.dataset.vk === state.variant));
+    });
+  });
 
   // Extract unique categories
   const cats = new Set(state.catalog.devices.map(d => d.category));
@@ -111,6 +136,7 @@ function setupUI() {
   
   document.getElementById('btn-explore').addEventListener('click', () => els.search.focus());
   document.getElementById('btn-empty-reset').addEventListener('click', resetAll);
+  document.getElementById('btn-reset-filters').addEventListener('click', resetAll);
   
   // Mobile filters
   document.getElementById('btn-open-filters').addEventListener('click', () => els.filterPanel.classList.add('open'));
@@ -137,8 +163,14 @@ function parseURL() {
   els.search.value = state.search;
   els.clearSearch.style.display = state.search ? 'block' : 'none';
   
-  state.filters.status = params.getAll('status');
-  state.filters.category = params.getAll('cat');
+  // Whitelist filter values against catalog data
+  const knownCategories = new Set(state.catalog.devices.map(d => d.category));
+  state.filters.status = params.getAll('status').filter(s => VALID_STATUSES.has(s));
+  state.filters.category = params.getAll('cat').map(c => sanitizeCategory(c, knownCategories)).filter(c => c !== null);
+  
+  // Variant filter (optional URL key, preserved for backward compat)
+  const vParam = params.get('variant');
+  state.variant = state.catalog.variants.some(v => v.key === vParam) ? vParam : null;
   
   // Sync checkboxes
   els.filterPanel.querySelectorAll('input').forEach(cb => {
@@ -146,12 +178,20 @@ function parseURL() {
     if (cb.name === 'category') cb.checked = state.filters.category.includes(cb.value);
   });
   
+  // Sync variant plates
+  document.querySelectorAll('.variant-plate').forEach(p => {
+    p.classList.toggle('active', p.dataset.vk === state.variant);
+    p.setAttribute('aria-pressed', String(p.dataset.vk === state.variant));
+  });
+  
   const idParam = params.get('id');
-  if (idParam !== null) {
-    openDetail(parseInt(idParam, 10), false);
+  const id = parseIdParam(idParam);
+  if (id !== null) {
+    openDetail(id, false);
   } else {
     state.selectedId = null;
     els.drawer.classList.remove('open');
+    els.drawer.setAttribute('aria-hidden', 'true');
     document.querySelectorAll('.card.selected').forEach(c => c.classList.remove('selected'));
   }
   
@@ -163,6 +203,7 @@ function updateURL() {
   if (state.search) params.set('q', state.search);
   state.filters.status.forEach(s => params.append('status', s));
   state.filters.category.forEach(c => params.append('cat', c));
+  if (state.variant) params.set('variant', state.variant);
   if (state.selectedId !== null) params.set('id', state.selectedId);
   
   const newUrl = `${window.location.pathname}${params.toString() ? '?' + params.toString() : ''}`;
@@ -170,7 +211,7 @@ function updateURL() {
 }
 
 function updateSearch() {
-  state.search = els.search.value.toLowerCase();
+  state.search = normalize(els.search.value);
   els.clearSearch.style.display = state.search ? 'block' : 'none';
   updateURL();
   render();
@@ -186,50 +227,38 @@ function updateFilters() {
 function resetAll() {
   els.search.value = '';
   state.search = '';
+  state.variant = null;
   els.filterPanel.querySelectorAll('input').forEach(cb => cb.checked = false);
   state.filters.status = [];
   state.filters.category = [];
+  document.querySelectorAll('.variant-plate').forEach(p => {
+    p.classList.remove('active');
+    p.setAttribute('aria-pressed', 'false');
+  });
   updateURL();
   render();
 }
 
 function removeFilter(type, val) {
+  const inputName = type === 'category' ? 'category' : 'status';
   state.filters[type] = state.filters[type].filter(v => v !== val);
-  els.filterPanel.querySelector(`input[name="${type === 'category' ? 'cat' : 'status'}"][value="${val}"]`).checked = false;
+  const cb = els.filterPanel.querySelector(`input[name="${inputName}"][value="${val}"]`);
+  if (cb) cb.checked = false;
   updateURL();
   render();
 }
 
 function render() {
   // 1. Filter logic
-  const filtered = state.catalog.devices.filter(d => {
-    // Text search
-    if (state.search) {
-      const term = state.search;
-      const match = 
-        d.id.toString() === term ||
-        d.slug.includes(term) ||
-        d.displayName.toLowerCase().includes(term) ||
-        d.softwareName.toLowerCase().includes(term) ||
-        (d.pcb?.number || '').toLowerCase().includes(term) ||
-        (d.pcb?.name || '').toLowerCase().includes(term) ||
-        (d.aliases || []).some(a => a.toLowerCase().includes(term)) ||
-        d.category.includes(term) ||
-        (d.physicalParts || []).some(p => p.part.toLowerCase().includes(term) || p.manufacturer.toLowerCase().includes(term));
-      if (!match) return false;
-    }
-    
-    // Checkboxes
-    if (state.filters.category.length > 0 && !state.filters.category.includes(d.category)) return false;
-    
-    // Status (if any variant has this status)
-    if (state.filters.status.length > 0) {
-      const hasStatus = Object.values(d.variantSupport).some(vs => state.filters.status.includes(vs.status));
-      if (!hasStatus) return false;
-    }
-    
-    return true;
+  let filtered = filterDevices(state.catalog.devices, {
+    search: state.search,
+    filters: state.filters
   });
+  
+  // Variant plate filter
+  if (state.variant) {
+    filtered = filtered.filter(d => d.variantSupport[state.variant]?.status === 'active');
+  }
 
   // 2. Render Cards
   if (filtered.length === 0) {
@@ -248,6 +277,7 @@ function render() {
       const vals = Object.values(d.variantSupport).map(v => v.status);
       if (vals.includes('active')) { overall = 'act'; oLbl = 'Active'; }
       else if (vals.includes('incomplete')) { overall = 'warn'; oLbl = 'Incomplete'; }
+      else if (vals.includes('auxiliary')) { overall = 'aux'; oLbl = 'Auxiliary'; }
       else if (vals.includes('declared-only')) { overall = 'warn'; oLbl = 'Declared Only'; }
       
       // Physical summary
@@ -256,11 +286,13 @@ function render() {
       else if (d.physicalParts && d.physicalParts.length > 1) phys = `${d.physicalParts.length} components (Composite)`;
       
       // Active variants dots
-      const vDots = ['micro', 'micro-rnd', 'micro-duo', 'ccu'].map(vk => {
-        const s = d.variantSupport[vk]?.status;
-        const cl = s === 'active' ? 'on' : (s === 'incomplete' || s === 'declared-only' ? 'inc' : 'off');
-        return `<div class="v-dot ${cl}" title="${vk}: ${s}"></div>`;
-      }).join('');
+      const vDots = state.catalog.variants
+        .filter(v => v.key !== 'micro-modular')
+        .map(vk => {
+          const s = d.variantSupport[vk.key]?.status;
+          const cl = s === 'active' ? 'on' : (s === 'incomplete' || s === 'declared-only' ? 'inc' : 'off');
+          return `<div class="v-dot ${cl}" title="${vk.key}: ${s}"></div>`;
+        }).join('');
 
       return `
         <div class="card ${isSel}" data-id="${d.id}" role="button" tabindex="0" onclick="window.openDetail(${d.id}, true)" onkeydown="if(event.key==='Enter') window.openDetail(${d.id}, true)">
@@ -366,9 +398,8 @@ window.openDetail = function(id, pushState = true) {
   document.getElementById('detail-measurements').innerHTML = msHtml || '<span class="mx-lbl">None</span>';
   
   // Variant Matrix
-  const varKeys = ['micro', 'micro-rnd', 'micro-duo', 'ccu'];
-  const mxHtml = varKeys.map(vk => {
-    const vs = d.variantSupport[vk];
+  const mxHtml = state.catalog.variants.map(vk => {
+    const vs = d.variantSupport[vk.key];
     if (!vs) return '';
     const stCls = vs.status === 'active' ? 'act' : (vs.status === 'unsupported' ? 'uns' : (vs.status === 'incomplete' || vs.status === 'declared-only' ? 'inc' : 'uns'));
     
@@ -381,7 +412,7 @@ window.openDetail = function(id, pushState = true) {
       }
     }
     
-    const vName = state.catalog.variants.find(v => v.key === vk)?.name || vk;
+    const vName = vk.name;
     
     return `
       <div class="mx-row">
@@ -411,12 +442,14 @@ window.openDetail = function(id, pushState = true) {
   document.getElementById('detail-evidence').innerHTML = evHtml || '<span class="mx-lbl">No source cited</span>';
 
   els.drawer.classList.add('open');
+  els.drawer.setAttribute('aria-hidden', 'false');
   els.drawer.querySelector('#btn-close-detail').focus();
 }
 
 window.closeDetail = function() {
   state.selectedId = null;
   els.drawer.classList.remove('open');
+  els.drawer.setAttribute('aria-hidden', 'true');
   document.querySelectorAll('.card.selected').forEach(c => c.classList.remove('selected'));
   updateURL();
   els.search.focus();
@@ -433,18 +466,6 @@ window.copyText = function(text) {
     toast.classList.add('show');
     setTimeout(() => toast.classList.remove('show'), 2500);
   });
-}
-
-function escape(str) {
-  if (!str) return '';
-  return str.toString().replace(/[&<>"']/g, function(m) {
-    return {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[m];
-  });
-}
-
-function formatEnum(str) {
-  if (!str) return '';
-  return str.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 }
 
 // Start
