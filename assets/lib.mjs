@@ -78,3 +78,32 @@ export function safeUrl(url) {
   if (parsed.protocol !== 'https:') return null;
   return parsed.href;
 }
+
+export function getCatalogOverview(catalog) {
+  const devices = Array.isArray(catalog?.devices) ? catalog.devices : [];
+  const variants = Array.isArray(catalog?.variants) ? catalog.variants : [];
+
+  const active = devices.filter(device =>
+    Object.values(device.variantSupport || {}).some(
+      support => support?.status === 'active'
+    )
+  ).length;
+
+  const categories = new Set(
+    devices
+      .map(device => device.category)
+      .filter(category => typeof category === 'string' && category.length > 0)
+  ).size;
+
+  const coverage = devices.length === 0
+    ? 0
+    : Math.round((active / devices.length) * 100);
+
+  return {
+    devices: devices.length,
+    active,
+    categories,
+    variants: variants.length,
+    coverage
+  };
+}
