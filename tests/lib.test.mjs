@@ -9,7 +9,8 @@ import {
   parseIdParam,
   sanitizeCategory,
   sanitizeStatus,
-  safeUrl
+  safeUrl,
+  getCatalogOverview
 } from '../assets/lib.mjs';
 
 const device = {
@@ -96,4 +97,98 @@ test('safeUrl() only permits https URLs', () => {
   assert.equal(safeUrl('javascript:alert(1)'), null);
   assert.equal(safeUrl(''), null);
   assert.equal(safeUrl('not a url'), null);
+});
+
+test('getCatalogOverview counts all devices', () => {
+  const overview = getCatalogOverview({
+    devices: [device, device],
+    variants: [{ key: 'micro' }]
+  });
+  assert.equal(overview.devices, 2);
+});
+
+test('getCatalogOverview counts active devices once even when multiple variants are active', () => {
+  const overview = getCatalogOverview({
+    variants: [{ key: 'micro' }, { key: 'ccu' }],
+    devices: [
+      {
+        category: 'environmental',
+        variantSupport: {
+          micro: { status: 'active' },
+          ccu: { status: 'active' }
+        }
+      },
+      {
+        category: 'digital-io',
+        variantSupport: {
+          micro: { status: 'unsupported' }
+        }
+      }
+    ]
+  });
+
+  assert.deepEqual(overview, {
+    devices: 2,
+    active: 1,
+    categories: 2,
+    variants: 2,
+    coverage: 50
+  });
+});
+
+test('getCatalogOverview does not count incomplete/declared-only/unsupported as active', () => {
+  const overview = getCatalogOverview({
+    variants: [{ key: 'micro' }],
+    devices: [
+      { category: 'env', variantSupport: { micro: { status: 'incomplete' } } },
+      { category: 'env', variantSupport: { micro: { status: 'declared-only' } } },
+      { category: 'env', variantSupport: { micro: { status: 'unsupported' } } },
+      { category: 'env', variantSupport: { micro: { status: 'auxiliary' } } },
+      { category: 'env', variantSupport: { micro: { status: 'unresolved' } } }
+    ]
+  });
+  assert.equal(overview.active, 0);
+});
+
+test('getCatalogOverview counts unique categories and all variants including micro-modular', () => {
+  const overview = getCatalogOverview({
+    variants: [{ key: 'micro' }, { key: 'micro-modular' }, { key: 'ccu' }],
+    devices: [
+      { category: 'environmental', variantSupport: {} },
+      { category: 'environmental', variantSupport: {} },
+      { category: 'digital-io', variantSupport: {} }
+    ]
+  });
+  assert.equal(overview.categories, 2);
+  assert.equal(overview.variants, 3);
+});
+
+test('getCatalogOverview rounds coverage to nearest whole percentage', () => {
+  const overview = getCatalogOverview({
+    variants: [],
+    devices: [
+      { category: 'env', variantSupport: { micro: { status: 'active' } } },
+      { category: 'env', variantSupport: { micro: { status: 'unsupported' } } },
+      { category: 'env', variantSupport: { micro: { status: 'unsupported' } } }
+    ]
+  });
+  assert.equal(overview.coverage, 33);
+});
+
+test('getCatalogOverview returns zeros for missing/empty arrays', () => {
+  const overview = getCatalogOverview(null);
+  assert.deepEqual(overview, { devices: 0, active: 0, categories: 0, variants: 0, coverage: 0 });
+  assert.deepEqual(getCatalogOverview({}), { devices: 0, active: 0, categories: 0, variants: 0, coverage: 0 });
+  assert.deepEqual(getCatalogOverview({ devices: [], variants: [] }), { devices: 0, active: 0, categories: 0, variants: 0, coverage: 0 });
+});
+
+test('getCatalogOverview does not throw when a device lacks variantSupport', () => {
+  const overview = getCatalogOverview({
+    variants: [{ key: 'micro' }],
+    devices: [
+      { category: 'environmental' },
+      { category: 'digital-io', variantSupport: null }
+    ]
+  });
+  assert.deepEqual(overview, { devices: 2, active: 0, categories: 2, variants: 1, coverage: 0 });
 });

@@ -1,4 +1,4 @@
-import { escape, formatEnum, normalize, filterDevices, parseIdParam, sanitizeCategory, safeUrl } from './lib.mjs';
+import { escape, formatEnum, normalize, filterDevices, parseIdParam, sanitizeCategory, safeUrl, getCatalogOverview } from './lib.mjs';
 
 const state = {
   catalog: null,
@@ -51,8 +51,8 @@ async function init() {
     if (!res.ok) throw new Error('Fetch failed');
     state.catalog = await res.json();
     
+    renderCatalogOverview(state.catalog);
     setupUI();
-    renderStats();
     parseURL();
 
     // Global keyboard
@@ -123,18 +123,50 @@ async function init() {
 
   } catch (err) {
     console.error(err);
+    renderCatalogOverviewError();
     els.grid.innerHTML = '';
     els.error.style.display = 'block';
   }
 }
 
-function renderStats() {
-  const devices = state.catalog.devices.length;
-  const categories = new Set(state.catalog.devices.map(d => d.category)).size;
-  const variants = state.catalog.variants.length;
-  document.getElementById('stat-devices').textContent = devices;
-  document.getElementById('stat-categories').textContent = categories;
-  document.getElementById('stat-variants').textContent = variants;
+function renderCatalogOverview(catalog) {
+  const metrics = getCatalogOverview(catalog);
+
+  document.getElementById('overview-devices').textContent = metrics.devices;
+  document.getElementById('overview-active').textContent = metrics.active;
+  document.getElementById('overview-categories').textContent = metrics.categories;
+  document.getElementById('overview-variants').textContent = metrics.variants;
+  document.getElementById('overview-coverage-value').textContent = `${metrics.coverage}%`;
+
+  const progress = document.getElementById('overview-progress');
+  progress.setAttribute('aria-valuenow', String(metrics.coverage));
+  document.getElementById('overview-progress-fill').style.width = `${metrics.coverage}%`;
+
+  document.querySelectorAll('.overview-value').forEach(value => {
+    value.classList.remove('is-loading');
+  });
+
+  const empty = metrics.devices === 0;
+  const status = document.getElementById('overview-status');
+  status.dataset.state = empty ? 'empty' : 'success';
+  document.getElementById('overview-status-label').textContent = empty
+    ? 'Empty catalog'
+    : 'Live catalog';
+}
+
+function renderCatalogOverviewError() {
+  document.querySelectorAll('.overview-value').forEach(value => {
+    value.textContent = 'Unavailable';
+    value.classList.remove('is-loading');
+  });
+
+  document.getElementById('overview-coverage-value').textContent = 'Unavailable';
+  document.getElementById('overview-progress').setAttribute('aria-valuenow', '0');
+  document.getElementById('overview-progress-fill').style.width = '0%';
+
+  const status = document.getElementById('overview-status');
+  status.dataset.state = 'error';
+  document.getElementById('overview-status-label').textContent = 'Catalog unavailable';
 }
 
 const VALID_STATUSES = new Set(['active', 'incomplete', 'declared-only', 'ui-only', 'unsupported', 'reserved', 'auxiliary', 'actuator', 'unresolved']);

@@ -34,23 +34,67 @@
                     <button class="btn-primary" id="btn-explore">Jelajahi Data</button>
                     <a href="https://github.com/GSPETech/Nexabrick_Firmware" class="btn-secondary" target="_blank">Lihat source firmware</a>
                 </div>
-                <div class="hero-stats" id="hero-stats" aria-label="Ringkasan katalog">
-                    <div class="hero-stat">
-                        <span class="stat-value" id="stat-devices">–</span>
-                        <span class="stat-label">Sensor didukung</span>
-                    </div>
-                    <div class="hero-stat">
-                        <span class="stat-value" id="stat-categories">–</span>
-                        <span class="stat-label">Kategori</span>
-                    </div>
-                    <div class="hero-stat">
-                        <span class="stat-value" id="stat-variants">–</span>
-                        <span class="stat-label">Varian perangkat</span>
-                    </div>
-                </div>
             </div>
             <div class="hero-variants" id="variant-plates">
                 <!-- Variant plates rendered here -->
+            </div>
+        </section>
+
+        <section class="catalog-overview" id="catalog-overview" aria-labelledby="catalog-overview-title">
+            <div class="overview-header">
+                <h2 id="catalog-overview-title">Catalog Overview</h2>
+                <div class="overview-status" id="overview-status" data-state="loading">
+                    <span class="overview-status-dot" aria-hidden="true"></span>
+                    <span id="overview-status-label">Loading catalog</span>
+                </div>
+            </div>
+
+            <div class="overview-grid">
+                <article class="overview-metric metric-devices">
+                    <span class="overview-icon" aria-hidden="true">ID</span>
+                    <span class="overview-value is-loading" id="overview-devices">Loading…</span>
+                    <h3>Devices Indexed</h3>
+                    <p>All primary catalog records</p>
+                </article>
+
+                <article class="overview-metric metric-active">
+                    <span class="overview-icon" aria-hidden="true">OK</span>
+                    <span class="overview-value is-loading" id="overview-active">Loading…</span>
+                    <h3>Active Support</h3>
+                    <p>At least one active firmware path</p>
+                </article>
+
+                <article class="overview-metric metric-categories">
+                    <span class="overview-icon" aria-hidden="true">CAT</span>
+                    <span class="overview-value is-loading" id="overview-categories">Loading…</span>
+                    <h3>Categories</h3>
+                    <p>Unique sensor and I/O domains</p>
+                </article>
+
+                <article class="overview-metric metric-variants">
+                    <span class="overview-icon" aria-hidden="true">VAR</span>
+                    <span class="overview-value is-loading" id="overview-variants">Loading…</span>
+                    <h3>Variants</h3>
+                    <p>Firmware and hardware targets</p>
+                </article>
+            </div>
+
+            <div class="overview-coverage">
+                <div class="overview-coverage-label">
+                    <span>Active coverage</span>
+                    <strong id="overview-coverage-value">Loading…</strong>
+                </div>
+                <div
+                    class="overview-progress"
+                    id="overview-progress"
+                    role="progressbar"
+                    aria-label="Active sensor support coverage"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                    aria-valuenow="0"
+                >
+                    <span class="overview-progress-fill" id="overview-progress-fill"></span>
+                </div>
             </div>
         </section>
 
