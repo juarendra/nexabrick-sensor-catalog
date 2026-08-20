@@ -128,12 +128,6 @@ async function init() {
 }
 
 const VALID_STATUSES = new Set(['active', 'incomplete', 'declared-only', 'ui-only', 'unsupported', 'reserved', 'auxiliary', 'actuator', 'unresolved']);
-const BADGE_STATUS = {
-  active: ['act', 'Active'],
-  incomplete: ['warn', 'Incomplete'],
-  'declared-only': ['warn', 'Declared Only'],
-  auxiliary: ['aux', 'Auxiliary']
-};
 
 function setupUI() {
   // Source badge
@@ -239,8 +233,10 @@ function parseURL() {
     openDetail(id, false);
   } else {
     state.selectedId = null;
+    state.opener = null;
     els.drawer.classList.remove('open');
     els.drawer.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('drawer-open');
     document.querySelectorAll('.card.selected').forEach(c => c.classList.remove('selected'));
   }
   
