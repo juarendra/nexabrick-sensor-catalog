@@ -2295,10 +2295,10 @@
       "deviceType": "sensor",
       "physicalParts": [
         {
-          "manufacturer": "N/A",
-          "part": "TIBBIT Module",
-          "role": "I/O controller",
-          "officialUrl": null
+          "manufacturer": "STMicroelectronics",
+          "part": "STM32F030F4P6",
+          "role": "Universal I/O MCU (module-side)",
+          "officialUrl": "https://www.st.com/en/microcontrollers-microprocessors/stm32f030f4.html"
         }
       ],
       "measurements": [
@@ -2350,8 +2350,8 @@
         },
         "micro-duo": {
           "status": "active",
-          "task": "readingSensorTIBBITGPIO",
-          "component": "components/tibbit",
+          "task": "readingSensorTibbitIO",
+          "component": "components/tibbit_io",
           "mqttDeviceName": "TIBBIT_GPIO",
           "interfaces": [
             {
@@ -2362,8 +2362,8 @@
         },
         "ccu": {
           "status": "active",
-          "task": "readingSensorTIBBITGPIO",
-          "component": "components/tibbit",
+          "task": "readingSensorTibbitIO",
+          "component": "components/tibbit_io",
           "mqttDeviceName": "TIBBIT_GPIO",
           "interfaces": [
             {
@@ -2378,13 +2378,19 @@
       },
       "confidence": "firmware-confirmed",
       "conflicts": [
-        "CCU juga memiliki FXL6408 expander di I2C 0x43 yang berjalan background, jangan dikacaukan dengan TIBBIT sensor ini."
+        "CCU juga memiliki FXL6408 expander di I2C 0x43 yang berjalan background, jangan dikacaukan dengan TIBBIT sensor ini.",
+        "CCU dispatch case 20 (slave.cpp:3451) masih menyebut readingSensorTIBBITGPIO (nama lama) padahal task yang didefinisikan adalah readingSensorTibbitIO."
       ],
       "evidence": [
         {
           "type": "firmware",
           "path": "Nexabrick Micro RND/main/slave.cpp",
-          "lines": "2333-2390"
+          "lines": "2353-2420"
+        },
+        {
+          "type": "firmware",
+          "path": "Nexabrick CCU/main/slave.cpp",
+          "lines": "699-770"
         }
       ],
       "pcb": {
@@ -3967,23 +3973,30 @@
     {
       "id": 1001,
       "slug": "tibbit-01",
-      "displayName": "Tibbit #01 FOUR_3V3_GPIO",
-      "softwareName": "Tibbit_0x01",
+      "displayName": "Four 3v3 GPIO",
+      "softwareName": "Tibbit_FourGpio",
       "aliases": [
         "#01",
-        "FOUR_3V3_GPIO"
+        "FOUR_3V3_GPIO",
+        "TIBBIT_FOUR_GPIO"
       ],
       "category": "digital-io",
-      "summary": "4 pin GPIO digital 3.3V dengan konfigurasi input/output yang dapat diatur via software.",
+      "summary": "4 pin GPIO digital 3.3V dengan konfigurasi input/output yang dapat diatur via register.",
       "purpose": "Modular slot (Device Code 0x01) yang dipetakan melalui firmware Universal Smart I/O ID 20.",
       "selectable": false,
-      "deviceType": "actuator",
+      "deviceType": "digital-io",
       "physicalParts": [
         {
           "manufacturer": "GSPETech",
-          "part": "#01",
-          "role": "Tibbit Module",
+          "part": "GPIO Modular",
+          "role": "Modular I/O board",
           "officialUrl": null
+        },
+        {
+          "manufacturer": "STMicroelectronics",
+          "part": "STM32F030F4P6",
+          "role": "I/O MCU",
+          "officialUrl": "https://www.st.com/en/microcontrollers-microprocessors/stm32f030f4.html"
         }
       ],
       "measurements": [
@@ -4019,8 +4032,13 @@
       "evidence": [
         {
           "type": "firmware",
-          "path": "Nexabrick_Firmware/docs/superpowers/plans/2026-08-18-tibbit-universal-io.md",
-          "lines": "42"
+          "path": "tools/stm32_tibbit_base/Core/Inc/tibbit_regs.h",
+          "lines": "11-16"
+        },
+        {
+          "type": "firmware",
+          "path": "docs/superpowers/plans/2026-08-18-tibbit-universal-io.md",
+          "lines": "39-46"
         }
       ],
       "pcb": {
@@ -4033,29 +4051,41 @@
     {
       "id": 1002,
       "slug": "tibbit-02",
-      "displayName": "Tibbit #02 TWO",
-      "softwareName": "Tibbit_0x02",
+      "displayName": "Two Isolated Open Collector Output POS",
+      "softwareName": "Tibbit_TwoIsolatedOut",
       "aliases": [
         "#02",
-        "TWO ISOLATED OPEN COLLECTOR OUTPUT POS"
+        "TIBBIT_TWO_ISOLATED_OPEN_COLLECTOR_OUTPUT_POS"
       ],
       "category": "digital-io",
-      "summary": "2 output Open Collector (positif) terisolasi secara optikal.",
+      "summary": "2 output Open Collector positif yang diisolasi secara optikal.",
       "purpose": "Modular slot (Device Code 0x02) yang dipetakan melalui firmware Universal Smart I/O ID 20.",
       "selectable": false,
       "deviceType": "actuator",
       "physicalParts": [
         {
           "manufacturer": "GSPETech",
-          "part": "#02",
-          "role": "Tibbit Module",
+          "part": "Isolated OC Output Modular",
+          "role": "Modular I/O board",
+          "officialUrl": null
+        },
+        {
+          "manufacturer": "STMicroelectronics",
+          "part": "STM32F030F4P6",
+          "role": "I/O MCU",
+          "officialUrl": "https://www.st.com/en/microcontrollers-microprocessors/stm32f030f4.html"
+        },
+        {
+          "manufacturer": "Lite-On",
+          "part": "LTV-827S",
+          "role": "Opto-isolator",
           "officialUrl": null
         }
       ],
       "measurements": [
         {
           "key": "state",
-          "label": "I/O State",
+          "label": "Output State",
           "unit": "bitmask"
         }
       ],
@@ -4085,8 +4115,13 @@
       "evidence": [
         {
           "type": "firmware",
-          "path": "Nexabrick_Firmware/docs/superpowers/plans/2026-08-18-tibbit-universal-io.md",
-          "lines": "42"
+          "path": "tools/stm32_tibbit_base/Core/Inc/tibbit_regs.h",
+          "lines": "11-16"
+        },
+        {
+          "type": "firmware",
+          "path": "docs/superpowers/plans/2026-08-18-tibbit-universal-io.md",
+          "lines": "39-46"
         }
       ],
       "pcb": {
@@ -4099,29 +4134,41 @@
     {
       "id": 1003,
       "slug": "tibbit-04",
-      "displayName": "Tibbit #04 FOUR",
-      "softwareName": "Tibbit_0x04",
+      "displayName": "Four Dry Contacts Inputs",
+      "softwareName": "Tibbit_FourDryContact",
       "aliases": [
         "#04",
-        "FOUR DRY CONTACTS INPUTS"
+        "TIBBIT_FOUR_DRY_CONTACTS_INPUTS"
       ],
       "category": "digital-io",
       "summary": "4 input dry contact pasif, cocok untuk membaca limit switch atau relay eksternal.",
       "purpose": "Modular slot (Device Code 0x04) yang dipetakan melalui firmware Universal Smart I/O ID 20.",
       "selectable": false,
-      "deviceType": "actuator",
+      "deviceType": "sensor",
       "physicalParts": [
         {
           "manufacturer": "GSPETech",
-          "part": "#04",
-          "role": "Tibbit Module",
+          "part": "Dry Contacts Input Modular",
+          "role": "Modular I/O board",
+          "officialUrl": null
+        },
+        {
+          "manufacturer": "STMicroelectronics",
+          "part": "STM32F030F4P6",
+          "role": "I/O MCU",
+          "officialUrl": "https://www.st.com/en/microcontrollers-microprocessors/stm32f030f4.html"
+        },
+        {
+          "manufacturer": "Lite-On",
+          "part": "LTV-847S",
+          "role": "Opto-isolator",
           "officialUrl": null
         }
       ],
       "measurements": [
         {
           "key": "state",
-          "label": "I/O State",
+          "label": "Input State",
           "unit": "bitmask"
         }
       ],
@@ -4151,8 +4198,13 @@
       "evidence": [
         {
           "type": "firmware",
-          "path": "Nexabrick_Firmware/docs/superpowers/plans/2026-08-18-tibbit-universal-io.md",
-          "lines": "42"
+          "path": "tools/stm32_tibbit_base/Core/Inc/tibbit_regs.h",
+          "lines": "11-16"
+        },
+        {
+          "type": "firmware",
+          "path": "docs/superpowers/plans/2026-08-18-tibbit-universal-io.md",
+          "lines": "39-46"
         }
       ],
       "pcb": {
@@ -4165,29 +4217,41 @@
     {
       "id": 1004,
       "slug": "tibbit-06",
-      "displayName": "Tibbit #06 FOUR",
-      "softwareName": "Tibbit_0x06",
+      "displayName": "Four Isolated Inputs Comm Cathode",
+      "softwareName": "Tibbit_FourIsolatedIn",
       "aliases": [
         "#06",
-        "FOUR ISOLATED INPUTS COMM_CATHODE"
+        "TIBBIT_FOUR_ISOLATED_INPUTS_COMM_CATHODE"
       ],
       "category": "digital-io",
       "summary": "4 input terisolasi optikal dengan common cathode.",
       "purpose": "Modular slot (Device Code 0x06) yang dipetakan melalui firmware Universal Smart I/O ID 20.",
       "selectable": false,
-      "deviceType": "actuator",
+      "deviceType": "sensor",
       "physicalParts": [
         {
           "manufacturer": "GSPETech",
-          "part": "#06",
-          "role": "Tibbit Module",
+          "part": "Isolated Inputs Modular",
+          "role": "Modular I/O board",
+          "officialUrl": null
+        },
+        {
+          "manufacturer": "STMicroelectronics",
+          "part": "STM32F030F4P6",
+          "role": "I/O MCU",
+          "officialUrl": "https://www.st.com/en/microcontrollers-microprocessors/stm32f030f4.html"
+        },
+        {
+          "manufacturer": "Lite-On",
+          "part": "LTV-847S",
+          "role": "Opto-isolator",
           "officialUrl": null
         }
       ],
       "measurements": [
         {
           "key": "state",
-          "label": "I/O State",
+          "label": "Input State",
           "unit": "bitmask"
         }
       ],
@@ -4217,8 +4281,13 @@
       "evidence": [
         {
           "type": "firmware",
-          "path": "Nexabrick_Firmware/docs/superpowers/plans/2026-08-18-tibbit-universal-io.md",
-          "lines": "42"
+          "path": "tools/stm32_tibbit_base/Core/Inc/tibbit_regs.h",
+          "lines": "11-16"
+        },
+        {
+          "type": "firmware",
+          "path": "docs/superpowers/plans/2026-08-18-tibbit-universal-io.md",
+          "lines": "39-46"
         }
       ],
       "pcb": {
@@ -4231,29 +4300,35 @@
     {
       "id": 1005,
       "slug": "tibbit-09",
-      "displayName": "Tibbit #09 TWO",
-      "softwareName": "Tibbit_0x09",
+      "displayName": "Two Low-Power Relay",
+      "softwareName": "Tibbit_TwoLowPowerRelay",
       "aliases": [
         "#09",
-        "TWO LOW-POWER RELAY"
+        "TIBBIT_TWO_LOW_POWER_RELAY"
       ],
       "category": "digital-io",
-      "summary": "2 buah relay elektromekanis low-power (misal Omron G6D) untuk pensaklaran.",
+      "summary": "2 relay elektromekanis low-power untuk pensaklaran beban ringan.",
       "purpose": "Modular slot (Device Code 0x09) yang dipetakan melalui firmware Universal Smart I/O ID 20.",
       "selectable": false,
       "deviceType": "actuator",
       "physicalParts": [
         {
           "manufacturer": "GSPETech",
-          "part": "#09",
-          "role": "Tibbit Module",
+          "part": "Low-Power Relay Modular",
+          "role": "Modular I/O board",
           "officialUrl": null
+        },
+        {
+          "manufacturer": "STMicroelectronics",
+          "part": "STM32F030F4P6",
+          "role": "I/O MCU",
+          "officialUrl": "https://www.st.com/en/microcontrollers-microprocessors/stm32f030f4.html"
         }
       ],
       "measurements": [
         {
           "key": "state",
-          "label": "I/O State",
+          "label": "Output State",
           "unit": "bitmask"
         }
       ],
@@ -4283,8 +4358,13 @@
       "evidence": [
         {
           "type": "firmware",
-          "path": "Nexabrick_Firmware/docs/superpowers/plans/2026-08-18-tibbit-universal-io.md",
-          "lines": "42"
+          "path": "tools/stm32_tibbit_base/Core/Inc/tibbit_regs.h",
+          "lines": "11-16"
+        },
+        {
+          "type": "firmware",
+          "path": "docs/superpowers/plans/2026-08-18-tibbit-universal-io.md",
+          "lines": "39-46"
         }
       ],
       "pcb": {
@@ -4297,11 +4377,11 @@
     {
       "id": 1006,
       "slug": "tibbit-12",
-      "displayName": "Tibbit #12 FOUR",
-      "softwareName": "Tibbit_0x0C",
+      "displayName": "Four PWM Open Drain 24V 3A",
+      "softwareName": "Tibbit_FourPwm24v3a",
       "aliases": [
         "#12",
-        "FOUR PWM OPEN DRAIN 24V_3A"
+        "TIBBIT_FOUR_PWM_24V_3A"
       ],
       "category": "digital-io",
       "summary": "4 channel PWM open drain untuk kontrol beban DC / LED (hingga 24V 3A).",
@@ -4311,15 +4391,21 @@
       "physicalParts": [
         {
           "manufacturer": "GSPETech",
-          "part": "#12",
-          "role": "Tibbit Module",
+          "part": "PWM Open Drain Modular",
+          "role": "Modular I/O board",
           "officialUrl": null
+        },
+        {
+          "manufacturer": "STMicroelectronics",
+          "part": "STM32F030F4P6",
+          "role": "I/O MCU",
+          "officialUrl": "https://www.st.com/en/microcontrollers-microprocessors/stm32f030f4.html"
         }
       ],
       "measurements": [
         {
           "key": "state",
-          "label": "I/O State",
+          "label": "Output State",
           "unit": "bitmask"
         }
       ],
@@ -4349,8 +4435,13 @@
       "evidence": [
         {
           "type": "firmware",
-          "path": "Nexabrick_Firmware/docs/superpowers/plans/2026-08-18-tibbit-universal-io.md",
-          "lines": "42"
+          "path": "tools/stm32_tibbit_base/Core/Inc/tibbit_regs.h",
+          "lines": "11-16"
+        },
+        {
+          "type": "firmware",
+          "path": "docs/superpowers/plans/2026-08-18-tibbit-universal-io.md",
+          "lines": "39-46"
         }
       ],
       "pcb": {
