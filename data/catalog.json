@@ -2281,127 +2281,6 @@
       }
     },
     {
-      "id": 20,
-      "slug": "tibbit-gpio",
-      "displayName": "Universal Smart I/O (Tibbit)",
-      "softwareName": "GPIO_Relay",
-      "aliases": [
-        "Tibbit"
-      ],
-      "category": "digital-io",
-      "summary": "Arsitektur Universal I/O untuk semua modular Tibbit (Relay, Opto-isolator, Dry Contact). Firmware STM32 mendeteksi hardware via Sub-Address dan melaporkannya ke ESP32.",
-      "purpose": "Akses pin digital tambahan dan kontrol relay secara remote.",
-      "selectable": true,
-      "deviceType": "sensor",
-      "physicalParts": [
-        {
-          "manufacturer": "STMicroelectronics",
-          "part": "STM32F030F4P6",
-          "role": "Universal I/O MCU (module-side)",
-          "officialUrl": "https://www.st.com/en/microcontrollers-microprocessors/stm32f030f4.html"
-        }
-      ],
-      "measurements": [
-        {
-          "key": "inputs",
-          "label": "Inputs",
-          "unit": "bitmask"
-        },
-        {
-          "key": "outputs",
-          "label": "Outputs",
-          "unit": "bitmask"
-        },
-        {
-          "key": "pwm",
-          "label": "PWM (x4)",
-          "unit": "duty"
-        },
-        {
-          "key": "mod_type",
-          "label": "Device Code",
-          "unit": "id"
-        }
-      ],
-      "variantSupport": {
-        "micro": {
-          "status": "active",
-          "task": "readingSensorTIBBITGPIO",
-          "component": "components/tibbit",
-          "mqttDeviceName": "TIBBIT_GPIO",
-          "interfaces": [
-            {
-              "bus": "I2C",
-              "address": "0x0C"
-            }
-          ]
-        },
-        "micro-rnd": {
-          "status": "active",
-          "task": "readingSensorTIBBITGPIO",
-          "component": "components/tibbit",
-          "mqttDeviceName": "TIBBIT_GPIO",
-          "interfaces": [
-            {
-              "bus": "I2C",
-              "address": "0x0C"
-            }
-          ]
-        },
-        "micro-duo": {
-          "status": "active",
-          "task": "readingSensorTibbitIO",
-          "component": "components/tibbit_io",
-          "mqttDeviceName": "TIBBIT_GPIO",
-          "interfaces": [
-            {
-              "bus": "I2C",
-              "address": "0x0C"
-            }
-          ]
-        },
-        "ccu": {
-          "status": "active",
-          "task": "readingSensorTibbitIO",
-          "component": "components/tibbit_io",
-          "mqttDeviceName": "TIBBIT_GPIO",
-          "interfaces": [
-            {
-              "bus": "I2C",
-              "address": "0x0C"
-            }
-          ]
-        },
-        "micro-modular": {
-          "status": "unsupported"
-        }
-      },
-      "confidence": "firmware-confirmed",
-      "conflicts": [
-        "CCU juga memiliki FXL6408 expander di I2C 0x43 yang berjalan background, jangan dikacaukan dengan TIBBIT sensor ini.",
-        "CCU dispatch case 20 (slave.cpp:3451) masih menyebut readingSensorTIBBITGPIO (nama lama) padahal task yang didefinisikan adalah readingSensorTibbitIO."
-      ],
-      "evidence": [
-        {
-          "type": "firmware",
-          "path": "Nexabrick Micro RND/main/slave.cpp",
-          "lines": "2353-2420"
-        },
-        {
-          "type": "firmware",
-          "path": "Nexabrick CCU/main/slave.cpp",
-          "lines": "699-770"
-        }
-      ],
-      "pcb": {
-        "number": null,
-        "name": null,
-        "confidence": "unresolved",
-        "sourcePath": null,
-        "note": "Belum ditemukan PCB bernomor yang dapat dipetakan secara andal."
-      }
-    },
-    {
       "id": 21,
       "slug": "opt3007",
       "displayName": "Ambient Light Sensor",
@@ -3982,7 +3861,7 @@
       ],
       "category": "digital-io",
       "summary": "4 pin GPIO digital 3.3V dengan konfigurasi input/output yang dapat diatur via register.",
-      "purpose": "Modular slot (Device Code 0x01) yang dipetakan melalui firmware Universal Smart I/O ID 20.",
+      "purpose": "Modular slot (Device Code 0x01) dengan 4 GPIO digital 3.3V.",
       "selectable": false,
       "deviceType": "digital-io",
       "physicalParts": [
@@ -4059,7 +3938,7 @@
       ],
       "category": "digital-io",
       "summary": "2 output Open Collector positif yang diisolasi secara optikal.",
-      "purpose": "Modular slot (Device Code 0x02) yang dipetakan melalui firmware Universal Smart I/O ID 20.",
+      "purpose": "Modular slot (Device Code 0x02) dengan 2 output Open Collector positif terisolasi.",
       "selectable": false,
       "deviceType": "actuator",
       "physicalParts": [
@@ -4142,7 +4021,7 @@
       ],
       "category": "digital-io",
       "summary": "4 input dry contact pasif, cocok untuk membaca limit switch atau relay eksternal.",
-      "purpose": "Modular slot (Device Code 0x04) yang dipetakan melalui firmware Universal Smart I/O ID 20.",
+      "purpose": "Modular slot (Device Code 0x04) dengan 4 input dry contact pasif.",
       "selectable": false,
       "deviceType": "sensor",
       "physicalParts": [
@@ -4225,7 +4104,7 @@
       ],
       "category": "digital-io",
       "summary": "4 input terisolasi optikal dengan common cathode.",
-      "purpose": "Modular slot (Device Code 0x06) yang dipetakan melalui firmware Universal Smart I/O ID 20.",
+      "purpose": "Modular slot (Device Code 0x06) dengan 4 input terisolasi common cathode.",
       "selectable": false,
       "deviceType": "sensor",
       "physicalParts": [
@@ -4308,7 +4187,7 @@
       ],
       "category": "digital-io",
       "summary": "2 relay elektromekanis low-power untuk pensaklaran beban ringan.",
-      "purpose": "Modular slot (Device Code 0x09) yang dipetakan melalui firmware Universal Smart I/O ID 20.",
+      "purpose": "Modular slot (Device Code 0x09) dengan 2 relay elektromekanis low-power.",
       "selectable": false,
       "deviceType": "actuator",
       "physicalParts": [
@@ -4385,7 +4264,7 @@
       ],
       "category": "digital-io",
       "summary": "4 channel PWM open drain untuk kontrol beban DC / LED (hingga 24V 3A).",
-      "purpose": "Modular slot (Device Code 0x0C) yang dipetakan melalui firmware Universal Smart I/O ID 20.",
+      "purpose": "Modular slot (Device Code 0x0C) dengan 4 channel PWM open drain.",
       "selectable": false,
       "deviceType": "actuator",
       "physicalParts": [
