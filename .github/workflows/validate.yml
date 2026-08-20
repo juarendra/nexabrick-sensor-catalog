@@ -17,4 +17,4 @@ jobs:
       - name: Run Validator
         run: node scripts/validate-catalog.mjs
       - name: Run Test Suite
-        run: node --test "tests/*.test.mjs"
+        run: node --test tests/*.test.mjs
