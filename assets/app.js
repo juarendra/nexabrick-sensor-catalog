@@ -1,4 +1,4 @@
-import { escape, formatEnum, normalize, filterDevices, parseIdParam, sanitizeCategory } from './lib.mjs';
+import { escape, formatEnum, normalize, filterDevices, parseIdParam, sanitizeCategory, safeUrl } from './lib.mjs';
 
 const state = {
   catalog: null,
@@ -53,7 +53,7 @@ async function init() {
     
     setupUI();
     parseURL();
-    
+
     // Global keyboard
     document.addEventListener('keydown', (e) => {
       if (e.key === '/' && document.activeElement !== els.search) {
@@ -69,6 +69,54 @@ async function init() {
         } else if (els.filterPanel.classList.contains('open')) {
           els.filterPanel.classList.remove('open');
         }
+      }
+    });
+
+    // Delegated click for dynamic content (cards, chips, matrix copy)
+    document.addEventListener('click', (e) => {
+      const card = e.target.closest('.card');
+      if (card) {
+        const id = parseIdParam(card.dataset.id);
+        if (id !== null) window.openDetail(id, true, card);
+        return;
+      }
+      const chip = e.target.closest('[data-remove-filter]');
+      if (chip) {
+        const type = chip.dataset.removeFilter;
+        const val = chip.dataset.value;
+        if (type && val) removeFilter(type, val);
+        return;
+      }
+      const copy = e.target.closest('[data-copy]');
+      if (copy) {
+        copyText(copy.dataset.copy);
+        return;
+      }
+    });
+
+    // Keyboard activation for role=button cards
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      const card = e.target.closest('.card');
+      if (!card) return;
+      e.preventDefault();
+      const id = parseIdParam(card.dataset.id);
+      if (id !== null) window.openDetail(id, true, card);
+    });
+
+    // Focus trap while drawer is open
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Tab' || !state.selectedId) return;
+      const focusables = els.drawer.querySelectorAll('button, a[href], [tabindex]:not([tabindex="-1"])');
+      if (focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
       }
     });
 
@@ -296,7 +344,7 @@ function render() {
         }).join('');
 
       return `
-        <div class="card ${isSel}" data-id="${d.id}" role="button" tabindex="0" onclick="window.openDetail(${d.id}, true, this)" onkeydown="if(event.key==='Enter'||event.key===' ') window.openDetail(${d.id}, true, this)">
+        <div class="card ${isSel}" data-id="${d.id}" role="button" tabindex="0" aria-label="Detail ${d.id} ${escape(d.displayName)}">
           <div class="card-header">
             <div class="card-id-rail">
               <span class="id-badge">${d.id.toString().padStart(2, '0')}</span>
@@ -324,8 +372,8 @@ function render() {
 
   // 3. Render Active Filter Chips
   const chips = [];
-  state.filters.status.forEach(s => chips.push(`<div class="filter-chip">Status: ${formatEnum(s)} <button onclick="window.removeFilter('status', '${s}')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button></div>`));
-  state.filters.category.forEach(c => chips.push(`<div class="filter-chip">Cat: ${formatEnum(c)} <button onclick="window.removeFilter('category', '${c}')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button></div>`));
+  state.filters.status.forEach(s => chips.push(`<div class="filter-chip">Status: ${formatEnum(s)} <button type="button" data-remove-filter="status" data-value="${s}" aria-label="Hapus filter status ${formatEnum(s)}"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button></div>`));
+  state.filters.category.forEach(c => chips.push(`<div class="filter-chip">Cat: ${formatEnum(c)} <button type="button" data-remove-filter="category" data-value="${c}" aria-label="Hapus filter kategori ${formatEnum(c)}"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button></div>`));
   
   els.activeFilters.innerHTML = chips.join('');
   els.summary.textContent = `Menampilkan ${filtered.length} perangkat dari total ${state.catalog.devices.length}`;
@@ -351,7 +399,7 @@ window.openDetail = function(id, pushState = true, opener = null) {
   
   const swEl = document.getElementById('detail-software-name');
   swEl.textContent = d.softwareName;
-  swEl.onclick = () => copyText(d.softwareName);
+  swEl.dataset.copy = d.softwareName;
   
   document.getElementById('detail-purpose').textContent = d.purpose || d.summary;
 
@@ -385,7 +433,7 @@ window.openDetail = function(id, pushState = true, opener = null) {
         <span class="part-mfg">${escape(p.manufacturer)}</span>
       </div>
       <span class="part-role">${escape(p.role)}</span>
-      ${p.officialUrl ? `<a href="${p.officialUrl}" target="_blank" title="Datasheet/Product Page" class="btn-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a>` : ''}
+      ${safeUrl(p.officialUrl) ? `<a href="${safeUrl(p.officialUrl)}" target="_blank" rel="noopener noreferrer" title="Datasheet/Product Page" class="btn-icon"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a>` : ''}
     </div>
   `).join('');
   document.getElementById('detail-parts').innerHTML = partsHtml || '<span class="mx-lbl">N/A</span>';
@@ -417,8 +465,8 @@ window.openDetail = function(id, pushState = true, opener = null) {
     
     let details = '';
     if (vs.status === 'active' || vs.status === 'incomplete' || vs.status === 'declared-only') {
-      if (vs.task) details += `<span class="mx-lbl">Task</span><span class="mx-val code-badge" onclick="window.copyText('${vs.task}')" title="Copy">${escape(vs.task)}</span>`;
-      if (vs.mqttDeviceName) details += `<span class="mx-lbl">MQTT</span><span class="mx-val code-badge" onclick="window.copyText('${vs.mqttDeviceName}')" title="Copy">${escape(vs.mqttDeviceName)}</span>`;
+      if (vs.task) details += `<span class="mx-lbl">Task</span><span class="mx-val code-badge" type="button" role="button" tabindex="0" data-copy="${escape(vs.task)}" title="Copy" aria-label="Salin task">${escape(vs.task)}</span>`;
+      if (vs.mqttDeviceName) details += `<span class="mx-lbl">MQTT</span><span class="mx-val code-badge" type="button" role="button" tabindex="0" data-copy="${escape(vs.mqttDeviceName)}" title="Copy" aria-label="Salin nama MQTT">${escape(vs.mqttDeviceName)}</span>`;
       if (vs.interfaces && vs.interfaces.length > 0) {
         details += `<span class="mx-lbl">I/F</span><span class="mx-val">${escape(vs.interfaces[0].bus)} ${escape(vs.interfaces[0].address)}</span>`;
       }
@@ -442,8 +490,8 @@ window.openDetail = function(id, pushState = true, opener = null) {
     const commit = state.catalog.generatedFrom.commit;
     const url = `${repoUrl}/blob/${commit}/${ev.path}#L${ev.lines.split('-')[0]}`;
     return `
-      <a href="${url}" target="_blank" class="ev-link">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+      <a href="${url}" target="_blank" rel="noopener noreferrer" class="ev-link">
+        <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
         <span style="flex:1; overflow:hidden; text-overflow:ellipsis;">${escape(ev.path)}</span>
         <span class="ev-line">L${escape(ev.lines)}</span>
       </a>
@@ -453,6 +501,7 @@ window.openDetail = function(id, pushState = true, opener = null) {
 
   els.drawer.classList.add('open');
   els.drawer.setAttribute('aria-hidden', 'false');
+  document.body.classList.add('drawer-open');
   els.drawer.querySelector('#btn-close-detail').focus();
 }
 
@@ -460,6 +509,7 @@ window.closeDetail = function() {
   state.selectedId = null;
   els.drawer.classList.remove('open');
   els.drawer.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('drawer-open');
   document.querySelectorAll('.card.selected').forEach(c => c.classList.remove('selected'));
   updateURL();
   if (state.opener && document.contains(state.opener)) {

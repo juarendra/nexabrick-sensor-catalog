@@ -531,6 +531,9 @@ input[type="text"]::placeholder { color: var(--text-muted); }
   cursor: copy;
 }
 .code-badge:hover { border-color: var(--accent); }
+.code-badge:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+body.drawer-open { overflow: hidden; }
 
 .detail-purpose { font-size: 1rem; color: var(--text-secondary); margin-bottom: var(--space-6); }
 
