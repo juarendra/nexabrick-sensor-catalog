@@ -30,6 +30,7 @@
   --radius-sm: 6px;
   --radius: 10px;
   --radius-lg: 16px;
+  --radius-full: 999px;
   
   --space-1: 4px;
   --space-2: 8px;
@@ -219,6 +220,27 @@ input[type="text"]::placeholder { color: var(--text-muted); }
 }
 .hero-actions { display: flex; gap: var(--space-4); flex-wrap: wrap; }
 
+.hero-stats {
+  display: flex;
+  gap: var(--space-6);
+  margin-top: var(--space-6);
+  flex-wrap: wrap;
+}
+.hero-stat { display: flex; flex-direction: column; gap: var(--space-1); }
+.stat-value {
+  font-family: var(--font-mono);
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--accent);
+  line-height: 1;
+}
+.stat-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
 .hero-variants {
   flex: 0 1 400px;
   display: flex;
@@ -348,7 +370,7 @@ input[type="text"]::placeholder { color: var(--text-muted); }
    ========================================================================== */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr));
   gap: var(--space-4);
 }
 
@@ -420,6 +442,7 @@ input[type="text"]::placeholder { color: var(--text-muted); }
 }
 .badge.warn { color: var(--warning); border-color: rgba(245, 184, 75, 0.3); background: rgba(245, 184, 75, 0.1); }
 .badge.act { color: var(--accent); border-color: rgba(84, 167, 255, 0.3); }
+.badge.aux { color: var(--accent); border-color: rgba(84, 167, 255, 0.3); background: rgba(84, 167, 255, 0.1); }
 
 .card-title {
   font-size: 1.125rem;
@@ -494,6 +517,7 @@ input[type="text"]::placeholder { color: var(--text-muted); }
   border-left: 1px solid var(--border-strong);
   box-shadow: var(--shadow-panel);
   height: 100%;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
   transform: translateX(100%);
@@ -502,7 +526,7 @@ input[type="text"]::placeholder { color: var(--text-muted); }
 .detail-drawer.open .drawer-content { transform: translateX(0); }
 
 .drawer-header {
-  padding: var(--space-4) var(--space-5);
+  padding: calc(var(--space-4) + env(safe-area-inset-top)) var(--space-5) var(--space-4);
   border-bottom: 1px solid var(--border);
   display: flex; justify-content: space-between; align-items: center;
   background: var(--surface);
@@ -512,6 +536,7 @@ input[type="text"]::placeholder { color: var(--text-muted); }
 
 .drawer-body {
   padding: var(--space-5);
+  padding-bottom: calc(var(--space-5) + env(safe-area-inset-bottom));
   overflow-y: auto;
   flex: 1;
 }
@@ -530,6 +555,9 @@ input[type="text"]::placeholder { color: var(--text-muted); }
   cursor: copy;
 }
 .code-badge:hover { border-color: var(--accent); }
+.code-badge:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+body.drawer-open { overflow: hidden; }
 
 .detail-purpose { font-size: 1rem; color: var(--text-secondary); margin-bottom: var(--space-6); }
 
@@ -572,6 +600,7 @@ input[type="text"]::placeholder { color: var(--text-muted); }
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   padding: var(--space-3);
+  min-width: 0;
 }
 .pcb-name {
   display: block;
@@ -579,6 +608,8 @@ input[type="text"]::placeholder { color: var(--text-muted); }
   font-weight: 600;
   font-size: 0.875rem;
   margin-bottom: var(--space-1);
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 .pcb-confidence {
   display: inline-flex;
@@ -604,11 +635,11 @@ input[type="text"]::placeholder { color: var(--text-muted); }
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
 }
-.part-icon { color: var(--text-muted); }
-.part-info { flex: 1; }
-.part-name { font-weight: 600; font-size: 0.875rem; display: block; color: var(--text); }
-.part-mfg { font-size: 0.75rem; color: var(--text-muted); }
-.part-role { font-size: 0.75rem; color: var(--text-secondary); background: var(--surface-raised); padding: 2px 6px; border-radius: 4px; }
+.part-icon { color: var(--text-muted); flex-shrink: 0; }
+.part-info { flex: 1; min-width: 0; }
+.part-name { font-weight: 600; font-size: 0.875rem; display: block; color: var(--text); overflow-wrap: break-word; word-break: break-word; }
+.part-mfg { font-size: 0.75rem; color: var(--text-muted); overflow-wrap: break-word; word-break: break-word; }
+.part-role { font-size: 0.75rem; color: var(--text-secondary); background: var(--surface-raised); padding: 2px 6px; border-radius: 4px; flex-shrink: 0; }
 
 .measurement-strip { display: flex; flex-wrap: wrap; gap: var(--space-2); }
 .ms-tag {

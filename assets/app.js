@@ -1,8 +1,12 @@
+import { escape, formatEnum, normalize, filterDevices, parseIdParam, sanitizeCategory, safeUrl } from './lib.mjs';
+
 const state = {
   catalog: null,
   filters: { status: [], category: [] },
   search: '',
-  selectedId: null
+  selectedId: null,
+  variant: null,
+  opener: null
 };
 
 // UI Elements
@@ -48,9 +52,9 @@ async function init() {
     state.catalog = await res.json();
     
     setupUI();
+    renderStats();
     parseURL();
-    render();
-    
+
     // Global keyboard
     document.addEventListener('keydown', (e) => {
       if (e.key === '/' && document.activeElement !== els.search) {
@@ -69,12 +73,71 @@ async function init() {
       }
     });
 
+    // Delegated click for dynamic content (cards, chips, matrix copy)
+    document.addEventListener('click', (e) => {
+      const card = e.target.closest('.card');
+      if (card) {
+        const id = parseIdParam(card.dataset.id);
+        if (id !== null) window.openDetail(id, true, card);
+        return;
+      }
+      const chip = e.target.closest('[data-remove-filter]');
+      if (chip) {
+        const type = chip.dataset.removeFilter;
+        const val = chip.dataset.value;
+        if (type && val) removeFilter(type, val);
+        return;
+      }
+      const copy = e.target.closest('[data-copy]');
+      if (copy) {
+        copyText(copy.dataset.copy);
+        return;
+      }
+    });
+
+    // Keyboard activation for role=button cards
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      const card = e.target.closest('.card');
+      if (!card) return;
+      e.preventDefault();
+      const id = parseIdParam(card.dataset.id);
+      if (id !== null) window.openDetail(id, true, card);
+    });
+
+    // Focus trap while drawer is open
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Tab' || !state.selectedId) return;
+      const focusables = els.drawer.querySelectorAll('button, a[href], [tabindex]:not([tabindex="-1"])');
+      if (focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    });
+
   } catch (err) {
     console.error(err);
     els.grid.innerHTML = '';
     els.error.style.display = 'block';
   }
 }
+
+function renderStats() {
+  const devices = state.catalog.devices.length;
+  const categories = new Set(state.catalog.devices.map(d => d.category)).size;
+  const variants = state.catalog.variants.length;
+  document.getElementById('stat-devices').textContent = devices;
+  document.getElementById('stat-categories').textContent = categories;
+  document.getElementById('stat-variants').textContent = variants;
+}
+
+const VALID_STATUSES = new Set(['active', 'incomplete', 'declared-only', 'ui-only', 'unsupported', 'reserved', 'auxiliary', 'actuator', 'unresolved']);
 
 function setupUI() {
   // Source badge
@@ -85,8 +148,9 @@ function setupUI() {
   }
 
   // Variant plates
-  els.variantPlates.innerHTML = state.catalog.variants.filter(v => v.key !== 'micro-modular').map(v => `
-    <button class="variant-plate" data-vk="${v.key}">
+  const visibleVariants = state.catalog.variants.filter(v => v.key !== 'micro-modular');
+  els.variantPlates.innerHTML = visibleVariants.map(v => `
+    <button class="variant-plate" type="button" data-vk="${escape(v.key)}" aria-pressed="${state.variant === v.key ? 'true' : 'false'}">
       <div class="vp-main">
         <span class="vp-name">${escape(v.name)}</span>
         <span class="vp-desc">${escape(v.description)}</span>
@@ -94,6 +158,20 @@ function setupUI() {
       <span class="vp-stat">${v.capacity} dev</span>
     </button>
   `).join('');
+
+  // Variant plate click -> toggle variant filter
+  els.variantPlates.addEventListener('click', (e) => {
+    const plate = e.target.closest('.variant-plate');
+    if (!plate) return;
+    const vk = plate.dataset.vk;
+    state.variant = state.variant === vk ? null : vk;
+    updateURL();
+    render();
+    document.querySelectorAll('.variant-plate').forEach(p => {
+      p.classList.toggle('active', p.dataset.vk === state.variant);
+      p.setAttribute('aria-pressed', String(p.dataset.vk === state.variant));
+    });
+  });
 
   // Extract unique categories
   const cats = new Set(state.catalog.devices.map(d => d.category));
@@ -111,6 +189,7 @@ function setupUI() {
   
   document.getElementById('btn-explore').addEventListener('click', () => els.search.focus());
   document.getElementById('btn-empty-reset').addEventListener('click', resetAll);
+  document.getElementById('btn-reset-filters').addEventListener('click', resetAll);
   
   // Mobile filters
   document.getElementById('btn-open-filters').addEventListener('click', () => els.filterPanel.classList.add('open'));
@@ -137,8 +216,14 @@ function parseURL() {
   els.search.value = state.search;
   els.clearSearch.style.display = state.search ? 'block' : 'none';
   
-  state.filters.status = params.getAll('status');
-  state.filters.category = params.getAll('cat');
+  // Whitelist filter values against catalog data
+  const knownCategories = new Set(state.catalog.devices.map(d => d.category));
+  state.filters.status = params.getAll('status').filter(s => VALID_STATUSES.has(s));
+  state.filters.category = params.getAll('cat').map(c => sanitizeCategory(c, knownCategories)).filter(c => c !== null);
+  
+  // Variant filter (optional URL key, preserved for backward compat)
+  const vParam = params.get('variant');
+  state.variant = state.catalog.variants.some(v => v.key === vParam) ? vParam : null;
   
   // Sync checkboxes
   els.filterPanel.querySelectorAll('input').forEach(cb => {
@@ -146,12 +231,22 @@ function parseURL() {
     if (cb.name === 'category') cb.checked = state.filters.category.includes(cb.value);
   });
   
+  // Sync variant plates
+  document.querySelectorAll('.variant-plate').forEach(p => {
+    p.classList.toggle('active', p.dataset.vk === state.variant);
+    p.setAttribute('aria-pressed', String(p.dataset.vk === state.variant));
+  });
+  
   const idParam = params.get('id');
-  if (idParam !== null) {
-    openDetail(parseInt(idParam, 10), false);
+  const id = parseIdParam(idParam);
+  if (id !== null) {
+    openDetail(id, false);
   } else {
     state.selectedId = null;
+    state.opener = null;
     els.drawer.classList.remove('open');
+    els.drawer.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('drawer-open');
     document.querySelectorAll('.card.selected').forEach(c => c.classList.remove('selected'));
   }
   
@@ -163,6 +258,7 @@ function updateURL() {
   if (state.search) params.set('q', state.search);
   state.filters.status.forEach(s => params.append('status', s));
   state.filters.category.forEach(c => params.append('cat', c));
+  if (state.variant) params.set('variant', state.variant);
   if (state.selectedId !== null) params.set('id', state.selectedId);
   
   const newUrl = `${window.location.pathname}${params.toString() ? '?' + params.toString() : ''}`;
@@ -170,7 +266,7 @@ function updateURL() {
 }
 
 function updateSearch() {
-  state.search = els.search.value.toLowerCase();
+  state.search = normalize(els.search.value);
   els.clearSearch.style.display = state.search ? 'block' : 'none';
   updateURL();
   render();
@@ -186,50 +282,38 @@ function updateFilters() {
 function resetAll() {
   els.search.value = '';
   state.search = '';
+  state.variant = null;
   els.filterPanel.querySelectorAll('input').forEach(cb => cb.checked = false);
   state.filters.status = [];
   state.filters.category = [];
+  document.querySelectorAll('.variant-plate').forEach(p => {
+    p.classList.remove('active');
+    p.setAttribute('aria-pressed', 'false');
+  });
   updateURL();
   render();
 }
 
 function removeFilter(type, val) {
+  const inputName = type === 'category' ? 'category' : 'status';
   state.filters[type] = state.filters[type].filter(v => v !== val);
-  els.filterPanel.querySelector(`input[name="${type === 'category' ? 'cat' : 'status'}"][value="${val}"]`).checked = false;
+  const cb = els.filterPanel.querySelector(`input[name="${inputName}"][value="${val}"]`);
+  if (cb) cb.checked = false;
   updateURL();
   render();
 }
 
 function render() {
   // 1. Filter logic
-  const filtered = state.catalog.devices.filter(d => {
-    // Text search
-    if (state.search) {
-      const term = state.search;
-      const match = 
-        d.id.toString() === term ||
-        d.slug.includes(term) ||
-        d.displayName.toLowerCase().includes(term) ||
-        d.softwareName.toLowerCase().includes(term) ||
-        (d.pcb?.number || '').toLowerCase().includes(term) ||
-        (d.pcb?.name || '').toLowerCase().includes(term) ||
-        (d.aliases || []).some(a => a.toLowerCase().includes(term)) ||
-        d.category.includes(term) ||
-        (d.physicalParts || []).some(p => p.part.toLowerCase().includes(term) || p.manufacturer.toLowerCase().includes(term));
-      if (!match) return false;
-    }
-    
-    // Checkboxes
-    if (state.filters.category.length > 0 && !state.filters.category.includes(d.category)) return false;
-    
-    // Status (if any variant has this status)
-    if (state.filters.status.length > 0) {
-      const hasStatus = Object.values(d.variantSupport).some(vs => state.filters.status.includes(vs.status));
-      if (!hasStatus) return false;
-    }
-    
-    return true;
+  let filtered = filterDevices(state.catalog.devices, {
+    search: state.search,
+    filters: state.filters
   });
+  
+  // Variant plate filter
+  if (state.variant) {
+    filtered = filtered.filter(d => d.variantSupport[state.variant]?.status === 'active');
+  }
 
   // 2. Render Cards
   if (filtered.length === 0) {
@@ -248,6 +332,7 @@ function render() {
       const vals = Object.values(d.variantSupport).map(v => v.status);
       if (vals.includes('active')) { overall = 'act'; oLbl = 'Active'; }
       else if (vals.includes('incomplete')) { overall = 'warn'; oLbl = 'Incomplete'; }
+      else if (vals.includes('auxiliary')) { overall = 'aux'; oLbl = 'Auxiliary'; }
       else if (vals.includes('declared-only')) { overall = 'warn'; oLbl = 'Declared Only'; }
       
       // Physical summary
@@ -256,14 +341,16 @@ function render() {
       else if (d.physicalParts && d.physicalParts.length > 1) phys = `${d.physicalParts.length} components (Composite)`;
       
       // Active variants dots
-      const vDots = ['micro', 'micro-rnd', 'micro-duo', 'ccu'].map(vk => {
-        const s = d.variantSupport[vk]?.status;
-        const cl = s === 'active' ? 'on' : (s === 'incomplete' || s === 'declared-only' ? 'inc' : 'off');
-        return `<div class="v-dot ${cl}" title="${vk}: ${s}"></div>`;
-      }).join('');
+      const vDots = state.catalog.variants
+        .filter(v => v.key !== 'micro-modular')
+        .map(vk => {
+          const s = d.variantSupport[vk.key]?.status || 'unknown';
+          const cl = s === 'active' ? 'on' : (s === 'incomplete' || s === 'declared-only' ? 'inc' : 'off');
+          return `<div class="v-dot ${cl}" role="img" title="${vk.key}: ${s}" aria-label="${vk.key}: ${s}"></div>`;
+        }).join('');
 
       return `
-        <div class="card ${isSel}" data-id="${d.id}" role="button" tabindex="0" onclick="window.openDetail(${d.id}, true)" onkeydown="if(event.key==='Enter') window.openDetail(${d.id}, true)">
+        <div class="card ${isSel}" data-id="${d.id}" role="button" tabindex="0" aria-label="Detail ${d.id} ${escape(d.displayName)}">
           <div class="card-header">
             <div class="card-id-rail">
               <span class="id-badge">${d.id.toString().padStart(2, '0')}</span>
@@ -291,18 +378,19 @@ function render() {
 
   // 3. Render Active Filter Chips
   const chips = [];
-  state.filters.status.forEach(s => chips.push(`<div class="filter-chip">Status: ${formatEnum(s)} <button onclick="window.removeFilter('status', '${s}')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button></div>`));
-  state.filters.category.forEach(c => chips.push(`<div class="filter-chip">Cat: ${formatEnum(c)} <button onclick="window.removeFilter('category', '${c}')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button></div>`));
+  state.filters.status.forEach(s => chips.push(`<div class="filter-chip">Status: ${formatEnum(s)} <button type="button" data-remove-filter="status" data-value="${s}" aria-label="Hapus filter status ${formatEnum(s)}"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button></div>`));
+  state.filters.category.forEach(c => chips.push(`<div class="filter-chip">Cat: ${formatEnum(c)} <button type="button" data-remove-filter="category" data-value="${c}" aria-label="Hapus filter kategori ${formatEnum(c)}"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button></div>`));
   
   els.activeFilters.innerHTML = chips.join('');
   els.summary.textContent = `Menampilkan ${filtered.length} perangkat dari total ${state.catalog.devices.length}`;
 }
 
-window.openDetail = function(id, pushState = true) {
+window.openDetail = function(id, pushState = true, opener = null) {
   const d = state.catalog.devices.find(x => x.id === id);
   if (!d) return;
   
   state.selectedId = id;
+  state.opener = opener;
   if (pushState) updateURL();
   
   // Highlight card
@@ -317,7 +405,7 @@ window.openDetail = function(id, pushState = true) {
   
   const swEl = document.getElementById('detail-software-name');
   swEl.textContent = d.softwareName;
-  swEl.onclick = () => copyText(d.softwareName);
+  swEl.dataset.copy = d.softwareName;
   
   document.getElementById('detail-purpose').textContent = d.purpose || d.summary;
 
@@ -351,7 +439,7 @@ window.openDetail = function(id, pushState = true) {
         <span class="part-mfg">${escape(p.manufacturer)}</span>
       </div>
       <span class="part-role">${escape(p.role)}</span>
-      ${p.officialUrl ? `<a href="${p.officialUrl}" target="_blank" title="Datasheet/Product Page" class="btn-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a>` : ''}
+      ${safeUrl(p.officialUrl) ? `<a href="${safeUrl(p.officialUrl)}" target="_blank" rel="noopener noreferrer" title="Datasheet/Product Page" class="btn-icon"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a>` : ''}
     </div>
   `).join('');
   document.getElementById('detail-parts').innerHTML = partsHtml || '<span class="mx-lbl">N/A</span>';
@@ -366,22 +454,29 @@ window.openDetail = function(id, pushState = true) {
   document.getElementById('detail-measurements').innerHTML = msHtml || '<span class="mx-lbl">None</span>';
   
   // Variant Matrix
-  const varKeys = ['micro', 'micro-rnd', 'micro-duo', 'ccu'];
-  const mxHtml = varKeys.map(vk => {
-    const vs = d.variantSupport[vk];
-    if (!vs) return '';
+  const mxHtml = state.catalog.variants.map(vk => {
+    const vs = d.variantSupport[vk.key];
+    const vName = vk.name;
+    if (!vs) {
+      return `
+        <div class="mx-row">
+          <div class="mx-head">
+            <span class="mx-name">${escape(vName)}</span>
+            <span class="mx-stat uns">Unknown</span>
+          </div>
+        </div>
+      `;
+    }
     const stCls = vs.status === 'active' ? 'act' : (vs.status === 'unsupported' ? 'uns' : (vs.status === 'incomplete' || vs.status === 'declared-only' ? 'inc' : 'uns'));
     
     let details = '';
     if (vs.status === 'active' || vs.status === 'incomplete' || vs.status === 'declared-only') {
-      if (vs.task) details += `<span class="mx-lbl">Task</span><span class="mx-val code-badge" onclick="window.copyText('${vs.task}')" title="Copy">${escape(vs.task)}</span>`;
-      if (vs.mqttDeviceName) details += `<span class="mx-lbl">MQTT</span><span class="mx-val code-badge" onclick="window.copyText('${vs.mqttDeviceName}')" title="Copy">${escape(vs.mqttDeviceName)}</span>`;
+      if (vs.task) details += `<span class="mx-lbl">Task</span><span class="mx-val code-badge" type="button" role="button" tabindex="0" data-copy="${escape(vs.task)}" title="Copy" aria-label="Salin task">${escape(vs.task)}</span>`;
+      if (vs.mqttDeviceName) details += `<span class="mx-lbl">MQTT</span><span class="mx-val code-badge" type="button" role="button" tabindex="0" data-copy="${escape(vs.mqttDeviceName)}" title="Copy" aria-label="Salin nama MQTT">${escape(vs.mqttDeviceName)}</span>`;
       if (vs.interfaces && vs.interfaces.length > 0) {
         details += `<span class="mx-lbl">I/F</span><span class="mx-val">${escape(vs.interfaces[0].bus)} ${escape(vs.interfaces[0].address)}</span>`;
       }
     }
-    
-    const vName = state.catalog.variants.find(v => v.key === vk)?.name || vk;
     
     return `
       <div class="mx-row">
@@ -401,8 +496,8 @@ window.openDetail = function(id, pushState = true) {
     const commit = state.catalog.generatedFrom.commit;
     const url = `${repoUrl}/blob/${commit}/${ev.path}#L${ev.lines.split('-')[0]}`;
     return `
-      <a href="${url}" target="_blank" class="ev-link">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+      <a href="${url}" target="_blank" rel="noopener noreferrer" class="ev-link">
+        <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
         <span style="flex:1; overflow:hidden; text-overflow:ellipsis;">${escape(ev.path)}</span>
         <span class="ev-line">L${escape(ev.lines)}</span>
       </a>
@@ -411,40 +506,49 @@ window.openDetail = function(id, pushState = true) {
   document.getElementById('detail-evidence').innerHTML = evHtml || '<span class="mx-lbl">No source cited</span>';
 
   els.drawer.classList.add('open');
+  els.drawer.setAttribute('aria-hidden', 'false');
+  document.body.classList.add('drawer-open');
   els.drawer.querySelector('#btn-close-detail').focus();
 }
 
 window.closeDetail = function() {
   state.selectedId = null;
   els.drawer.classList.remove('open');
+  els.drawer.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('drawer-open');
   document.querySelectorAll('.card.selected').forEach(c => c.classList.remove('selected'));
   updateURL();
-  els.search.focus();
+  if (state.opener && document.contains(state.opener)) {
+    state.opener.focus();
+  } else {
+    els.search.focus();
+  }
+  state.opener = null;
 }
 
 window.removeFilter = removeFilter;
 
 window.copyText = function(text) {
+  const toast = document.getElementById('toast');
+  const live = document.getElementById('live-region');
+  if (!navigator.clipboard || !navigator.clipboard.writeText) {
+    toast.textContent = 'Clipboard tidak tersedia';
+    live.textContent = 'Gagal menyalin ke clipboard.';
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2500);
+    return;
+  }
   navigator.clipboard.writeText(text).then(() => {
-    const toast = document.getElementById('toast');
-    const live = document.getElementById('live-region');
     toast.textContent = `Tersalin: ${text}`;
     live.textContent = `${text} disalin ke clipboard.`;
     toast.classList.add('show');
     setTimeout(() => toast.classList.remove('show'), 2500);
+  }).catch(() => {
+    toast.textContent = 'Gagal menyalin teks';
+    live.textContent = 'Gagal menyalin ke clipboard.';
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2500);
   });
-}
-
-function escape(str) {
-  if (!str) return '';
-  return str.toString().replace(/[&<>"']/g, function(m) {
-    return {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[m];
-  });
-}
-
-function formatEnum(str) {
-  if (!str) return '';
-  return str.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 }
 
 // Start

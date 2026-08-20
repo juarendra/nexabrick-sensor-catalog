@@ -34,6 +34,20 @@
                     <button class="btn-primary" id="btn-explore">Jelajahi Data</button>
                     <a href="https://github.com/GSPETech/Nexabrick_Firmware" class="btn-secondary" target="_blank">Lihat source firmware</a>
                 </div>
+                <div class="hero-stats" id="hero-stats" aria-label="Ringkasan katalog">
+                    <div class="hero-stat">
+                        <span class="stat-value" id="stat-devices">–</span>
+                        <span class="stat-label">Sensor didukung</span>
+                    </div>
+                    <div class="hero-stat">
+                        <span class="stat-value" id="stat-categories">–</span>
+                        <span class="stat-label">Kategori</span>
+                    </div>
+                    <div class="hero-stat">
+                        <span class="stat-value" id="stat-variants">–</span>
+                        <span class="stat-label">Varian perangkat</span>
+                    </div>
+                </div>
             </div>
             <div class="hero-variants" id="variant-plates">
                 <!-- Variant plates rendered here -->
@@ -66,7 +80,7 @@
                 </div>
                 
                 <div class="filter-actions">
-                    <button class="btn-secondary btn-full" id="btn-reset-filters" style="display: none;">Reset Filter</button>
+                    <button class="btn-secondary btn-full" id="btn-reset-filters">Reset Filter</button>
                     <button class="btn-primary btn-full mobile-only" id="btn-apply-filters">Terapkan</button>
                 </div>
             </aside>
@@ -130,7 +144,7 @@
             
             <div class="drawer-body" id="detail-body">
                 <h2 id="detail-title">--</h2>
-                <div class="code-badge copy-target" id="detail-software-name" role="button" tabindex="0" title="Salin">--</div>
+                <div class="code-badge copy-target" id="detail-software-name" type="button" role="button" tabindex="0" aria-label="Salin nama software" title="Salin">--</div>
                 
                 <p class="detail-purpose" id="detail-purpose">--</p>
                 
