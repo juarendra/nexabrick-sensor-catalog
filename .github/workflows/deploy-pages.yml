@@ -23,14 +23,43 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run Catalog Validator
+        run: node scripts/validate-catalog.mjs
+
+      - name: Build public site
+        run: |
+          mkdir -p _site/assets _site/data
+          cp index.html _site/
+          cp 404.html _site/
+          cp assets/app.js assets/styles.css assets/lib.mjs _site/assets/
+          cp data/catalog.json _site/data/
+          # Exclude scripts/, tests/, docs/, and any helper files from publishing.
+
+      - name: Smoke test artifact
+        run: |
+          test -f _site/index.html
+          test -f _site/assets/app.js
+          test -f _site/assets/lib.mjs
+          test -f _site/assets/styles.css
+          test -f _site/data/catalog.json
+          node -e "JSON.parse(require('fs').readFileSync('_site/data/catalog.json','utf8')); console.log('catalog.json parses OK')"
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
         with:
           enablement: true
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
+          path: '_site'
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

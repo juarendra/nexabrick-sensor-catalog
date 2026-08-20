@@ -40,6 +40,28 @@
 <body>
     <h1>404</h1>
     <p>Data atau sensor yang Anda cari tidak ditemukan.</p>
-    <a href="/nexabrick-sensor-catalog/">Kembali ke Katalog Utama</a>
+    <a id="home-link" href="./">Kembali ke Katalog Utama</a>
+    <script>
+      // Resolve the Pages base path dynamically (project site + repo sub-path)
+      (function () {
+        var link = document.getElementById('home-link');
+        var segments = location.pathname.split('/').filter(Boolean);
+        var candidates = [location.origin + '/'];
+        for (var i = 0; i <= segments.length; i++) {
+          candidates.push(location.origin + '/' + segments.slice(0, i).join('/') + '/');
+        }
+        // Check from deepest candidate up; first that serves index.html is the app root
+        var check = function (root) {
+          return fetch(root + 'index.html').then(function (r) { return r.ok; });
+        };
+        (function walk(i) {
+          if (i < 0) { link.href = candidates[0]; return; }
+          check(candidates[i]).then(function (ok) {
+            if (ok) { link.href = candidates[i]; }
+            else { walk(i - 1); }
+          });
+        })(candidates.length - 1);
+      })();
+    </script>
 </body>
 </html>
