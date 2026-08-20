@@ -5,7 +5,8 @@ const state = {
   filters: { status: [], category: [] },
   search: '',
   selectedId: null,
-  variant: null
+  variant: null,
+  opener: null
 };
 
 // UI Elements
@@ -289,13 +290,13 @@ function render() {
       const vDots = state.catalog.variants
         .filter(v => v.key !== 'micro-modular')
         .map(vk => {
-          const s = d.variantSupport[vk.key]?.status;
+          const s = d.variantSupport[vk.key]?.status || 'unknown';
           const cl = s === 'active' ? 'on' : (s === 'incomplete' || s === 'declared-only' ? 'inc' : 'off');
-          return `<div class="v-dot ${cl}" title="${vk.key}: ${s}"></div>`;
+          return `<div class="v-dot ${cl}" role="img" title="${vk.key}: ${s}" aria-label="${vk.key}: ${s}"></div>`;
         }).join('');
 
       return `
-        <div class="card ${isSel}" data-id="${d.id}" role="button" tabindex="0" onclick="window.openDetail(${d.id}, true)" onkeydown="if(event.key==='Enter') window.openDetail(${d.id}, true)">
+        <div class="card ${isSel}" data-id="${d.id}" role="button" tabindex="0" onclick="window.openDetail(${d.id}, true, this)" onkeydown="if(event.key==='Enter'||event.key===' ') window.openDetail(${d.id}, true, this)">
           <div class="card-header">
             <div class="card-id-rail">
               <span class="id-badge">${d.id.toString().padStart(2, '0')}</span>
@@ -330,11 +331,12 @@ function render() {
   els.summary.textContent = `Menampilkan ${filtered.length} perangkat dari total ${state.catalog.devices.length}`;
 }
 
-window.openDetail = function(id, pushState = true) {
+window.openDetail = function(id, pushState = true, opener = null) {
   const d = state.catalog.devices.find(x => x.id === id);
   if (!d) return;
   
   state.selectedId = id;
+  state.opener = opener;
   if (pushState) updateURL();
   
   // Highlight card
@@ -400,7 +402,17 @@ window.openDetail = function(id, pushState = true) {
   // Variant Matrix
   const mxHtml = state.catalog.variants.map(vk => {
     const vs = d.variantSupport[vk.key];
-    if (!vs) return '';
+    const vName = vk.name;
+    if (!vs) {
+      return `
+        <div class="mx-row">
+          <div class="mx-head">
+            <span class="mx-name">${escape(vName)}</span>
+            <span class="mx-stat uns">Unknown</span>
+          </div>
+        </div>
+      `;
+    }
     const stCls = vs.status === 'active' ? 'act' : (vs.status === 'unsupported' ? 'uns' : (vs.status === 'incomplete' || vs.status === 'declared-only' ? 'inc' : 'uns'));
     
     let details = '';
@@ -411,8 +423,6 @@ window.openDetail = function(id, pushState = true) {
         details += `<span class="mx-lbl">I/F</span><span class="mx-val">${escape(vs.interfaces[0].bus)} ${escape(vs.interfaces[0].address)}</span>`;
       }
     }
-    
-    const vName = vk.name;
     
     return `
       <div class="mx-row">
@@ -452,17 +462,34 @@ window.closeDetail = function() {
   els.drawer.setAttribute('aria-hidden', 'true');
   document.querySelectorAll('.card.selected').forEach(c => c.classList.remove('selected'));
   updateURL();
-  els.search.focus();
+  if (state.opener && document.contains(state.opener)) {
+    state.opener.focus();
+  } else {
+    els.search.focus();
+  }
+  state.opener = null;
 }
 
 window.removeFilter = removeFilter;
 
 window.copyText = function(text) {
+  const toast = document.getElementById('toast');
+  const live = document.getElementById('live-region');
+  if (!navigator.clipboard || !navigator.clipboard.writeText) {
+    toast.textContent = 'Clipboard tidak tersedia';
+    live.textContent = 'Gagal menyalin ke clipboard.';
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2500);
+    return;
+  }
   navigator.clipboard.writeText(text).then(() => {
-    const toast = document.getElementById('toast');
-    const live = document.getElementById('live-region');
     toast.textContent = `Tersalin: ${text}`;
     live.textContent = `${text} disalin ke clipboard.`;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2500);
+  }).catch(() => {
+    toast.textContent = 'Gagal menyalin teks';
+    live.textContent = 'Gagal menyalin ke clipboard.';
     toast.classList.add('show');
     setTimeout(() => toast.classList.remove('show'), 2500);
   });
