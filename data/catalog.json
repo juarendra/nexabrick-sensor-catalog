@@ -3887,8 +3887,16 @@
       ],
       "variantSupport": {
         "micro": {
-          "status": "auxiliary",
-          "component": "components/tibbit_io"
+          "status": "active",
+          "component": "components/tibbit_io",
+          "task": "task_digital_io",
+          "mqttDeviceName": "Nexabrick_IO_01",
+          "interfaces": [
+            {
+              "bus": "GPIO",
+              "address": "N/A"
+            }
+          ]
         },
         "micro-rnd": {
           "status": "auxiliary",
@@ -3970,8 +3978,16 @@
       ],
       "variantSupport": {
         "micro": {
-          "status": "auxiliary",
-          "component": "components/tibbit_io"
+          "status": "active",
+          "component": "components/tibbit_io",
+          "task": "task_digital_io",
+          "mqttDeviceName": "Nexabrick_IO_02",
+          "interfaces": [
+            {
+              "bus": "GPIO",
+              "address": "N/A"
+            }
+          ]
         },
         "micro-rnd": {
           "status": "auxiliary",
@@ -4053,8 +4069,16 @@
       ],
       "variantSupport": {
         "micro": {
-          "status": "auxiliary",
-          "component": "components/tibbit_io"
+          "status": "active",
+          "component": "components/tibbit_io",
+          "task": "task_digital_io",
+          "mqttDeviceName": "Nexabrick_IO_04",
+          "interfaces": [
+            {
+              "bus": "GPIO",
+              "address": "N/A"
+            }
+          ]
         },
         "micro-rnd": {
           "status": "auxiliary",
@@ -4136,8 +4160,16 @@
       ],
       "variantSupport": {
         "micro": {
-          "status": "auxiliary",
-          "component": "components/tibbit_io"
+          "status": "active",
+          "component": "components/tibbit_io",
+          "task": "task_digital_io",
+          "mqttDeviceName": "Nexabrick_IO_06",
+          "interfaces": [
+            {
+              "bus": "GPIO",
+              "address": "N/A"
+            }
+          ]
         },
         "micro-rnd": {
           "status": "auxiliary",
@@ -4213,8 +4245,16 @@
       ],
       "variantSupport": {
         "micro": {
-          "status": "auxiliary",
-          "component": "components/tibbit_io"
+          "status": "active",
+          "component": "components/tibbit_io",
+          "task": "task_digital_io",
+          "mqttDeviceName": "Nexabrick_IO_09",
+          "interfaces": [
+            {
+              "bus": "GPIO",
+              "address": "N/A"
+            }
+          ]
         },
         "micro-rnd": {
           "status": "auxiliary",
@@ -4329,6 +4369,536 @@
         "confidence": "confirmed",
         "sourcePath": "#12 [1A SLOT] FOUR PWM OPEN DRAIN 24V_3A/doc/registers.md"
       }
+    },
+    {
+      "id": 1007,
+      "slug": "tibbit-03",
+      "deviceType": "actuator",
+      "category": "digital-io",
+      "displayName": "Two Isolated Open Collector Output NEG",
+      "softwareName": "Generic_IO",
+      "summary": "Digital I/O or Actuator module.",
+      "pcb": {
+        "number": "#03",
+        "name": "Two Isolated Open Collector Output NEG",
+        "confidence": "confirmed",
+        "sourcePath": "Firmware integration"
+      },
+      "physicalParts": [
+        {
+          "part": "Generic IO",
+          "manufacturer": "N/A",
+          "role": "Interface"
+        }
+      ],
+      "variantSupport": {
+        "micro": {
+          "status": "active",
+          "task": "task_digital_io",
+          "mqttDeviceName": "Nexabrick_IO_03",
+          "interfaces": [
+            {
+              "bus": "GPIO",
+              "address": "N/A"
+            }
+          ]
+        },
+        "micro-rnd": {
+          "status": "unsupported"
+        },
+        "micro-duo": {
+          "status": "unsupported"
+        },
+        "ccu": {
+          "status": "unsupported"
+        },
+        "micro-modular": {
+          "status": "unsupported"
+        }
+      },
+      "measurements": [],
+      "conflicts": [],
+      "evidence": [],
+      "aliases": [
+        "Tibbit #03"
+      ]
+    },
+    {
+      "id": 1008,
+      "slug": "tibbit-05",
+      "deviceType": "actuator",
+      "category": "digital-io",
+      "displayName": "Two Isolated Inputs Comm Cathode",
+      "softwareName": "Generic_IO",
+      "summary": "Digital I/O or Actuator module.",
+      "pcb": {
+        "number": "#05",
+        "name": "Two Isolated Inputs Comm Cathode",
+        "confidence": "confirmed",
+        "sourcePath": "Firmware integration"
+      },
+      "physicalParts": [
+        {
+          "part": "Generic IO",
+          "manufacturer": "N/A",
+          "role": "Interface"
+        }
+      ],
+      "variantSupport": {
+        "micro": {
+          "status": "active",
+          "task": "task_digital_io",
+          "mqttDeviceName": "Nexabrick_IO_05",
+          "interfaces": [
+            {
+              "bus": "GPIO",
+              "address": "N/A"
+            }
+          ]
+        },
+        "micro-rnd": {
+          "status": "unsupported"
+        },
+        "micro-duo": {
+          "status": "unsupported"
+        },
+        "ccu": {
+          "status": "unsupported"
+        },
+        "micro-modular": {
+          "status": "unsupported"
+        }
+      },
+      "measurements": [],
+      "conflicts": [],
+      "evidence": [],
+      "aliases": [
+        "Tibbit #05"
+      ]
+    },
+    {
+      "id": 1009,
+      "slug": "tibbit-07",
+      "deviceType": "actuator",
+      "category": "digital-io",
+      "displayName": "Four Isolated Inputs Comm Anode",
+      "softwareName": "Generic_IO",
+      "summary": "Digital I/O or Actuator module.",
+      "pcb": {
+        "number": "#07",
+        "name": "Four Isolated Inputs Comm Anode",
+        "confidence": "confirmed",
+        "sourcePath": "Firmware integration"
+      },
+      "physicalParts": [
+        {
+          "part": "Generic IO",
+          "manufacturer": "N/A",
+          "role": "Interface"
+        }
+      ],
+      "variantSupport": {
+        "micro": {
+          "status": "active",
+          "task": "task_digital_io",
+          "mqttDeviceName": "Nexabrick_IO_07",
+          "interfaces": [
+            {
+              "bus": "GPIO",
+              "address": "N/A"
+            }
+          ]
+        },
+        "micro-rnd": {
+          "status": "unsupported"
+        },
+        "micro-duo": {
+          "status": "unsupported"
+        },
+        "ccu": {
+          "status": "unsupported"
+        },
+        "micro-modular": {
+          "status": "unsupported"
+        }
+      },
+      "measurements": [],
+      "conflicts": [],
+      "evidence": [],
+      "aliases": [
+        "Tibbit #07"
+      ]
+    },
+    {
+      "id": 1010,
+      "slug": "tibbit-08",
+      "deviceType": "actuator",
+      "category": "digital-io",
+      "displayName": "Four Isolated Inputs Comm Ground",
+      "softwareName": "Generic_IO",
+      "summary": "Digital I/O or Actuator module.",
+      "pcb": {
+        "number": "#08",
+        "name": "Four Isolated Inputs Comm Ground",
+        "confidence": "confirmed",
+        "sourcePath": "Firmware integration"
+      },
+      "physicalParts": [
+        {
+          "part": "Generic IO",
+          "manufacturer": "N/A",
+          "role": "Interface"
+        }
+      ],
+      "variantSupport": {
+        "micro": {
+          "status": "active",
+          "task": "task_digital_io",
+          "mqttDeviceName": "Nexabrick_IO_08",
+          "interfaces": [
+            {
+              "bus": "GPIO",
+              "address": "N/A"
+            }
+          ]
+        },
+        "micro-rnd": {
+          "status": "unsupported"
+        },
+        "micro-duo": {
+          "status": "unsupported"
+        },
+        "ccu": {
+          "status": "unsupported"
+        },
+        "micro-modular": {
+          "status": "unsupported"
+        }
+      },
+      "measurements": [],
+      "conflicts": [],
+      "evidence": [],
+      "aliases": [
+        "Tibbit #08"
+      ]
+    },
+    {
+      "id": 1011,
+      "slug": "tibbit-10",
+      "deviceType": "actuator",
+      "category": "digital-io",
+      "displayName": "Two Solid-State Relay",
+      "softwareName": "Generic_IO",
+      "summary": "Digital I/O or Actuator module.",
+      "pcb": {
+        "number": "#10",
+        "name": "Two Solid-State Relay",
+        "confidence": "confirmed",
+        "sourcePath": "Firmware integration"
+      },
+      "physicalParts": [
+        {
+          "part": "Generic IO",
+          "manufacturer": "N/A",
+          "role": "Interface"
+        }
+      ],
+      "variantSupport": {
+        "micro": {
+          "status": "active",
+          "task": "task_digital_io",
+          "mqttDeviceName": "Nexabrick_IO_10",
+          "interfaces": [
+            {
+              "bus": "GPIO",
+              "address": "N/A"
+            }
+          ]
+        },
+        "micro-rnd": {
+          "status": "unsupported"
+        },
+        "micro-duo": {
+          "status": "unsupported"
+        },
+        "ccu": {
+          "status": "unsupported"
+        },
+        "micro-modular": {
+          "status": "unsupported"
+        }
+      },
+      "measurements": [],
+      "conflicts": [],
+      "evidence": [],
+      "aliases": [
+        "Tibbit #10"
+      ]
+    },
+    {
+      "id": 1012,
+      "slug": "tibbit-45",
+      "deviceType": "actuator",
+      "category": "digital-io",
+      "displayName": "Four 1A Open Drain Outputs",
+      "softwareName": "Generic_IO",
+      "summary": "Digital I/O or Actuator module.",
+      "pcb": {
+        "number": "#45",
+        "name": "Four 1A Open Drain Outputs",
+        "confidence": "confirmed",
+        "sourcePath": "Firmware integration"
+      },
+      "physicalParts": [
+        {
+          "part": "Generic IO",
+          "manufacturer": "N/A",
+          "role": "Interface"
+        }
+      ],
+      "variantSupport": {
+        "micro": {
+          "status": "active",
+          "task": "task_digital_io",
+          "mqttDeviceName": "Nexabrick_IO_45",
+          "interfaces": [
+            {
+              "bus": "GPIO",
+              "address": "N/A"
+            }
+          ]
+        },
+        "micro-rnd": {
+          "status": "unsupported"
+        },
+        "micro-duo": {
+          "status": "unsupported"
+        },
+        "ccu": {
+          "status": "unsupported"
+        },
+        "micro-modular": {
+          "status": "unsupported"
+        }
+      },
+      "measurements": [],
+      "conflicts": [],
+      "evidence": [],
+      "aliases": [
+        "Tibbit #45"
+      ]
+    },
+    {
+      "id": 1013,
+      "slug": "tibbit-55",
+      "deviceType": "actuator",
+      "category": "digital-io",
+      "displayName": "Pushbutton",
+      "softwareName": "Generic_IO",
+      "summary": "Digital I/O or Actuator module.",
+      "pcb": {
+        "number": "#55",
+        "name": "Pushbutton",
+        "confidence": "confirmed",
+        "sourcePath": "Firmware integration"
+      },
+      "physicalParts": [
+        {
+          "part": "Generic IO",
+          "manufacturer": "N/A",
+          "role": "Interface"
+        }
+      ],
+      "variantSupport": {
+        "micro": {
+          "status": "active",
+          "task": "task_digital_io",
+          "mqttDeviceName": "Nexabrick_IO_55",
+          "interfaces": [
+            {
+              "bus": "GPIO",
+              "address": "N/A"
+            }
+          ]
+        },
+        "micro-rnd": {
+          "status": "unsupported"
+        },
+        "micro-duo": {
+          "status": "unsupported"
+        },
+        "ccu": {
+          "status": "unsupported"
+        },
+        "micro-modular": {
+          "status": "unsupported"
+        }
+      },
+      "measurements": [],
+      "conflicts": [],
+      "evidence": [],
+      "aliases": [
+        "Tibbit #55"
+      ]
+    },
+    {
+      "id": 1014,
+      "slug": "tibbit-56",
+      "deviceType": "actuator",
+      "category": "digital-io",
+      "displayName": "8-Bit Port",
+      "softwareName": "Generic_IO",
+      "summary": "Digital I/O or Actuator module.",
+      "pcb": {
+        "number": "#56",
+        "name": "8-Bit Port",
+        "confidence": "confirmed",
+        "sourcePath": "Firmware integration"
+      },
+      "physicalParts": [
+        {
+          "part": "Generic IO",
+          "manufacturer": "N/A",
+          "role": "Interface"
+        }
+      ],
+      "variantSupport": {
+        "micro": {
+          "status": "active",
+          "task": "task_digital_io",
+          "mqttDeviceName": "Nexabrick_IO_56",
+          "interfaces": [
+            {
+              "bus": "GPIO",
+              "address": "N/A"
+            }
+          ]
+        },
+        "micro-rnd": {
+          "status": "unsupported"
+        },
+        "micro-duo": {
+          "status": "unsupported"
+        },
+        "ccu": {
+          "status": "unsupported"
+        },
+        "micro-modular": {
+          "status": "unsupported"
+        }
+      },
+      "measurements": [],
+      "conflicts": [],
+      "evidence": [],
+      "aliases": [
+        "Tibbit #56"
+      ]
+    },
+    {
+      "id": 1015,
+      "slug": "tibbit-80",
+      "deviceType": "actuator",
+      "category": "digital-io",
+      "displayName": "Two High-Power Relay",
+      "softwareName": "Generic_IO",
+      "summary": "Digital I/O or Actuator module.",
+      "pcb": {
+        "number": "#80",
+        "name": "Two High-Power Relay",
+        "confidence": "confirmed",
+        "sourcePath": "Firmware integration"
+      },
+      "physicalParts": [
+        {
+          "part": "Generic IO",
+          "manufacturer": "N/A",
+          "role": "Interface"
+        }
+      ],
+      "variantSupport": {
+        "micro": {
+          "status": "active",
+          "task": "task_digital_io",
+          "mqttDeviceName": "Nexabrick_IO_80",
+          "interfaces": [
+            {
+              "bus": "GPIO",
+              "address": "N/A"
+            }
+          ]
+        },
+        "micro-rnd": {
+          "status": "unsupported"
+        },
+        "micro-duo": {
+          "status": "unsupported"
+        },
+        "ccu": {
+          "status": "unsupported"
+        },
+        "micro-modular": {
+          "status": "unsupported"
+        }
+      },
+      "measurements": [],
+      "conflicts": [],
+      "evidence": [],
+      "aliases": [
+        "Tibbit #80"
+      ]
+    },
+    {
+      "id": 1016,
+      "slug": "tibbit-81",
+      "deviceType": "actuator",
+      "category": "digital-io",
+      "displayName": "High-Voltage Solid State Relay",
+      "softwareName": "Generic_IO",
+      "summary": "Digital I/O or Actuator module.",
+      "pcb": {
+        "number": "#81",
+        "name": "High-Voltage Solid State Relay",
+        "confidence": "confirmed",
+        "sourcePath": "Firmware integration"
+      },
+      "physicalParts": [
+        {
+          "part": "Generic IO",
+          "manufacturer": "N/A",
+          "role": "Interface"
+        }
+      ],
+      "variantSupport": {
+        "micro": {
+          "status": "active",
+          "task": "task_digital_io",
+          "mqttDeviceName": "Nexabrick_IO_81",
+          "interfaces": [
+            {
+              "bus": "GPIO",
+              "address": "N/A"
+            }
+          ]
+        },
+        "micro-rnd": {
+          "status": "unsupported"
+        },
+        "micro-duo": {
+          "status": "unsupported"
+        },
+        "ccu": {
+          "status": "unsupported"
+        },
+        "micro-modular": {
+          "status": "unsupported"
+        }
+      },
+      "measurements": [],
+      "conflicts": [],
+      "evidence": [],
+      "aliases": [
+        "Tibbit #81"
+      ]
     }
   ]
 }
