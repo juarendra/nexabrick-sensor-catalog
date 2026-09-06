@@ -1,4 +1,4 @@
-import { escape, formatEnum, normalize, filterDevices, parseIdParam, sanitizeCategory, safeUrl, getCatalogOverview } from './lib.mjs';
+import { escape, formatEnum, normalize, filterDevices, parseIdParam, sanitizeCategory, safeUrl, assetUrl, getCatalogOverview } from './lib.mjs';
 
 const state = {
   catalog: null,
@@ -22,7 +22,9 @@ const els = {
   summary: document.getElementById('results-summary'),
   empty: document.getElementById('empty-state'),
   error: document.getElementById('error-state'),
-  drawer: document.getElementById('detail-drawer')
+  drawer: document.getElementById('detail-drawer'),
+  detailMediaSection: document.getElementById('detail-media-section'),
+  detailMedia: document.getElementById('detail-media')
 };
 
 // Colors matching CSS
@@ -417,6 +419,99 @@ function render() {
   els.summary.textContent = `Menampilkan ${filtered.length} perangkat dari total ${state.catalog.devices.length}`;
 }
 
+// Render the optional "Visual Reference" media block for a device. Shows a 3D
+// model viewer (model-viewer) when available with a graceful fallback to the
+// poster image + downloads, plus a reference-image gallery and CAD downloads.
+// All text is escaped; all asset paths go through assetUrl() (relative only).
+function renderMedia(d) {
+  const section = els.detailMediaSection;
+  const container = els.detailMedia;
+  if (!section || !container) return;
+  const media = Array.isArray(d.media) ? d.media : [];
+  if (media.length === 0) {
+    section.style.display = 'none';
+    section.setAttribute('aria-hidden', 'true');
+    container.innerHTML = '';
+    return;
+  }
+  section.style.display = 'block';
+  section.setAttribute('aria-hidden', 'false');
+
+  const reduced = typeof window.matchMedia === 'function'
+    && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const hasMV = typeof customElements !== 'undefined' && customElements.get('model-viewer');
+
+  const dlIcon = '<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>';
+
+  const groupsHtml = media.map((g, gi) => {
+    const label = g.label || '';
+    const variant = g.variant || '';
+    const status = g.hardwareStatus || 'pending';
+    const statusCls = status === 'hardware-verified' ? 'ok'
+      : (status === 'not-qualified' ? 'bad' : 'pending');
+    const note = g.note || '';
+
+    const images = Array.isArray(g.images) ? g.images : [];
+    const thumbsHtml = images.map((img, ii) => {
+      const src = assetUrl(img ? img.src : '');
+      if (!src) return '';
+      const alt = (img && img.alt) ? img.alt : label;
+      return `<button type="button" class="media-thumb${ii === 0 ? ' active' : ''}" data-group="${gi}" data-idx="${ii}" aria-label="Tampilkan referensi: ${escape(alt)}"><img src="${src}" alt="${escape(alt)}" loading="lazy" decoding="async"></button>`;
+    }).join('');
+
+    const model = (g.model && typeof g.model === 'object') ? g.model : null;
+    const modelSrc = model ? assetUrl(model.src) : null;
+    const poster = model ? assetUrl(model.poster) : null;
+
+    let viewerHtml;
+    if (modelSrc && hasMV) {
+      viewerHtml = `<model-viewer class="media-3d-viewer" src="${modelSrc}"${poster ? ` poster="${poster}"` : ''} alt="${escape(label + ' (model 3D)')}" camera-controls${reduced ? '' : ' auto-rotate'} loading="lazy" shadow-intensity="1" exposure="1"></model-viewer>`;
+    } else {
+      viewerHtml = `<div class="media-3d-fallback">${poster ? `<img class="media-3d-poster" src="${poster}" alt="${escape(label + ' (pratinjau)')}" loading="lazy" decoding="async">` : '<div class="media-3d-empty" aria-hidden="true"></div>'}<span class="media-3d-fallback-note">Penampil 3D tidak tersedia — buka dengan koneksi ke CDN, atau unduh model GLB di bawah.</span></div>`;
+    }
+
+    const downloads = Array.isArray(g.cadDownloads) ? g.cadDownloads : [];
+    const dlHtml = downloads.map(dl => {
+      const url = assetUrl(dl ? dl.src : '');
+      if (!url) return '';
+      const filename = (dl.src || '').split('/').pop() || '';
+      return `<a class="media-dl" href="${url}" download="${escape(filename)}" title="${escape(dl.format || 'CAD file')}">${dlIcon}<span>${escape(dl.label || ('Download ' + (dl.format || 'file')))}</span></a>`;
+    }).join('');
+
+    return `<article class="media-group" data-group="${gi}">
+      <div class="media-group-head">
+        <span class="media-group-label">${escape(label)}</span>
+        ${variant ? `<span class="media-variant-badge">${escape(variant)}</span>` : ''}
+        <span class="media-status ${statusCls}" title="Status kualifikasi hardware">${escape(formatEnum(status))}</span>
+      </div>
+      <div class="media-3d-frame">${viewerHtml}</div>
+      ${thumbsHtml ? `<div class="media-thumbs" role="tablist" aria-label="Galeri referensi ${escape(label)}">${thumbsHtml}</div>` : ''}
+      ${dlHtml ? `<div class="media-downloads">${dlHtml}</div>` : ''}
+      ${note ? `<p class="media-note">${escape(note)}</p>` : ''}
+    </article>`;
+  }).join('');
+
+  container.innerHTML = groupsHtml;
+
+  container.querySelectorAll('.media-thumb').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const gi = Number(btn.dataset.group);
+      const idx = Number(btn.dataset.idx);
+      const group = media[gi];
+      const img = (group && Array.isArray(group.images)) ? group.images[idx] : null;
+      const src = img ? assetUrl(img.src) : null;
+      if (!src) return;
+      const groupEl = container.querySelector(`.media-group[data-group="${gi}"]`);
+      if (!groupEl) return;
+      groupEl.querySelectorAll('.media-thumb').forEach(t => t.classList.toggle('active', t === btn));
+      const mv = groupEl.querySelector('model-viewer');
+      if (mv) mv.poster = src;
+      const fb = groupEl.querySelector('.media-3d-poster');
+      if (fb) fb.src = src;
+    });
+  });
+}
+
 window.openDetail = function(id, pushState = true, opener = null) {
   const d = state.catalog.devices.find(x => x.id === id);
   if (!d) return;
@@ -440,6 +535,8 @@ window.openDetail = function(id, pushState = true, opener = null) {
   swEl.dataset.copy = d.softwareName;
   
   document.getElementById('detail-purpose').textContent = d.purpose || d.summary;
+
+  renderMedia(d);
 
   const pcb = d.pcb || {};
   const pcbResolved = Boolean(pcb.number);

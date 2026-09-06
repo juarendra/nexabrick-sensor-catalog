@@ -612,7 +612,70 @@
         "name": "Four Dry Contacts Inputs",
         "confidence": "probable",
         "sourcePath": "#04 [1A SLOT] FOUR DRY CONTACTS INPUTS/doc/registers.md"
-      }
+      },
+      "media": [
+        {
+          "label": "Modular 6 Terminal Block",
+          "variant": "micro-modular",
+          "images": [
+            {
+              "src": "media/Modular 6 Terminal Block/isometric_1.png",
+              "alt": "Modular 6 terminal block, isometric view 1 (unverified CAD reference)"
+            },
+            {
+              "src": "media/Modular 6 Terminal Block/isometric_2.png",
+              "alt": "Modular 6 terminal block, isometric view 2 (unverified CAD reference)"
+            }
+          ],
+          "model": {
+            "src": "media/Modular 6 Terminal Block/model.glb",
+            "poster": "media/Modular 6 Terminal Block/isometric_1.png"
+          },
+          "cadDownloads": [
+            {
+              "label": "Download STEP",
+              "src": "media/Modular 6 Terminal Block/Modular 6 Terminal Block.step",
+              "format": "STEP"
+            }
+          ],
+          "confidence": "unresolved",
+          "hardwareStatus": "pending",
+          "note": "User-provided CAD reference render. Not a production PCB and not a hardware qualification."
+        },
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 terminal block, isometric view 1 (unverified CAD reference)"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 terminal block, isometric view 2 (unverified CAD reference)"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "cadDownloads": [
+            {
+              "label": "Download STEP",
+              "src": "media/Nexabrick Micro 6 Terminal Block/Nexabrick Micro 6 Terminal Block.step",
+              "format": "STEP"
+            },
+            {
+              "label": "Download SketchUp (SKP)",
+              "src": "media/Nexabrick Micro 6 Terminal Block/Nexabrick Micro 6 Terminal Block.skp",
+              "format": "SKP"
+            }
+          ],
+          "confidence": "unresolved",
+          "hardwareStatus": "pending",
+          "note": "User-provided CAD reference render. Not a production PCB and not a hardware qualification."
+        }
+      ]
     },
     {
       "id": 4,

@@ -177,3 +177,137 @@ test('non-https catalogRepository fails', () => {
   assert.equal(r.ok, false);
   assert.ok(r.errors.some(e => e.includes('generatedFrom.catalogRepository')));
 });
+
+function validMedia() {
+  return [{
+    label: 'Test Model',
+    variant: 'micro',
+    images: [{ src: 'media/test/a.png', alt: 'view 1' }],
+    model: { src: 'media/test/model.glb', poster: 'media/test/a.png' },
+    cadDownloads: [{ label: 'Download STEP', src: 'media/test/model.step', format: 'STEP' }],
+    confidence: 'unresolved',
+    hardwareStatus: 'pending'
+  }];
+}
+
+test('valid media block passes', () => {
+  const c = baseCatalog();
+  c.devices[0].media = validMedia();
+  const r = validateCatalog(c);
+  assert.equal(r.ok, true, r.errors.join('\n'));
+});
+
+test('media non-array fails', () => {
+  const c = baseCatalog();
+  c.devices[0].media = { label: 'x' };
+  const r = validateCatalog(c);
+  assert.equal(r.ok, false);
+  assert.ok(r.errors.some(e => e.includes('devices[0].media')));
+});
+
+test('media entry non-object fails', () => {
+  const c = baseCatalog();
+  c.devices[0].media = ['nope'];
+  const r = validateCatalog(c);
+  assert.equal(r.ok, false);
+  assert.ok(r.errors.some(e => e.includes('media[0]')));
+});
+
+test('media missing label fails', () => {
+  const c = baseCatalog();
+  c.devices[0].media = validMedia();
+  delete c.devices[0].media[0].label;
+  const r = validateCatalog(c);
+  assert.equal(r.ok, false);
+  assert.ok(r.errors.some(e => e.includes('Missing label')));
+});
+
+test('media unknown variant fails', () => {
+  const c = baseCatalog();
+  c.devices[0].media = validMedia();
+  c.devices[0].media[0].variant = 'ghost-variant';
+  const r = validateCatalog(c);
+  assert.equal(r.ok, false);
+  assert.ok(r.errors.some(e => e.includes('Unknown variant key')));
+});
+
+test('media image with bad extension fails', () => {
+  const c = baseCatalog();
+  c.devices[0].media = validMedia();
+  c.devices[0].media[0].images[0].src = 'media/test/a.gif';
+  const r = validateCatalog(c);
+  assert.equal(r.ok, false);
+  assert.ok(r.errors.some(e => e.includes('Not an allowed image type')));
+});
+
+test('media image absolute path fails', () => {
+  const c = baseCatalog();
+  c.devices[0].media = validMedia();
+  c.devices[0].media[0].images[0].src = '/abs/a.png';
+  const r = validateCatalog(c);
+  assert.equal(r.ok, false);
+  assert.ok(r.errors.some(e => e.includes('repo-relative')));
+});
+
+test('media image external URL fails', () => {
+  const c = baseCatalog();
+  c.devices[0].media = validMedia();
+  c.devices[0].media[0].images[0].src = 'https://cdn.example.com/a.png';
+  const r = validateCatalog(c);
+  assert.equal(r.ok, false);
+  assert.ok(r.errors.some(e => e.includes('repo-relative')));
+});
+
+test('media image missing alt fails', () => {
+  const c = baseCatalog();
+  c.devices[0].media = validMedia();
+  delete c.devices[0].media[0].images[0].alt;
+  const r = validateCatalog(c);
+  assert.equal(r.ok, false);
+  assert.ok(r.errors.some(e => e.includes('alt')));
+});
+
+test('media model with bad extension fails', () => {
+  const c = baseCatalog();
+  c.devices[0].media = validMedia();
+  c.devices[0].media[0].model.src = 'media/test/model.obj';
+  const r = validateCatalog(c);
+  assert.equal(r.ok, false);
+  assert.ok(r.errors.some(e => e.includes('Not an allowed 3D model type')));
+});
+
+test('media model external URL fails', () => {
+  const c = baseCatalog();
+  c.devices[0].media = validMedia();
+  c.devices[0].media[0].model.src = 'http://example.com/model.glb';
+  const r = validateCatalog(c);
+  assert.equal(r.ok, false);
+  assert.ok(r.errors.some(e => e.includes('repo-relative')));
+});
+
+test('media cad download with bad extension fails', () => {
+  const c = baseCatalog();
+  c.devices[0].media = validMedia();
+  c.devices[0].media[0].cadDownloads[0].src = 'media/test/model.zip';
+  const r = validateCatalog(c);
+  assert.equal(r.ok, false);
+  assert.ok(r.errors.some(e => e.includes('Not an allowed CAD type')));
+});
+
+test('media invalid hardwareStatus fails', () => {
+  const c = baseCatalog();
+  c.devices[0].media = validMedia();
+  c.devices[0].media[0].hardwareStatus = 'shiny';
+  const r = validateCatalog(c);
+  assert.equal(r.ok, false);
+  assert.ok(r.errors.some(e => e.includes('Invalid hardwareStatus')));
+});
+
+test('media invalid confidence fails', () => {
+  const c = baseCatalog();
+  c.devices[0].media = validMedia();
+  c.devices[0].media[0].confidence = 'certain';
+  const r = validateCatalog(c);
+  assert.equal(r.ok, false);
+  assert.ok(r.errors.some(e => e.includes('Invalid confidence')));
+});

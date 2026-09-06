@@ -60,6 +60,42 @@ Level konfidensi komponen:
 - `firmware-confirmed`: Fungsional firmware terkonfirmasi, komponen IC tidak tercatat.
 - `unresolved`: Konflik resolusi data ditemukan antara nama web, implementasi macro C, atau hardware modulnya.
 
+## Media Hardware
+
+Setiap perangkat **bisa** punya blok `media` opsional di `catalog.json` yang menampilkan referensi visual (gambar) dan model 3D interaktif di panel detail. Media bersifat **referensi saja** — bukan PCB produksi dan bukan bukti kualifikasi hardware. Saat ini hanya sensor ID `3` (Dry Contact Input) yang memiliki media.
+
+### Skema
+```json
+"media": [
+  {
+    "label": "Nama varian",
+    "variant": "micro",
+    "images": [{ "src": "media/<folder>/foto.png", "alt": "Deskripsi" }],
+    "model": { "src": "media/<folder>/model.glb", "poster": "media/<folder>/foto.png" },
+    "cadDownloads": [{ "label": "Download STEP", "src": "media/<folder>/file.step", "format": "STEP" }],
+    "confidence": "unresolved",
+    "hardwareStatus": "pending"
+  }
+]
+```
+
+- `src` harus path relatif dari root repo (tanpa `http(s)://`, tanpa path absolut). Folder boleh mengandung spasi — URL di-encode otomatis per-segmen saat dirender.
+- Format gambar: `.png .jpg .jpeg .webp`. Format model 3D: `.glb .gltf`. Format CAD download: `.step .stp .skp .iges`.
+- `hardwareStatus`: `pending | not-qualified | hardware-verified | unresolved`. Media tidak boleh mengklaim `hardware-verified` tanpa bukti hardware.
+- Viewer 3D memakai `<model-viewer>` (CDN, versi di-pin) dengan fallback ke poster + download bila CDN tak tersedia.
+
+### Menghasilkan model GLB dari CAD
+Browser tidak bisa merender `.step`/`.skp` secara langsung, jadi file CAD diproses menjadi `model.glb` (self-contained, < 10 MB disarankan) yang dipakai viewer, sementara file CAD asli tetap disediakan sebagai download. Pipeline referensi (cadquery/OCP + Blender headless):
+1. `cadquery` membaca STEP → tessellate → OBJ (dipusatkan di origin).
+2. Blender headless: import OBJ → merge + decimate agar ringan → material netral → export GLB.
+
+### Validasi
+```bash
+node scripts/validate-catalog.mjs   # skema + aturan media (path relatif, ekstensi, status)
+node scripts/validate-media.mjs     # semua file yang dirujuk benar-benar ada di disk
+```
+CI menjalankan keduanya plus suite test. `validate-media.mjs` memastikan tidak ada referensi media mati yang ter-deploy.
+
 ---
 
 _Terkoneksi pada: [GSPETech/Nexabrick_Firmware](https://github.com/GSPETech/Nexabrick_Firmware)_

@@ -862,6 +862,101 @@ body.drawer-open { overflow: hidden; }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
 /* ==========================================================================
+   Media Gallery (Visual Reference)
+   ========================================================================== */
+.media-section { margin-bottom: var(--space-8); }
+.media-section-title {
+  font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em;
+  font-weight: 700; color: var(--accent);
+  border-bottom: 1px solid var(--border-strong);
+  padding-bottom: var(--space-2); margin-bottom: var(--space-2);
+}
+.media-section-sub {
+  font-size: 0.75rem; color: var(--text-muted);
+  margin-bottom: var(--space-4); line-height: 1.5;
+}
+.media-groups { display: flex; flex-direction: column; gap: var(--space-5); }
+
+.media-group {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: var(--space-4);
+}
+.media-group-head {
+  display: flex; align-items: center; gap: var(--space-2); flex-wrap: wrap;
+  margin-bottom: var(--space-3);
+}
+.media-group-label { font-weight: 600; font-size: 0.9rem; color: var(--text); }
+.media-variant-badge {
+  font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase;
+  background: var(--surface-raised); border: 1px solid var(--border);
+  color: var(--text-secondary); padding: 2px 8px; border-radius: var(--radius-full);
+}
+.media-status {
+  margin-left: auto; font-size: 0.7rem; text-transform: uppercase; font-weight: 600;
+  padding: 2px 8px; border-radius: var(--radius-full); letter-spacing: 0.04em;
+}
+.media-status.pending { background: rgba(245, 184, 75, 0.12); color: var(--warning); }
+.media-status.ok { background: rgba(75, 210, 139, 0.12); color: var(--success); }
+.media-status.bad { background: rgba(255, 107, 114, 0.12); color: var(--danger); }
+
+.media-3d-frame {
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  overflow: hidden; position: relative;
+  background: radial-gradient(120% 120% at 50% 0%, rgba(84, 167, 255, 0.08), transparent 60%), var(--bg);
+}
+.media-3d-frame model-viewer {
+  width: 100%; height: 300px; display: block;
+  --poster-color: transparent;
+}
+.media-3d-fallback { position: relative; }
+.media-3d-poster { width: 100%; height: 300px; object-fit: contain; display: block; background: var(--bg); }
+.media-3d-empty { width: 100%; height: 300px; }
+.media-3d-fallback-note {
+  position: absolute; bottom: 8px; left: 8px; right: 8px;
+  background: rgba(9, 13, 20, 0.82); color: var(--text-secondary);
+  font-size: 0.7rem; padding: 6px 8px; border-radius: 4px;
+}
+
+.media-thumbs {
+  display: flex; gap: var(--space-2); margin-top: var(--space-3);
+  overflow-x: auto; padding-bottom: 2px;
+}
+.media-thumb {
+  flex: 0 0 auto; width: 72px; height: 54px;
+  padding: 0; border: 2px solid var(--border);
+  border-radius: 4px; overflow: hidden; background: var(--bg); cursor: pointer;
+}
+.media-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.media-thumb:hover { border-color: var(--border-strong); }
+.media-thumb.active { border-color: var(--accent); }
+
+.media-downloads { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-3); }
+.media-dl {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  padding: 6px 10px; font-size: 0.75rem;
+  background: var(--surface-raised); border: 1px solid var(--border);
+  border-radius: 4px; color: var(--text-secondary);
+}
+.media-dl:hover { background: var(--surface-hover); border-color: var(--accent); color: var(--text); text-decoration: none; }
+
+.media-note {
+  margin: var(--space-3) 0 0; font-size: 0.75rem;
+  color: var(--text-muted); line-height: 1.5;
+  border-top: 1px dashed var(--border); padding-top: var(--space-2);
+}
+
+@media (max-width: 767px) {
+  .media-3d-frame model-viewer,
+  .media-3d-poster,
+  .media-3d-empty { height: 220px; }
+  .media-group { padding: var(--space-3); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .media-3d-frame model-viewer { transition: none; }
+}
+
+/* ==========================================================================
    Responsive
    ========================================================================== */
 .mobile-only { display: none; }

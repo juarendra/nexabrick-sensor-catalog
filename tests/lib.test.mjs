@@ -10,6 +10,7 @@ import {
   sanitizeCategory,
   sanitizeStatus,
   safeUrl,
+  assetUrl,
   getCatalogOverview
 } from '../assets/lib.mjs';
 
@@ -97,6 +98,31 @@ test('safeUrl() only permits https URLs', () => {
   assert.equal(safeUrl('javascript:alert(1)'), null);
   assert.equal(safeUrl(''), null);
   assert.equal(safeUrl('not a url'), null);
+});
+
+test('assetUrl() percent-encodes each path segment but keeps separators', () => {
+  assert.equal(assetUrl('media/model.glb'), 'media/model.glb');
+  assert.equal(assetUrl('media/Modular 6 Terminal Block/isometric_1.png'),
+    'media/Modular%206%20Terminal%20Block/isometric_1.png');
+  assert.equal(assetUrl('a/b c/d.png'), 'a/b%20c/d.png');
+});
+
+test('assetUrl() rejects absolute paths, traversal, and URL schemes', () => {
+  assert.equal(assetUrl('/abs/path.png'), null);
+  assert.equal(assetUrl('C:\\win\\path.png'), null);
+  assert.equal(assetUrl('../escape.png'), null);
+  assert.equal(assetUrl('a/../../b.png'), null);
+  assert.equal(assetUrl('http://x/y.glb'), null);
+  assert.equal(assetUrl('https://x/y.glb'), null);
+  assert.equal(assetUrl('data:image/png;base64,AAA'), null);
+  assert.equal(assetUrl('javascript:alert(1)'), null);
+});
+
+test('assetUrl() rejects empty and non-strings', () => {
+  assert.equal(assetUrl(''), null);
+  assert.equal(assetUrl(null), null);
+  assert.equal(assetUrl(undefined), null);
+  assert.equal(assetUrl(42), null);
 });
 
 test('getCatalogOverview counts all devices', () => {
