@@ -174,9 +174,9 @@ const VALID_STATUSES = new Set(['active', 'incomplete', 'declared-only', 'ui-onl
 function setupUI() {
   // Source badge
   if (state.catalog.generatedFrom) {
-    const sha = state.catalog.generatedFrom.commit.substring(0, 7);
-    els.sourceRev.textContent = `FW: ${sha} (${state.catalog.generatedFrom.auditedAt})`;
-    els.sourceRev.title = `Commit ${state.catalog.generatedFrom.commit}`;
+    const fw = state.catalog.generatedFrom.firmwareCommit || state.catalog.generatedFrom.commit || '';
+    els.sourceRev.textContent = `FW: ${fw.substring(0, 7)} (${state.catalog.generatedFrom.auditedAt})`;
+    els.sourceRev.title = `Firmware commit ${fw}`;
   }
 
   // Variant plates
@@ -524,8 +524,9 @@ window.openDetail = function(id, pushState = true, opener = null) {
   
   // Evidence
   const evHtml = (d.evidence || []).map(ev => {
-    const repoUrl = state.catalog.generatedFrom.repository;
-    const commit = state.catalog.generatedFrom.commit;
+    const gf = state.catalog.generatedFrom;
+    const repoUrl = gf.repository;
+    const commit = gf.firmwareCommit || gf.commit;
     const url = `${repoUrl}/blob/${commit}/${ev.path}#L${ev.lines.split('-')[0]}`;
     return `
       <a href="${url}" target="_blank" rel="noopener noreferrer" class="ev-link">

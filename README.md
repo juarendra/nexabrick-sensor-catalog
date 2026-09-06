@@ -20,7 +20,22 @@ Katalog ini mencerminkan snapshot kode firmware yang sebenarnya. Aturan untuk be
    ```bash
    node scripts/validate-catalog.mjs
    ```
-3. Data akan divalidasi CI GitHub Actions, lalu otomatis di-deploy ke GitHub Pages saat masuk ke branch `main`.
+3. **Konsistensi Firmware (lokal)**: Untuk memastikan katalog selaras dengan pohon sumber firmware (task, bank Modbus baterai, ukuran slot CCU, parent Tibbit id `20`, profil modular `1001`-`1016`, selector UI), jalankan tool ini dari lokal dengan path checkout firmware:
+   ```bash
+   node scripts/compare-firmware-registry.mjs <path-ke-repo-Nexabrick_Firmware>
+   ```
+   Tool ini hanya dijalankan secara lokal (fixture diuji CI), sehingga CI tidak bergantung pada checkout firmware terbaru yang tidak dipin.
+4. Data akan divalidasi CI GitHub Actions, lalu otomatis di-deploy ke GitHub Pages saat masuk ke branch `main`.
+
+## Provenance
+
+Blok `generatedFrom` di `catalog.json` merekam asal audit:
+
+- `firmwareCommit`: SHA 40-digit commit firmware Nexabrick yang menjadi sumber audit. Ini adalah sumber kebenaran; badge website dan link bukti (`evidence`) menunjuk ke commit ini.
+- `commit`: mirror legasi, hanya boleh ada bila nilainya sama dengan `firmwareCommit`.
+- `catalogRepository` / `catalogCommit`: repo dan commit katalog saat audit dilakukan (bukan commit hasil PR).
+
+Validator menolak `firmwareCommit` non-hex, mirror `commit` yang tidak sama, `catalogRepository` non-HTTPS, atau `catalogCommit` non-hex.
 
 ## Jalankan Website Lokal
 

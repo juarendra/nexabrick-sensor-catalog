@@ -5,7 +5,14 @@ import { validateCatalog } from '../scripts/validate-catalog.mjs';
 function baseCatalog() {
   return {
     schemaVersion: 1,
-    generatedFrom: { repository: 'https://github.com/GSPETech/Nexabrick_Firmware', commit: 'a'.repeat(40), auditedAt: '2026-08-20' },
+    generatedFrom: {
+      repository: 'https://github.com/GSPETech/Nexabrick_Firmware',
+      firmwareCommit: 'a'.repeat(40),
+      commit: 'a'.repeat(40),
+      auditedAt: '2026-09-06',
+      catalogRepository: 'https://github.com/juarendra/nexabrick-sensor-catalog',
+      catalogCommit: 'b'.repeat(40)
+    },
     variants: [
       { key: 'micro', name: 'Micro', description: 'Micro variant', capacity: 40 },
       { key: 'ccu', name: 'CCU', description: 'CCU variant', capacity: 20 }
@@ -137,4 +144,36 @@ test('active variant without task fails', () => {
   const r = validateCatalog(c);
   assert.equal(r.ok, false);
   assert.ok(r.errors.some(e => e.includes('Active device missing task')));
+});
+
+test('missing firmwareCommit fails', () => {
+  const c = baseCatalog();
+  delete c.generatedFrom.firmwareCommit;
+  const r = validateCatalog(c);
+  assert.equal(r.ok, false);
+  assert.ok(r.errors.some(e => e.includes('generatedFrom.firmwareCommit')));
+});
+
+test('legacy commit mirror mismatch fails', () => {
+  const c = baseCatalog();
+  c.generatedFrom.commit = 'c'.repeat(40);
+  const r = validateCatalog(c);
+  assert.equal(r.ok, false);
+  assert.ok(r.errors.some(e => e.includes('generatedFrom.commit')));
+});
+
+test('invalid catalogCommit fails', () => {
+  const c = baseCatalog();
+  c.generatedFrom.catalogCommit = 'not-a-sha';
+  const r = validateCatalog(c);
+  assert.equal(r.ok, false);
+  assert.ok(r.errors.some(e => e.includes('generatedFrom.catalogCommit')));
+});
+
+test('non-https catalogRepository fails', () => {
+  const c = baseCatalog();
+  c.generatedFrom.catalogRepository = 'http://example.com/repo';
+  const r = validateCatalog(c);
+  assert.equal(r.ok, false);
+  assert.ok(r.errors.some(e => e.includes('generatedFrom.catalogRepository')));
 });

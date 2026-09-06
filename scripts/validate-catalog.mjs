@@ -44,8 +44,20 @@ export function validateCatalog(catalog) {
     if (typeof gf.repository !== 'string' || !/^https:\/\//.test(gf.repository)) {
       fail('generatedFrom.repository', 'Must be https URL string');
     }
-    if (!/^[0-9a-f]{40}$/.test(gf.commit || '')) fail('generatedFrom.commit', 'Must be 40-char SHA');
+    if (!/^[0-9a-f]{40}$/.test(gf.firmwareCommit || '')) {
+      fail('generatedFrom.firmwareCommit', 'Must be 40-char firmware SHA');
+    }
+    // Legacy mirror kept for UI/tooling compat; when present it must agree.
+    if (gf.commit !== undefined && gf.commit !== gf.firmwareCommit) {
+      fail('generatedFrom.commit', 'Legacy commit mirror must equal firmwareCommit');
+    }
     if (!gf.auditedAt) fail('generatedFrom.auditedAt', 'Missing auditedAt date');
+    if (gf.catalogRepository !== undefined && (typeof gf.catalogRepository !== 'string' || !/^https:\/\//.test(gf.catalogRepository))) {
+      fail('generatedFrom.catalogRepository', 'Must be https URL string when present');
+    }
+    if (gf.catalogCommit !== undefined && !/^[0-9a-f]{40}$/.test(gf.catalogCommit)) {
+      fail('generatedFrom.catalogCommit', 'Must be 40-char SHA when present');
+    }
   }
 
   // 2. Variants
