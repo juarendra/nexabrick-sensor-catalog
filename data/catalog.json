@@ -2,8 +2,11 @@
   "schemaVersion": 1,
   "generatedFrom": {
     "repository": "https://github.com/GSPETech/Nexabrick_Firmware",
-    "commit": "64431d906d3d5bec9e895d4d80c7a8bd6eb87956",
-    "auditedAt": "2026-08-18"
+    "firmwareCommit": "1e4146c2fee05ab38dd8ad8a0d003e1aba88f696",
+    "commit": "1e4146c2fee05ab38dd8ad8a0d003e1aba88f696",
+    "auditedAt": "2026-09-06",
+    "catalogRepository": "https://github.com/juarendra/nexabrick-sensor-catalog",
+    "catalogCommit": "e14d966fa0e41adf968e498ae8d91d6344f3118a"
   },
   "variants": [
     {
@@ -97,7 +100,7 @@
       "capacity": 10,
       "registerModel": {
         "slotCount": 10,
-        "registersPerSlot": 10,
+        "registersPerSlot": 11,
         "firstHoldingRegister": 40001
       },
       "protocols": [
@@ -196,22 +199,30 @@
         "micro": {
           "status": "auxiliary",
           "component": "components/battery_monitor",
-          "mqttDeviceName": "Sensor_Battery"
+          "mqttDeviceName": "Sensor_Battery",
+          "modbusBank": 40051,
+          "registerCount": 4
         },
         "micro-rnd": {
           "status": "auxiliary",
           "component": "components/battery_monitor",
-          "mqttDeviceName": "Sensor_Battery"
+          "mqttDeviceName": "Sensor_Battery",
+          "modbusBank": 40051,
+          "registerCount": 4
         },
         "micro-duo": {
           "status": "auxiliary",
           "component": "components/battery_monitor",
-          "mqttDeviceName": "Sensor_Battery"
+          "mqttDeviceName": "Sensor_Battery",
+          "modbusBank": 40051,
+          "registerCount": 4
         },
         "ccu": {
           "status": "auxiliary",
           "component": "components/battery_monitor",
-          "mqttDeviceName": "Sensor_Battery"
+          "mqttDeviceName": "Sensor_Battery",
+          "modbusBank": 40151,
+          "registerCount": 4
         }
       },
       "confidence": "confirmed",
@@ -219,8 +230,23 @@
       "evidence": [
         {
           "type": "firmware",
+          "path": "Nexabrick Micro/main/slave.cpp",
+          "lines": "509-510"
+        },
+        {
+          "type": "firmware",
           "path": "Nexabrick Micro RND/main/slave.cpp",
-          "lines": "2245-2287"
+          "lines": "527"
+        },
+        {
+          "type": "firmware",
+          "path": "Nexabrick Micro Duo/main/slave.cpp",
+          "lines": "512"
+        },
+        {
+          "type": "firmware",
+          "path": "Nexabrick CCU/main/slave.cpp",
+          "lines": "3103"
         }
       ]
     }
@@ -1372,7 +1398,7 @@
           "status": "active",
           "task": "readingSensorLD2410",
           "component": "components/ld2410_radar",
-          "mqttDeviceName": "Sensor_Radar_LD2410",
+          "mqttDeviceName": "LD2410_Radar",
           "interfaces": [
             {
               "bus": "I2C",
@@ -1393,10 +1419,10 @@
           ]
         },
         "micro-duo": {
-          "status": "incomplete",
+          "status": "active",
           "task": "readingSensorLD2410",
           "component": "components/ld2410_radar",
-          "mqttDeviceName": "None",
+          "mqttDeviceName": "LD2410_Radar",
           "interfaces": [
             {
               "bus": "I2C",
@@ -1405,16 +1431,9 @@
           ]
         },
         "ccu": {
-          "status": "active",
+          "status": "unsupported",
           "task": "readingSensorLD2410",
-          "component": "components/ld2410_radar",
-          "mqttDeviceName": "LD2410_Radar",
-          "interfaces": [
-            {
-              "bus": "UART",
-              "address": "256000 bps"
-            }
-          ]
+          "component": "components/ld2410_radar"
         },
         "micro-modular": {
           "status": "unsupported"
@@ -1422,19 +1441,25 @@
       },
       "confidence": "unresolved",
       "conflicts": [
-        "Implementasi transport sangat berantakan: CCU dan komponen helper memakai protocol aslinya (UART 256000bps), sementara Micro/RND/Duo secara sengaja membaca dari STM32 I2C bridge di alamat 0x12 yang modulnya tidak terdokumentasi.",
-        "Modbus register mapping dibiarkan kosong di sebagian besar firmware."
+        "CCU: task readingSensorLD2410 ada di kode, tetapi case 11 menolak startup di runtime karena UART TX/RX bertabrakan dengan I2C SDA/SCL tetap (GPIO33/32) milik FXL6408.",
+        "Transport campuran: Micro/RND/Duo membaca STM32 I2C bridge di alamat 0x12 (modul bridge tidak terdokumentasi), sedangkan komponen CCU memakai UART 256000 bps asli LD2410.",
+        "Nama MQTT device tidak konsisten antar varian (LD2410_Radar di Micro/Duo/CCU vs Sensor_Radar_LD2410 di RND)."
       ],
       "evidence": [
         {
           "type": "firmware",
-          "path": "Nexabrick Micro RND/main/slave.cpp",
-          "lines": "1152-1240"
+          "path": "Nexabrick Micro/main/slave.cpp",
+          "lines": "3192-3195"
+        },
+        {
+          "type": "firmware",
+          "path": "Nexabrick Micro Duo/main/slave.cpp",
+          "lines": "1698"
         },
         {
           "type": "firmware",
           "path": "Nexabrick CCU/main/slave.cpp",
-          "lines": "2776-2852"
+          "lines": "3952-3959"
         }
       ],
       "pcb": {
@@ -1491,7 +1516,7 @@
           "status": "active",
           "task": "readingSensorADXL345",
           "component": "components/adxl345",
-          "mqttDeviceName": "Sensor_Vibration_ADXL345",
+          "mqttDeviceName": "Sensor_Vibration_1",
           "interfaces": [
             {
               "bus": "I2C",
@@ -1540,12 +1565,19 @@
         }
       },
       "confidence": "confirmed",
-      "conflicts": [],
+      "conflicts": [
+        "Nama MQTT device tidak konsisten antar varian: RND menerbitkan Sensor_Vibration_ADXL345, sedangkan Micro/Duo/CCU menerbitkan Sensor_Vibration_1."
+      ],
       "evidence": [
         {
           "type": "firmware",
+          "path": "Nexabrick Micro/main/slave.cpp",
+          "lines": "1208-1284"
+        },
+        {
+          "type": "firmware",
           "path": "Nexabrick Micro RND/main/slave.cpp",
-          "lines": "908-990"
+          "lines": "1002-1078"
         }
       ],
       "pcb": {
@@ -1689,7 +1721,7 @@
       ],
       "variantSupport": {
         "micro": {
-          "status": "declared-only",
+          "status": "incomplete",
           "task": "readingSensorD6F_W04A1",
           "component": "components/d6f_w04a1",
           "mqttDeviceName": "Sensor_Air_Pressure_1",
@@ -1701,7 +1733,7 @@
           ]
         },
         "micro-rnd": {
-          "status": "declared-only",
+          "status": "active",
           "task": "readingSensorD6F_W04A1",
           "component": "components/d6f_w04a1",
           "mqttDeviceName": "Sensor_Airflow_D6F_W04A1",
@@ -1713,7 +1745,7 @@
           ]
         },
         "micro-duo": {
-          "status": "declared-only",
+          "status": "active",
           "task": "readingSensorD6F_W04A1",
           "component": "components/d6f_w04a1",
           "mqttDeviceName": "Sensor_Air_Pressure_1",
@@ -1742,19 +1774,25 @@
       },
       "confidence": "confirmed",
       "conflicts": [
-        "Tidak tersambung ke `app_main` dispatch di hampir semua varian selain CCU.",
-        "MQTT label pada CCU menyesatkan ('Sensor_Air_Pressure_1')."
+        "Micro: kegagalan init hanya di-log; task tidak pernah memanggil sensor_slot_ready()/sensor_slot_failed() sehingga slot tidak pernah ditandai siap atau gagal.",
+        "MQTT label 'Sensor_Air_Pressure_1' menyesatkan untuk sensor airflow (Micro/Duo/CCU).",
+        "Timestamp MQTT hard-coded '2025-02-17 13:50:13' pada payload Micro/Duo/CCU."
       ],
       "evidence": [
         {
           "type": "firmware",
-          "path": "Nexabrick Micro RND/components/d6f_w04a1/d6f_w04a1.h",
-          "lines": "11"
+          "path": "Nexabrick Micro/main/slave.cpp",
+          "lines": "1033-1083"
+        },
+        {
+          "type": "firmware",
+          "path": "Nexabrick Micro/main/slave.cpp",
+          "lines": "3213-3215"
         },
         {
           "type": "firmware",
           "path": "Nexabrick CCU/main/slave.cpp",
-          "lines": "1613-1653"
+          "lines": "1691-1740"
         }
       ],
       "pcb": {
@@ -2278,6 +2316,119 @@
         "name": "Ambient Pressure Onboard Sensor",
         "confidence": "probable",
         "sourcePath": "#52 [1B SLOT ] AMBIENT PRESSURE ONBOARD SENSOR/sch-pcb/BOM/Bill Of Materials #52 AMBIENT PRESSURE ONBOARD SENSOR.csv"
+      }
+    },
+    {
+      "id": 20,
+      "slug": "tibbit-io",
+      "displayName": "Universal Smart I/O (Tibbit)",
+      "softwareName": "TIBBIT_IO",
+      "aliases": [
+        "Tibbit",
+        "TIBBIT_IO"
+      ],
+      "category": "digital-io",
+      "summary": "Perangkat parent untuk keluarga modul Tibbit smart I/O; profil modul fisik (1001-1016) diidentifikasi saat runtime dari module code I2C/NVS.",
+      "purpose": "Satu slot selector di firmware ESP32 untuk seluruh keluarga modul Tibbit modular.",
+      "selectable": true,
+      "deviceType": "digital-io",
+      "physicalParts": [
+        {
+          "manufacturer": "GSPETech",
+          "part": "Tibbit Modular I/O",
+          "role": "I/O module family",
+          "officialUrl": null
+        }
+      ],
+      "measurements": [
+        {
+          "key": "state",
+          "label": "I/O State",
+          "unit": "bitmask"
+        }
+      ],
+      "variantSupport": {
+        "micro": {
+          "status": "active",
+          "task": "readingSensorTibbitIO",
+          "component": "components/tibbit_io",
+          "mqttDeviceName": null,
+          "interfaces": [
+            {
+              "bus": "I2C",
+              "address": "0x0C (NVS configurable)"
+            }
+          ]
+        },
+        "micro-rnd": {
+          "status": "active",
+          "task": "readingSensorTibbitIO",
+          "component": "components/tibbit_io",
+          "mqttDeviceName": null,
+          "interfaces": [
+            {
+              "bus": "I2C",
+              "address": "0x0C (NVS configurable)"
+            }
+          ]
+        },
+        "micro-duo": {
+          "status": "active",
+          "task": "readingSensorTibbitIO",
+          "component": "components/tibbit_io",
+          "mqttDeviceName": null,
+          "interfaces": [
+            {
+              "bus": "I2C",
+              "address": "0x0C (NVS configurable)"
+            }
+          ]
+        },
+        "ccu": {
+          "status": "active",
+          "task": "readingSensorTibbitIO",
+          "component": "components/tibbit_io",
+          "mqttDeviceName": null,
+          "interfaces": [
+            {
+              "bus": "I2C",
+              "address": "0x0C (NVS configurable)"
+            }
+          ]
+        },
+        "micro-modular": {
+          "status": "unsupported"
+        }
+      },
+      "confidence": "confirmed",
+      "conflicts": [
+        "Tidak ada MQTT device name untuk jalur ini; data mengalir melalui register slot Modbus.",
+        "Alamat I2C dapat dikonfigurasi via NVS; board legacy ber-fallback ke 0x0C.",
+        "Parent selector tidak menyiratkan kualifikasi hardware profil modul 1001-1016 (status tetap BLOCKED-HUMAN-HARDWARE)."
+      ],
+      "evidence": [
+        {
+          "type": "firmware",
+          "path": "Nexabrick Micro/main/slave.cpp",
+          "lines": "2699-2740"
+        },
+        {
+          "type": "firmware",
+          "path": "Nexabrick CCU/main/slave.cpp",
+          "lines": "3984-3986"
+        },
+        {
+          "type": "header",
+          "path": "components/tibbit_io/include/tibbit_io.h",
+          "lines": "1-111"
+        }
+      ],
+      "pcb": {
+        "number": null,
+        "name": null,
+        "confidence": "unresolved",
+        "sourcePath": null,
+        "note": "Parent selector; pemetaan PCB per profil ada di perangkat 1001-1016."
       }
     },
     {
