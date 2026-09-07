@@ -550,14 +550,10 @@ window.openDetail = function(id, pushState = true, opener = null) {
     </div>
   `;
   
-  // Conflicts
-  const confEl = document.getElementById('detail-conflicts');
-  if (d.conflicts && d.conflicts.length > 0) {
-    confEl.style.display = 'block';
-    document.getElementById('detail-conflicts-list').innerHTML = d.conflicts.map(c => `<li>${escape(c)}</li>`).join('');
-  } else {
-    confEl.style.display = 'none';
-  }
+  // Verification status — raw data conflicts are developer-internal, so the
+  // public UI never shows the conflict text, only a blocked badge.
+  const verEl = document.getElementById('detail-verification');
+  verEl.style.display = (d.conflicts && d.conflicts.length > 0) ? 'inline-flex' : 'none';
   
   // Parts
   const partsHtml = (d.physicalParts || []).map(p => `
