@@ -39,6 +39,9 @@ jobs:
           cp 404.html _site/
           cp assets/app.js assets/styles.css assets/lib.mjs _site/assets/
           cp data/catalog.json _site/data/
+          # Media assets (3D models, reference images, CAD downloads) are served
+          # from the site root, so copy the whole tree.
+          cp -r media _site/media
           # Exclude scripts/, tests/, docs/, and any helper files from publishing.
 
       - name: Smoke test artifact
@@ -48,6 +51,7 @@ jobs:
           test -f _site/assets/lib.mjs
           test -f _site/assets/styles.css
           test -f _site/data/catalog.json
+          test -d _site/media
           node -e "JSON.parse(require('fs').readFileSync('_site/data/catalog.json','utf8')); console.log('catalog.json parses OK')"
 
       - name: Setup Pages
