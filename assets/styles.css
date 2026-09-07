@@ -178,15 +178,6 @@ input[type="text"]::placeholder { color: var(--text-muted); }
 .brand { font-weight: 700; letter-spacing: 0.05em; }
 
 .topbar-meta { display: flex; align-items: center; gap: var(--space-4); }
-.revision-badge {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  background: var(--surface);
-  padding: 4px 8px;
-  border-radius: 4px;
-  border: 1px solid var(--border);
-}
 .repo-link { display: flex; align-items: center; gap: var(--space-2); color: var(--text-secondary); font-size: 0.875rem; font-weight: 500; }
 .repo-link:hover { color: var(--text); text-decoration: none; }
 
@@ -769,21 +760,6 @@ body.drawer-open { overflow: hidden; }
   overflow-wrap: break-word;
   word-break: break-word;
 }
-.pcb-confidence {
-  display: inline-flex;
-  color: var(--text-muted);
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-.pcb-note {
-  display: block;
-  margin-top: var(--space-2);
-  color: var(--text-secondary);
-  font-size: 0.75rem;
-  line-height: 1.45;
-}
 
 .stack-list { display: flex; flex-direction: column; gap: var(--space-3); }
 .part-row {
@@ -822,37 +798,6 @@ body.drawer-open { overflow: hidden; }
 .mx-data { font-size: 0.75rem; color: var(--text-secondary); display: grid; grid-template-columns: 80px 1fr; gap: 4px var(--space-3); }
 .mx-lbl { color: var(--text-muted); }
 .mx-val { font-family: var(--font-mono); color: var(--text); word-break: break-all; }
-
-.verification-blocked {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  margin: var(--space-3) 0;
-  padding: 6px 12px;
-  border-radius: var(--radius-sm);
-  border: 1px solid rgba(255, 107, 114, 0.4);
-  background: rgba(255, 107, 114, 0.12);
-  color: var(--danger);
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  font-weight: 700;
-}
-.verification-blocked svg { flex-shrink: 0; }
-
-.evidence-list { display: flex; flex-direction: column; gap: var(--space-2); }
-.ev-link {
-  display: flex; align-items: center; gap: var(--space-2);
-  padding: var(--space-2) var(--space-3);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  font-size: 0.75rem;
-  font-family: var(--font-mono);
-  color: var(--text-secondary);
-}
-.ev-link:hover { background: var(--surface-hover); border-color: var(--border-strong); color: var(--text); text-decoration: none; }
-.ev-line { color: var(--accent); }
 
 /* Copy Toast */
 .toast {

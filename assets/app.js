@@ -11,7 +11,6 @@ const state = {
 
 // UI Elements
 const els = {
-  sourceRev: document.getElementById('source-revision'),
   variantPlates: document.getElementById('variant-plates'),
   grid: document.getElementById('catalog-grid'),
   search: document.getElementById('search-input'),
@@ -171,16 +170,7 @@ function renderCatalogOverviewError() {
   document.getElementById('overview-status-label').textContent = 'Catalog unavailable';
 }
 
-const VALID_STATUSES = new Set(['active', 'incomplete', 'declared-only', 'ui-only', 'unsupported', 'reserved', 'auxiliary', 'actuator', 'unresolved']);
-
 function setupUI() {
-  // Source badge
-  if (state.catalog.generatedFrom) {
-    const fw = state.catalog.generatedFrom.firmwareCommit || state.catalog.generatedFrom.commit || '';
-    els.sourceRev.textContent = `FW: ${fw.substring(0, 7)} (${state.catalog.generatedFrom.auditedAt})`;
-    els.sourceRev.title = `Firmware commit ${fw}`;
-  }
-
   // Variant plates
   const visibleVariants = state.catalog.variants.filter(v => v.key !== 'micro-modular');
   els.variantPlates.innerHTML = visibleVariants.map(v => `
@@ -250,9 +240,8 @@ function parseURL() {
   els.search.value = state.search;
   els.clearSearch.style.display = state.search ? 'block' : 'none';
   
-  // Whitelist filter values against catalog data
   const knownCategories = new Set(state.catalog.devices.map(d => d.category));
-  state.filters.status = params.getAll('status').filter(s => VALID_STATUSES.has(s));
+  state.filters.status = [];
   state.filters.category = params.getAll('cat').map(c => sanitizeCategory(c, knownCategories)).filter(c => c !== null);
   
   // Variant filter (optional URL key, preserved for backward compat)
@@ -260,9 +249,8 @@ function parseURL() {
   state.variant = state.catalog.variants.some(v => v.key === vParam) ? vParam : null;
   
   // Sync checkboxes
-  els.filterPanel.querySelectorAll('input').forEach(cb => {
-    if (cb.name === 'status') cb.checked = state.filters.status.includes(cb.value);
-    if (cb.name === 'category') cb.checked = state.filters.category.includes(cb.value);
+  els.filterPanel.querySelectorAll('input[name="category"]').forEach(cb => {
+    cb.checked = state.filters.category.includes(cb.value);
   });
   
   // Sync variant plates
@@ -290,7 +278,6 @@ function parseURL() {
 function updateURL() {
   const params = new URLSearchParams();
   if (state.search) params.set('q', state.search);
-  state.filters.status.forEach(s => params.append('status', s));
   state.filters.category.forEach(c => params.append('cat', c));
   if (state.variant) params.set('variant', state.variant);
   if (state.selectedId !== null) params.set('id', state.selectedId);
@@ -307,7 +294,7 @@ function updateSearch() {
 }
 
 function updateFilters() {
-  state.filters.status = Array.from(els.filterPanel.querySelectorAll('input[name="status"]:checked')).map(cb => cb.value);
+  state.filters.status = [];
   state.filters.category = Array.from(els.filterPanel.querySelectorAll('input[name="category"]:checked')).map(cb => cb.value);
   updateURL();
   render();
@@ -361,26 +348,25 @@ function render() {
       const pcbNumber = d.pcb?.number || '—';
       const pcbClass = d.pcb?.number ? '' : 'unresolved';
       
-      // Determine overall best status for badge
-      let overall = 'uns'; let oLbl = 'Unsupported';
+      // Determine overall support label for badge
+      let overall = 'uns'; let oLbl = 'Tidak tersedia';
       const vals = Object.values(d.variantSupport).map(v => v.status);
-      if (vals.includes('active')) { overall = 'act'; oLbl = 'Active'; }
-      else if (vals.includes('incomplete')) { overall = 'warn'; oLbl = 'Incomplete'; }
-      else if (vals.includes('auxiliary')) { overall = 'aux'; oLbl = 'Auxiliary'; }
-      else if (vals.includes('declared-only')) { overall = 'warn'; oLbl = 'Declared Only'; }
+      if (vals.includes('active') || vals.includes('auxiliary')) { overall = 'act'; oLbl = 'Aktif'; }
       
       // Physical summary
       let phys = 'Generic / Undocumented';
       if (d.physicalParts && d.physicalParts.length === 1) phys = d.physicalParts[0].part;
       else if (d.physicalParts && d.physicalParts.length > 1) phys = `${d.physicalParts.length} components (Composite)`;
       
-      // Active variants dots
+      // Variant support dots
       const vDots = state.catalog.variants
         .filter(v => v.key !== 'micro-modular')
         .map(vk => {
-          const s = d.variantSupport[vk.key]?.status || 'unknown';
-          const cl = s === 'active' ? 'on' : (s === 'incomplete' || s === 'declared-only' ? 'inc' : 'off');
-          return `<div class="v-dot ${cl}" role="img" title="${vk.key}: ${s}" aria-label="${vk.key}: ${s}"></div>`;
+          const s = d.variantSupport[vk.key]?.status || 'unsupported';
+          const on = s === 'active' || s === 'auxiliary';
+          const cl = on ? 'on' : 'off';
+          const lbl = on ? 'Aktif' : 'Tidak tersedia';
+          return `<div class="v-dot ${cl}" role="img" title="${vk.key}: ${lbl}" aria-label="${vk.key}: ${lbl}"></div>`;
         }).join('');
 
       return `
@@ -412,7 +398,6 @@ function render() {
 
   // 3. Render Active Filter Chips
   const chips = [];
-  state.filters.status.forEach(s => chips.push(`<div class="filter-chip">Status: ${formatEnum(s)} <button type="button" data-remove-filter="status" data-value="${s}" aria-label="Hapus filter status ${formatEnum(s)}"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button></div>`));
   state.filters.category.forEach(c => chips.push(`<div class="filter-chip">Cat: ${formatEnum(c)} <button type="button" data-remove-filter="category" data-value="${c}" aria-label="Hapus filter kategori ${formatEnum(c)}"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button></div>`));
   
   els.activeFilters.innerHTML = chips.join('');
@@ -542,18 +527,10 @@ window.openDetail = function(id, pushState = true, opener = null) {
   const pcbResolved = Boolean(pcb.number);
   document.getElementById('detail-pcb').innerHTML = `
     <div class="pcb-number-block ${pcbResolved ? '' : 'unresolved'}">${pcbResolved ? escape(pcb.number) : '—'}</div>
-    <div class="pcb-info-block">
-      <span class="pcb-name">${pcbResolved ? escape(pcb.name) : 'PCB belum teridentifikasi'}</span>
-      <span class="pcb-confidence">${escape(pcb.confidence || 'unresolved')}</span>
-      ${pcb.note ? `<span class="pcb-note">${escape(pcb.note)}</span>` : ''}
-      ${pcb.sourcePath ? `<span class="pcb-note"><strong>Evidence:</strong> ${escape(pcb.sourcePath)}</span>` : ''}
-    </div>
+      <div class="pcb-info-block">
+        <span class="pcb-name">${pcbResolved ? escape(pcb.name) : 'PCB belum teridentifikasi'}</span>
+      </div>
   `;
-  
-  // Verification status — raw data conflicts are developer-internal, so the
-  // public UI never shows the conflict text, only a blocked badge.
-  const verEl = document.getElementById('detail-verification');
-  verEl.style.display = (d.conflicts && d.conflicts.length > 0) ? 'inline-flex' : 'none';
   
   // Parts
   const partsHtml = (d.physicalParts || []).map(p => `
@@ -587,16 +564,17 @@ window.openDetail = function(id, pushState = true, opener = null) {
         <div class="mx-row">
           <div class="mx-head">
             <span class="mx-name">${escape(vName)}</span>
-            <span class="mx-stat uns">Unknown</span>
+            <span class="mx-stat uns">Tidak tersedia</span>
           </div>
         </div>
       `;
     }
-    const stCls = vs.status === 'active' ? 'act' : (vs.status === 'unsupported' ? 'uns' : (vs.status === 'incomplete' || vs.status === 'declared-only' ? 'inc' : 'uns'));
+    const on = vs.status === 'active' || vs.status === 'auxiliary';
+    const stCls = on ? 'act' : 'uns';
+    const stLbl = on ? 'Aktif' : 'Tidak tersedia';
     
     let details = '';
-    if (vs.status === 'active' || vs.status === 'incomplete' || vs.status === 'declared-only') {
-      if (vs.task) details += `<span class="mx-lbl">Task</span><span class="mx-val code-badge" type="button" role="button" tabindex="0" data-copy="${escape(vs.task)}" title="Copy" aria-label="Salin task">${escape(vs.task)}</span>`;
+    if (on) {
       if (vs.mqttDeviceName) details += `<span class="mx-lbl">MQTT</span><span class="mx-val code-badge" type="button" role="button" tabindex="0" data-copy="${escape(vs.mqttDeviceName)}" title="Copy" aria-label="Salin nama MQTT">${escape(vs.mqttDeviceName)}</span>`;
       if (vs.interfaces && vs.interfaces.length > 0) {
         details += `<span class="mx-lbl">I/F</span><span class="mx-val">${escape(vs.interfaces[0].bus)} ${escape(vs.interfaces[0].address)}</span>`;
@@ -607,7 +585,7 @@ window.openDetail = function(id, pushState = true, opener = null) {
       <div class="mx-row">
         <div class="mx-head">
           <span class="mx-name">${escape(vName)}</span>
-          <span class="mx-stat ${stCls}">${formatEnum(vs.status)}</span>
+            <span class="mx-stat ${stCls}">${stLbl}</span>
         </div>
         ${details ? `<div class="mx-data">${details}</div>` : ''}
       </div>
@@ -615,22 +593,6 @@ window.openDetail = function(id, pushState = true, opener = null) {
   }).join('');
   document.getElementById('detail-matrix').innerHTML = mxHtml;
   
-  // Evidence
-  const evHtml = (d.evidence || []).map(ev => {
-    const gf = state.catalog.generatedFrom;
-    const repoUrl = gf.repository;
-    const commit = gf.firmwareCommit || gf.commit;
-    const url = `${repoUrl}/blob/${commit}/${ev.path}#L${ev.lines.split('-')[0]}`;
-    return `
-      <a href="${url}" target="_blank" rel="noopener noreferrer" class="ev-link">
-        <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-        <span style="flex:1; overflow:hidden; text-overflow:ellipsis;">${escape(ev.path)}</span>
-        <span class="ev-line">L${escape(ev.lines)}</span>
-      </a>
-    `;
-  }).join('');
-  document.getElementById('detail-evidence').innerHTML = evHtml || '<span class="mx-lbl">No source cited</span>';
-
   els.drawer.classList.add('open');
   els.drawer.setAttribute('aria-hidden', 'false');
   document.body.classList.add('drawer-open');
