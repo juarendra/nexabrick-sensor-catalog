@@ -79,6 +79,18 @@ export function safeUrl(url) {
   return parsed.href;
 }
 
+// Build a safe, repo-relative asset URL (e.g. for media files with spaces in the
+// folder name). Rejects absolute paths, path traversal, and anything with a URL
+// scheme (http:, https:, data:, file:, ...) so only local relative assets pass.
+// Each path segment is percent-encoded; the "/" separators are preserved.
+export function assetUrl(path) {
+  if (typeof path !== 'string' || path.length === 0) return null;
+  if (path.startsWith('/') || path.startsWith('\\')) return null;
+  if (path.includes('..')) return null;
+  if (/^[a-z][a-z0-9+.-]*:/i.test(path)) return null;
+  return path.split('/').map(seg => encodeURIComponent(seg)).join('/');
+}
+
 export function getCatalogOverview(catalog) {
   const devices = Array.isArray(catalog?.devices) ? catalog.devices : [];
   const variants = Array.isArray(catalog?.variants) ? catalog.variants : [];

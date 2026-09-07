@@ -1,5 +1,5 @@
 import { readFileSync } from 'fs';
-import { join, dirname } from 'path';
+import { join, dirname, extname } from 'path';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -26,6 +26,23 @@ export const ALLOWED_EVIDENCE_TYPES = new Set(['firmware', 'header', 'hardware',
 const HTTPS_URL_EXCEPTIONS = new Set([
   'http://www.worldsemi.com/Certifications/WS2812B.html'
 ]);
+
+// --- Media (optional per-device visual reference) allowlists ---
+const MEDIA_IMAGE_EXT = new Set(['.png', '.jpg', '.jpeg', '.webp']);
+const MEDIA_MODEL_EXT = new Set(['.glb', '.gltf']);
+const MEDIA_CAD_EXT = new Set(['.step', '.stp', '.skp', '.iges']);
+const ALLOWED_MEDIA_CONFIDENCE = new Set(['confirmed', 'probable', 'unresolved']);
+const ALLOWED_MEDIA_HARDWARE_STATUS = new Set(['pending', 'not-qualified', 'hardware-verified', 'unresolved']);
+
+// Reject absolute paths, path traversal, and any value that carries a URL
+// scheme (http:, https:, data:, file:, javascript:, drive letters, ...).
+export function isBadAssetPath(p) {
+  if (typeof p !== 'string' || p.length === 0) return true;
+  if (p.startsWith('/') || p.startsWith('\\')) return true;
+  if (p.includes('..')) return true;
+  if (/^[a-z][a-z0-9+.-]*:/i.test(p)) return true;
+  return false;
+}
 
 export const CATALOG_PATH = join(__dirname, '../data/catalog.json');
 
@@ -258,6 +275,59 @@ export function validateCatalog(catalog) {
             fail(ep, `Unknown evidence type ${ev.type}`);
           }
         }
+      });
+    }
+
+    // media (optional per-device visual reference; schema only — file existence
+    // is checked by scripts/validate-media.mjs)
+    if (d.media !== undefined && !Array.isArray(d.media)) {
+      fail(`${path}.media`, 'Must be an array');
+    } else if (Array.isArray(d.media)) {
+      d.media.forEach((m, j) => {
+        const mp = `${path}.media[${j}]`;
+        if (!m || typeof m !== 'object') { fail(mp, 'Media entry must be an object'); return; }
+        if (typeof m.label !== 'string' || !m.label) fail(mp, 'Missing label');
+        if (typeof m.variant !== 'string' || !m.variant) fail(`${mp}.variant`, 'Missing variant');
+        else if (!knownVariants.has(m.variant)) fail(`${mp}.variant`, `Unknown variant key ${m.variant}`);
+        if (m.images !== undefined) {
+          if (!Array.isArray(m.images)) fail(`${mp}.images`, 'Must be an array');
+          else m.images.forEach((img, k) => {
+            const ip = `${mp}.images[${k}]`;
+            if (!img || typeof img !== 'object') { fail(ip, 'Image must be an object'); return; }
+            if (typeof img.src !== 'string' || !img.src) fail(`${ip}.src`, 'Missing src');
+            else if (isBadAssetPath(img.src)) fail(`${ip}.src`, 'Must be a repo-relative path (no absolute/external)');
+            else if (!MEDIA_IMAGE_EXT.has(extname(img.src).toLowerCase())) fail(`${ip}.src`, `Not an allowed image type (${extname(img.src)})`);
+            if (typeof img.alt !== 'string' || !img.alt) fail(`${ip}.alt`, 'Missing alt text');
+          });
+        }
+        if (m.model !== undefined) {
+          if (!m.model || typeof m.model !== 'object') fail(`${mp}.model`, 'Must be an object');
+          else {
+            if (typeof m.model.src !== 'string' || !m.model.src) fail(`${mp}.model.src`, 'Missing src');
+            else if (isBadAssetPath(m.model.src)) fail(`${mp}.model.src`, 'Must be a repo-relative path (no absolute/external)');
+            else if (!MEDIA_MODEL_EXT.has(extname(m.model.src).toLowerCase())) fail(`${mp}.model.src`, `Not an allowed 3D model type (${extname(m.model.src)})`);
+            if (m.model.poster !== undefined) {
+              if (typeof m.model.poster !== 'string' || !m.model.poster) fail(`${mp}.model.poster`, 'Must be a non-empty string');
+              else if (isBadAssetPath(m.model.poster)) fail(`${mp}.model.poster`, 'Must be a repo-relative path (no absolute/external)');
+              else if (!MEDIA_IMAGE_EXT.has(extname(m.model.poster).toLowerCase())) fail(`${mp}.model.poster`, `Not an allowed image type (${extname(m.model.poster)})`);
+            }
+          }
+        }
+        if (m.cadDownloads !== undefined) {
+          if (!Array.isArray(m.cadDownloads)) fail(`${mp}.cadDownloads`, 'Must be an array');
+          else m.cadDownloads.forEach((dl, k) => {
+            const dp = `${mp}.cadDownloads[${k}]`;
+            if (!dl || typeof dl !== 'object') { fail(dp, 'Download must be an object'); return; }
+            if (typeof dl.label !== 'string' || !dl.label) fail(`${dp}.label`, 'Missing label');
+            if (typeof dl.src !== 'string' || !dl.src) fail(`${dp}.src`, 'Missing src');
+            else if (isBadAssetPath(dl.src)) fail(`${dp}.src`, 'Must be a repo-relative path (no absolute/external)');
+            else if (!MEDIA_CAD_EXT.has(extname(dl.src).toLowerCase())) fail(`${dp}.src`, `Not an allowed CAD type (${extname(dl.src)})`);
+            if (dl.format !== undefined && typeof dl.format !== 'string') fail(`${dp}.format`, 'Must be a string');
+          });
+        }
+        if (m.confidence !== undefined && !ALLOWED_MEDIA_CONFIDENCE.has(m.confidence)) fail(`${mp}.confidence`, `Invalid confidence ${m.confidence}`);
+        if (m.hardwareStatus !== undefined && !ALLOWED_MEDIA_HARDWARE_STATUS.has(m.hardwareStatus)) fail(`${mp}.hardwareStatus`, `Invalid hardwareStatus ${m.hardwareStatus}`);
+        if (m.note !== undefined && typeof m.note !== 'string') fail(`${mp}.note`, 'Must be a string');
       });
     }
   });
