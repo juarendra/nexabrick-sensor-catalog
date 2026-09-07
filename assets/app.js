@@ -556,7 +556,9 @@ window.openDetail = function(id, pushState = true, opener = null) {
   document.getElementById('detail-measurements').innerHTML = msHtml || '<span class="mx-lbl">None</span>';
   
   // Variant Matrix
-  const mxHtml = state.catalog.variants.map(vk => {
+  const mxHtml = state.catalog.variants
+    .filter(vk => vk.key !== 'micro-modular')
+    .map(vk => {
     const vs = d.variantSupport[vk.key];
     const vName = vk.name;
     if (!vs) {
@@ -576,9 +578,6 @@ window.openDetail = function(id, pushState = true, opener = null) {
     let details = '';
     if (on) {
       if (vs.mqttDeviceName) details += `<span class="mx-lbl">MQTT</span><span class="mx-val code-badge" type="button" role="button" tabindex="0" data-copy="${escape(vs.mqttDeviceName)}" title="Copy" aria-label="Salin nama MQTT">${escape(vs.mqttDeviceName)}</span>`;
-      if (vs.interfaces && vs.interfaces.length > 0) {
-        details += `<span class="mx-lbl">I/F</span><span class="mx-val">${escape(vs.interfaces[0].bus)} ${escape(vs.interfaces[0].address)}</span>`;
-      }
     }
     
     return `
