@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { validateCatalog } from '../scripts/validate-catalog.mjs';
+import { validateCatalog, isBadAssetPath } from '../scripts/validate-catalog.mjs';
+import { validateMediaFiles } from '../scripts/validate-media.mjs';
 
 function baseCatalog() {
   return {
@@ -35,6 +36,50 @@ function baseCatalog() {
         ccu: { status: 'unsupported' }
       },
       evidence: [{ type: 'firmware', path: 'main/test.cpp', lines: '10-20' }]
+    }, {
+      id: 3,
+      slug: 'dry-contact-input',
+      displayName: 'Dry Contact Input',
+      softwareName: 'dry_contact_input',
+      category: 'digital-io',
+      summary: 'Test dry contact input',
+      deviceType: 'digital-io',
+      pcb: { number: null, confidence: 'unresolved' },
+      physicalParts: [],
+      measurements: [],
+      conflicts: [],
+      aliases: [],
+      variantSupport: {
+        micro: { status: 'active', task: 'components/test' },
+        ccu: { status: 'unsupported' }
+      },
+      evidence: [],
+      media: [
+        {
+          id: 'modular-6-terminal-block',
+          label: 'Modular 6 Terminal Block',
+          variant: 'micro',
+          description: 'Test modular media',
+          images: [{ src: 'media/test-modular/a.png', alt: 'modular view 1' }],
+          model: { src: 'media/test-modular/model.glb', poster: 'media/test-modular/a.png' },
+          cadDownloads: [{ label: 'Download STEP', src: 'media/test-modular/model.step', format: 'STEP' }],
+          hardwareStatus: 'pending',
+          confidence: 'unresolved',
+          note: 'Test note'
+        },
+        {
+          id: 'nexabrick-micro-6-terminal-block',
+          label: 'Nexabrick Micro 6 Terminal Block',
+          variant: 'micro',
+          description: 'Test micro media',
+          images: [{ src: 'media/test-micro/a.png', alt: 'micro view 1' }],
+          model: { src: 'media/test-micro/model.glb', poster: 'media/test-micro/a.png' },
+          cadDownloads: [{ label: 'Download STEP', src: 'media/test-micro/model.step', format: 'STEP' }],
+          hardwareStatus: 'pending',
+          confidence: 'unresolved',
+          note: 'Test note'
+        }
+      ]
     }],
     auxiliarySystems: []
   };
@@ -43,7 +88,7 @@ function baseCatalog() {
 test('valid catalog passes', () => {
   const r = validateCatalog(baseCatalog());
   assert.equal(r.ok, true, r.errors.join('\n'));
-  assert.equal(r.deviceCount, 1);
+  assert.equal(r.deviceCount, 2);
   assert.equal(r.variantCount, 2);
 });
 
@@ -300,7 +345,7 @@ test('media invalid hardwareStatus fails', () => {
   c.devices[0].media[0].hardwareStatus = 'shiny';
   const r = validateCatalog(c);
   assert.equal(r.ok, false);
-  assert.ok(r.errors.some(e => e.includes('Invalid hardwareStatus')));
+  assert.ok(r.errors.some(e => e.includes('Missing or invalid hardwareStatus')));
 });
 
 test('media invalid confidence fails', () => {
@@ -309,5 +354,88 @@ test('media invalid confidence fails', () => {
   c.devices[0].media[0].confidence = 'certain';
   const r = validateCatalog(c);
   assert.equal(r.ok, false);
-  assert.ok(r.errors.some(e => e.includes('Invalid confidence')));
+  assert.ok(r.errors.some(e => e.includes('Missing or invalid confidence')));
+});
+
+test('media duplicate id fails', () => {
+  const c = baseCatalog();
+  c.devices[0].media = validMedia();
+  c.devices[0].media[0].id = 'same-id';
+  c.devices[0].media.push({ ...validMedia()[0], id: 'same-id' });
+  const r = validateCatalog(c);
+  assert.equal(r.ok, false);
+  assert.ok(r.errors.some(e => e.includes('Duplicate media id')));
+});
+
+test('media image path traversal fails', () => {
+  const c = baseCatalog();
+  c.devices[0].media = validMedia();
+  c.devices[0].media[0].images[0].src = '../outside/a.png';
+  const r = validateCatalog(c);
+  assert.equal(r.ok, false);
+  assert.ok(r.errors.some(e => e.includes('repo-relative')));
+});
+
+test('media model drive path fails', () => {
+  const c = baseCatalog();
+  c.devices[0].media = validMedia();
+  c.devices[0].media[0].model.src = 'C:\\absolute\\model.glb';
+  const r = validateCatalog(c);
+  assert.equal(r.ok, false);
+  assert.ok(r.errors.some(e => e.includes('repo-relative')));
+});
+
+test('media missing hardwareStatus fails', () => {
+  const c = baseCatalog();
+  c.devices[0].media = validMedia();
+  delete c.devices[0].media[0].hardwareStatus;
+  const r = validateCatalog(c);
+  assert.equal(r.ok, false);
+  assert.ok(r.errors.some(e => e.includes('Missing or invalid hardwareStatus')));
+});
+
+test('media missing confidence fails', () => {
+  const c = baseCatalog();
+  c.devices[0].media = validMedia();
+  delete c.devices[0].media[0].confidence;
+  const r = validateCatalog(c);
+  assert.equal(r.ok, false);
+  assert.ok(r.errors.some(e => e.includes('Missing or invalid confidence')));
+});
+
+test('media duplicate image reference fails', () => {
+  const c = baseCatalog();
+  c.devices[0].media = validMedia();
+  c.devices[0].media[0].images.push({ ...c.devices[0].media[0].images[0] });
+  const r = validateCatalog(c);
+  assert.equal(r.ok, false);
+  assert.ok(r.errors.some(e => e.includes('Duplicate image reference')));
+});
+
+test('media duplicate cad download fails', () => {
+  const c = baseCatalog();
+  c.devices[0].media = validMedia();
+  c.devices[0].media[0].cadDownloads.push({ ...c.devices[0].media[0].cadDownloads[0] });
+  const r = validateCatalog(c);
+  assert.equal(r.ok, false);
+  assert.ok(r.errors.some(e => e.includes('Duplicate CAD download reference')));
+});
+
+test('isBadAssetPath rejects unsafe media paths', () => {
+  assert.equal(isBadAssetPath('/media/file'), true);
+  assert.equal(isBadAssetPath('C:\\absolute\\file'), true);
+  assert.equal(isBadAssetPath('../outside/file'), true);
+  assert.equal(isBadAssetPath('https://remote-model.example/model.glb'), true);
+  assert.equal(isBadAssetPath('media/file.png'), false);
+});
+
+test('validateMediaFiles rejects unsafe media paths', () => {
+  const c = baseCatalog();
+  c.devices[1].media[0].images[0].src = '/unsafe/a.png';
+  c.devices[1].media[1].images[0].src = 'https://remote-model.example/model.glb';
+  const r = validateMediaFiles(c, process.cwd());
+  assert.equal(r.ok, false);
+  assert.equal(r.badPaths.length, 2);
+  assert.ok(r.badPaths.some(p => p.includes('/unsafe/a.png')));
+  assert.ok(r.badPaths.some(p => p.includes('https://remote-model.example/model.glb')));
 });

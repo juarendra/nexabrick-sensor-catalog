@@ -1,5 +1,9 @@
 import { escape, formatEnum, normalize, filterDevices, parseIdParam, sanitizeCategory, safeUrl, assetUrl, getCatalogOverview } from './lib.mjs';
 
+const MODEL_VIEWER_CDN = 'https://cdn.jsdelivr.net/npm/@google/model-viewer@3.5.0/dist/model-viewer.min.js';
+let modelViewerPromise = null;
+const modelLoadTimers = new Map();
+
 const state = {
   catalog: null,
   filters: { status: [], category: [] },
@@ -228,7 +232,12 @@ function setupUI() {
   // Drawer
   document.getElementById('btn-close-detail').addEventListener('click', closeDetail);
   document.getElementById('drawer-backdrop').addEventListener('click', closeDetail);
-  
+
+  // Media viewer + image gallery controls (delegated, so re-renders are safe)
+  els.detailMedia.addEventListener('click', handleMediaClick);
+  els.detailMedia.addEventListener('keydown', handleMediaKeydown);
+  els.detailMedia.addEventListener('error', handleMediaImageError, true);
+
   // Browser back button handling for detail view
   window.addEventListener('popstate', parseURL);
 }
@@ -264,8 +273,8 @@ function parseURL() {
   if (id !== null) {
     openDetail(id, false);
   } else {
+    clearAllModelTimers();
     state.selectedId = null;
-    state.opener = null;
     els.drawer.classList.remove('open');
     els.drawer.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('drawer-open');
@@ -404,10 +413,119 @@ function render() {
   els.summary.textContent = `Menampilkan ${filtered.length} perangkat dari total ${state.catalog.devices.length}`;
 }
 
-// Render the optional "Visual Reference" media block for a device. Shows a 3D
-// model viewer (model-viewer) when available with a graceful fallback to the
-// poster image + downloads, plus a reference-image gallery and CAD downloads.
-// All text is escaped; all asset paths go through assetUrl() (relative only).
+// --- 3D viewer + reference image media renderer ---
+// All catalog text is escaped. All asset paths are repository-relative and go
+// through assetUrl(). The pinned model-viewer module is loaded lazily once and
+// never blocks catalog browsing or detail rendering.
+const MODEL_STATUS = {
+  loading: 'Model sedang dimuat...',
+  ready: 'Model 3D tersedia',
+  unavailable: 'Penampil 3D tidak tersedia',
+  error: 'Model 3D gagal dimuat. Gambar pratinjau tetap tersedia.',
+  'no-model': 'Model 3D tidak tersedia'
+};
+
+const dlIcon = '<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>';
+
+function getReducedMotion() {
+  return typeof window.matchMedia === 'function'
+    && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+function ensureModelViewer() {
+  if (modelViewerPromise) return modelViewerPromise;
+
+  modelViewerPromise = new Promise((resolve, reject) => {
+    let settled = false;
+    const finish = (err = null) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      if (err) reject(err);
+      else resolve(true);
+    };
+    const timer = setTimeout(() => finish(new Error('Model viewer load timeout')), 15000);
+
+    if (typeof customElements !== 'undefined' && customElements.get('model-viewer')) {
+      finish();
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.type = 'module';
+    script.src = MODEL_VIEWER_CDN;
+    script.addEventListener('error', () => finish(new Error('Model viewer CDN failed')));
+    script.addEventListener('load', () => {
+      if (typeof customElements !== 'undefined' && typeof customElements.whenDefined === 'function') {
+        customElements.whenDefined('model-viewer')
+          .then(() => finish())
+          .catch(() => finish(new Error('Model viewer not defined')));
+      } else if (typeof customElements !== 'undefined' && customElements.get('model-viewer')) {
+        finish();
+      } else {
+        finish(new Error('Model viewer not defined'));
+      }
+    });
+    document.head.appendChild(script);
+  });
+
+  return modelViewerPromise;
+}
+
+function clearModelTimer(key) {
+  const timer = modelLoadTimers.get(key);
+  if (timer) {
+    clearTimeout(timer);
+    modelLoadTimers.delete(key);
+  }
+}
+
+function clearAllModelTimers() {
+  modelLoadTimers.forEach(timer => clearTimeout(timer));
+  modelLoadTimers.clear();
+}
+
+function isCurrentMediaGroup(groupEl, deviceId, groupIndex) {
+  return groupEl
+    && groupEl.isConnected
+    && state.selectedId === deviceId
+    && els.detailMedia.dataset.deviceId === String(deviceId)
+    && groupEl.dataset.group === String(groupIndex);
+}
+
+function updateModelControls(groupEl, ready) {
+  groupEl.querySelectorAll('[data-action="reset"], [data-action="rotate"], [data-action="fullscreen"]').forEach(btn => {
+    btn.disabled = !ready;
+  });
+  const rotateBtn = groupEl.querySelector('[data-action="rotate"]');
+  if (rotateBtn && ready) {
+    rotateBtn.setAttribute('aria-pressed', String(rotateBtn.dataset.on === 'true'));
+  }
+}
+
+function setModelFallback(groupEl, group, label, stateName) {
+  const frame = groupEl.querySelector('.media-3d-frame');
+  if (!frame) return;
+  const poster = group.model ? assetUrl(group.model.poster) : null;
+  const posterHtml = poster
+    ? `<img class="media-model-poster" src="${poster}" alt="${escape(label + ' pratinjau model 3D')}" loading="lazy" decoding="async">`
+    : '<div class="media-model-empty" aria-hidden="true"></div>';
+  frame.dataset.state = stateName;
+  frame.innerHTML = `${posterHtml}<span class="media-model-status" role="status">${escape(MODEL_STATUS[stateName] || '')}</span>`;
+  updateModelControls(groupEl, false);
+}
+
+function setModelReady(groupEl, modelViewer) {
+  const frame = groupEl.querySelector('.media-3d-frame');
+  if (!frame) return;
+  frame.dataset.state = 'ready';
+  frame.querySelectorAll('.media-model-poster, .media-model-empty').forEach(node => node.remove());
+  if (!frame.contains(modelViewer)) frame.prepend(modelViewer);
+  const status = frame.querySelector('.media-model-status');
+  if (status) status.textContent = MODEL_STATUS.ready;
+  updateModelControls(groupEl, true);
+}
+
 function renderMedia(d) {
   const section = els.detailMediaSection;
   const container = els.detailMedia;
@@ -421,80 +539,357 @@ function renderMedia(d) {
   }
   section.style.display = 'block';
   section.setAttribute('aria-hidden', 'false');
+  container.dataset.deviceId = String(d.id);
 
-  const reduced = typeof window.matchMedia === 'function'
-    && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const hasMV = typeof customElements !== 'undefined' && customElements.get('model-viewer');
+  clearAllModelTimers();
+  container.innerHTML = media.map((g, gi) => renderMediaGroup(g, gi)).join('');
 
-  const dlIcon = '<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>';
-
-  const groupsHtml = media.map((g, gi) => {
-    const label = g.label || '';
-    const variant = g.variant || '';
-    const status = g.hardwareStatus || 'pending';
-    const statusCls = status === 'hardware-verified' ? 'ok'
-      : (status === 'not-qualified' ? 'bad' : 'pending');
-    const note = g.note || '';
-
-    const images = Array.isArray(g.images) ? g.images : [];
-    const thumbsHtml = images.map((img, ii) => {
-      const src = assetUrl(img ? img.src : '');
-      if (!src) return '';
-      const alt = (img && img.alt) ? img.alt : label;
-      return `<button type="button" class="media-thumb${ii === 0 ? ' active' : ''}" data-group="${gi}" data-idx="${ii}" aria-label="Tampilkan referensi: ${escape(alt)}"><img src="${src}" alt="${escape(alt)}" loading="lazy" decoding="async"></button>`;
-    }).join('');
-
-    const model = (g.model && typeof g.model === 'object') ? g.model : null;
-    const modelSrc = model ? assetUrl(model.src) : null;
-    const poster = model ? assetUrl(model.poster) : null;
-
-    let viewerHtml;
-    if (modelSrc && hasMV) {
-      viewerHtml = `<model-viewer class="media-3d-viewer" src="${modelSrc}"${poster ? ` poster="${poster}"` : ''} alt="${escape(label + ' (model 3D)')}" camera-controls${reduced ? '' : ' auto-rotate'} loading="lazy" shadow-intensity="1" exposure="1"></model-viewer>`;
+  container.querySelectorAll('.media-group').forEach(groupEl => {
+    const gi = Number(groupEl.dataset.group);
+    const group = media[gi];
+    if (!group) return;
+    if (group.model && assetUrl(group.model.src)) {
+      setupModelViewer(groupEl, group);
     } else {
-      viewerHtml = `<div class="media-3d-fallback">${poster ? `<img class="media-3d-poster" src="${poster}" alt="${escape(label + ' (pratinjau)')}" loading="lazy" decoding="async">` : '<div class="media-3d-empty" aria-hidden="true"></div>'}<span class="media-3d-fallback-note">Penampil 3D tidak tersedia — buka dengan koneksi ke CDN, atau unduh model GLB di bawah.</span></div>`;
+      setModelFallback(groupEl, group, group.label || 'Model 3D', 'no-model');
     }
+  });
+}
+function renderModbus(d) {
+  const existing = document.getElementById('detail-modbus-section');
+  const modbus = d.modbus;
+  if (!modbus) {
+    if (existing) existing.remove();
+    return;
+  }
 
-    const downloads = Array.isArray(g.cadDownloads) ? g.cadDownloads : [];
-    const dlHtml = downloads.map(dl => {
-      const url = assetUrl(dl ? dl.src : '');
-      if (!url) return '';
-      const filename = (dl.src || '').split('/').pop() || '';
-      return `<a class="media-dl" href="${url}" download="${escape(filename)}" title="${escape(dl.format || 'CAD file')}">${dlIcon}<span>${escape(dl.label || ('Download ' + (dl.format || 'file')))}</span></a>`;
-    }).join('');
+  const section = existing || document.createElement('section');
+  section.id = 'detail-modbus-section';
+  section.className = 'dossier-section modbus-section';
+  if (!existing) els.detailMediaSection.insertAdjacentElement('afterend', section);
 
-    return `<article class="media-group" data-group="${gi}">
-      <div class="media-group-head">
-        <span class="media-group-label">${escape(label)}</span>
-        ${variant ? `<span class="media-variant-badge">${escape(variant)}</span>` : ''}
-        <span class="media-status ${statusCls}" title="Status kualifikasi hardware">${escape(formatEnum(status))}</span>
-      </div>
-      <div class="media-3d-frame">${viewerHtml}</div>
-      ${thumbsHtml ? `<div class="media-thumbs" role="tablist" aria-label="Galeri referensi ${escape(label)}">${thumbsHtml}</div>` : ''}
-      ${dlHtml ? `<div class="media-downloads">${dlHtml}</div>` : ''}
-      ${note ? `<p class="media-note">${escape(note)}</p>` : ''}
-    </article>`;
+  if (modbus.available === false) {
+    section.innerHTML = `
+      <h3>REGISTER MODBUS (NEXABRICK MICRO)</h3>
+      <p class="modbus-note">${escape(modbus.description)}</p>
+    `;
+    return;
+  }
+
+  const registers = Array.isArray(modbus.registers) ? modbus.registers : [];
+  const rows = registers.map(reg => `
+    <tr>
+      <td>${escape(reg.address)}</td>
+      <td>${escape(reg.regs)}</td>
+      <td>${escape(reg.fc)}</td>
+      <td>${escape(reg.name)}</td>
+      <td class="modbus-data-type">${escape(reg.dataType)}</td>
+      <td>${escape(reg.access)}</td>
+      <td>${reg.unit ? escape(reg.unit) : '-'}</td>
+      <td>${reg.scale === null || reg.scale === undefined ? '-' : escape(reg.scale)}</td>
+    </tr>
+  `).join('');
+
+  section.innerHTML = `
+    <h3>REGISTER MODBUS (NEXABRICK MICRO)</h3>
+    <p class="modbus-intro">Alamat basis ${escape(modbus.base)}, selang antar slot ${escape(modbus.slotStride)} register</p>
+    <div class="modbus-table-wrap">
+      <table class="modbus-table">
+        <thead>
+          <tr><th>Alamat</th><th>Reg</th><th>FC</th><th>Nama</th><th>Tipe Data</th><th>Akses</th><th>Unit</th><th>Skala</th></tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+  `;
+}
+
+
+function renderMediaGroup(g, gi) {
+  const label = g.label || '';
+  const variant = g.variant || '';
+  const description = g.description || '';
+  const status = g.hardwareStatus || 'pending';
+  const statusCls = status === 'hardware-verified' ? 'ok'
+    : (status === 'not-qualified' ? 'bad' : 'pending');
+  const note = g.note || '';
+
+  const images = Array.isArray(g.images) ? g.images : [];
+  const validImages = [];
+  images.forEach(img => {
+    const src = assetUrl(img ? img.src : '');
+    if (!src) return;
+    const alt = (img && img.alt) ? img.alt : label;
+    validImages.push({ src, alt });
+  });
+
+  const thumbsHtml = validImages.map((img, ii) => `
+    <button type="button" class="media-thumb${ii === 0 ? ' active' : ''}" data-action="thumb" data-group="${gi}" data-idx="${ii}" aria-current="${ii === 0 ? 'true' : 'false'}" aria-label="Tampilkan gambar ${ii + 1}: ${escape(img.alt)}">
+      <img src="${img.src}" alt="${escape(img.alt)}" loading="lazy" decoding="async">
+    </button>`).join('');
+
+  const model = (g.model && typeof g.model === 'object') ? g.model : null;
+  const modelSrc = model ? assetUrl(model.src) : null;
+  const poster = model ? assetUrl(model.poster) : null;
+  const modelFilename = model ? (model.src.split('/').pop() || 'model.glb') : 'model.glb';
+  const modelState = modelSrc ? 'loading' : 'unavailable';
+  const autoInitial = Boolean(modelSrc) && !getReducedMotion();
+  const fullscreenSupported = typeof document !== 'undefined'
+    && 'fullscreenEnabled' in document
+    && typeof Element !== 'undefined'
+    && 'requestFullscreen' in Element.prototype;
+
+  const posterHtml = poster
+    ? `<img class="media-model-poster" src="${poster}" alt="${escape(label + ' pratinjau model 3D')}" loading="lazy" decoding="async">`
+    : '<div class="media-model-empty" aria-hidden="true"></div>';
+
+  const controlsHtml = `
+    <button type="button" class="media-model-btn" data-action="reset" aria-label="Atur ulang tampilan model" disabled>Reset</button>
+    <button type="button" class="media-model-btn" data-action="rotate" data-on="${String(autoInitial)}" aria-pressed="${String(autoInitial)}" aria-label="Aktifkan rotasi otomatis" disabled>Rotasi</button>
+    ${fullscreenSupported && modelSrc ? '<button type="button" class="media-model-btn" data-action="fullscreen" aria-label="Buka model dalam layar penuh" disabled>Layar Penuh</button>' : ''}
+    ${modelSrc ? `<a class="media-model-btn media-dl" href="${modelSrc}" download="${escape(modelFilename)}" aria-label="Unduh model GLB">GLB</a>` : ''}
+  `;
+
+  const downloads = Array.isArray(g.cadDownloads) ? g.cadDownloads : [];
+  const dlHtml = downloads.map(dl => {
+    const url = assetUrl(dl ? dl.src : '');
+    if (!url) return '';
+    const filename = (dl.src || '').split('/').pop() || '';
+    return `<a class="media-dl" href="${url}" download="${escape(filename)}" title="${escape(dl.format || 'CAD file')}">${dlIcon}<span>${escape(dl.label || ('Download ' + (dl.format || 'file')))}</span></a>`;
   }).join('');
 
-  container.innerHTML = groupsHtml;
+  const stageHtml = validImages.length
+    ? `<img class="media-gallery-img" src="${validImages[0].src}" alt="${escape(validImages[0].alt)}" loading="eager" decoding="async">`
+    : '<div class="media-gallery-empty">Gambar tidak tersedia</div>';
 
-  container.querySelectorAll('.media-thumb').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const gi = Number(btn.dataset.group);
-      const idx = Number(btn.dataset.idx);
-      const group = media[gi];
-      const img = (group && Array.isArray(group.images)) ? group.images[idx] : null;
-      const src = img ? assetUrl(img.src) : null;
-      if (!src) return;
-      const groupEl = container.querySelector(`.media-group[data-group="${gi}"]`);
-      if (!groupEl) return;
-      groupEl.querySelectorAll('.media-thumb').forEach(t => t.classList.toggle('active', t === btn));
-      const mv = groupEl.querySelector('model-viewer');
-      if (mv) mv.poster = src;
-      const fb = groupEl.querySelector('.media-3d-poster');
-      if (fb) fb.src = src;
-    });
+  const countText = validImages.length ? `1 / ${validImages.length}` : '-';
+
+  return `<article class="media-group" data-group="${gi}" data-selected="0">
+    <div class="media-group-head">
+      <div class="media-group-title">
+        <span class="media-group-label">${escape(label)}</span>
+        ${description ? `<span class="media-group-desc">${escape(description)}</span>` : ''}
+      </div>
+      ${variant ? `<span class="media-variant-badge">VARIAN ${escape(formatEnum(variant))}</span>` : ''}
+      <span class="media-status ${statusCls}">STATUS HARDWARE: ${escape(formatEnum(status))}</span>
+    </div>
+    <div class="media-visual-grid">
+      <section class="media-model-panel" aria-label="Model 3D ${escape(label)}">
+        <h4 class="media-panel-title">MODEL 3D</h4>
+        <div class="media-3d-frame" data-state="${modelState}">${posterHtml}<span class="media-model-status" role="status">${escape(MODEL_STATUS[modelState])}</span></div>
+        <div class="media-model-controls">${controlsHtml}</div>
+      </section>
+      <section class="media-gallery-panel" aria-label="Gambar referensi ${escape(label)}">
+        <div class="media-gallery-header">
+          <h4 class="media-panel-title">GAMBAR REFERENSI</h4>
+          <span class="media-gallery-count" data-count>${escape(countText)}</span>
+        </div>
+        <div class="media-gallery" tabindex="0" role="group" aria-label="Navigasi gambar ${escape(label)}" data-selected="0">
+          <div class="media-gallery-stage" data-stage>${stageHtml}</div>
+          ${validImages.length ? `
+          <div class="media-gallery-controls">
+            <button type="button" class="media-nav-btn" data-action="prev" aria-label="Gambar sebelumnya" ${validImages.length <= 1 ? 'disabled' : ''}>&#8249;</button>
+            <span class="media-gallery-count" data-count>${escape(countText)}</span>
+            <button type="button" class="media-nav-btn" data-action="next" aria-label="Gambar berikutnya" ${validImages.length <= 1 ? 'disabled' : ''}>&#8250;</button>
+          </div>` : ''}
+          <div class="media-thumbs" role="group" aria-label="Daftar gambar ${escape(label)}">${thumbsHtml}</div>
+        </div>
+      </section>
+    </div>
+    ${dlHtml ? `<div class="media-files"><h4 class="media-panel-title">FILE CAD</h4><div class="media-downloads">${dlHtml}</div></div>` : ''}
+    ${note ? `<p class="media-note">${escape(note)}</p>` : ''}
+  </article>`;
+}
+
+function setupModelViewer(groupEl, group) {
+  const label = group.label || '';
+  const modelSrc = group.model ? assetUrl(group.model.src) : null;
+  if (!modelSrc) {
+    setModelFallback(groupEl, group, label, 'no-model');
+    return;
+  }
+
+  const deviceId = Number(els.detailMedia.dataset.deviceId);
+  const groupIndex = Number(groupEl.dataset.group);
+  const key = `${deviceId}:${groupIndex}`;
+  clearModelTimer(key);
+
+  ensureModelViewer().then(() => {
+    if (!isCurrentMediaGroup(groupEl, deviceId, groupIndex)) return;
+
+    const frame = groupEl.querySelector('.media-3d-frame');
+    if (!frame) return;
+
+    const reduced = getReducedMotion();
+    const autoRotate = !reduced;
+    const modelViewer = document.createElement('model-viewer');
+    modelViewer.setAttribute('src', modelSrc);
+    modelViewer.setAttribute('alt', `${label} model 3D interaktif`);
+    modelViewer.setAttribute('camera-controls', '');
+    modelViewer.setAttribute('loading', 'eager');
+    modelViewer.setAttribute('shadow-intensity', '1');
+    modelViewer.setAttribute('exposure', '1');
+    modelViewer.setAttribute('auto-rotate', String(autoRotate));
+    if (group.model && assetUrl(group.model.poster)) {
+      modelViewer.setAttribute('poster', assetUrl(group.model.poster));
+    }
+
+    frame.querySelectorAll('model-viewer').forEach(node => node.remove());
+    frame.appendChild(modelViewer);
+    updateModelControls(groupEl, false);
+
+    const timer = setTimeout(() => {
+      clearModelTimer(key);
+      if (!isCurrentMediaGroup(groupEl, deviceId, groupIndex)) return;
+      if (modelViewer.isConnected && modelViewer.getAttribute('data-loaded') !== 'true') {
+        setModelFallback(groupEl, group, label, 'error');
+      }
+    }, 15000);
+    modelLoadTimers.set(key, timer);
+
+    modelViewer.addEventListener('load', () => {
+      clearModelTimer(key);
+      if (!isCurrentMediaGroup(groupEl, deviceId, groupIndex)) return;
+      modelViewer.setAttribute('data-loaded', 'true');
+      try { modelViewer.autoRotate = autoRotate; } catch (e) { /* no-op */ }
+      try {
+        modelViewer.dataset.defaultOrbit = modelViewer.cameraOrbit;
+        modelViewer.dataset.defaultTarget = modelViewer.cameraTarget;
+      } catch (e) { /* no-op */ }
+      setModelReady(groupEl, modelViewer);
+    }, { once: true });
+
+    modelViewer.addEventListener('error', () => {
+      clearModelTimer(key);
+      if (!isCurrentMediaGroup(groupEl, deviceId, groupIndex)) return;
+      setModelFallback(groupEl, group, label, 'error');
+    }, { once: true });
+  }).catch(() => {
+    if (!isCurrentMediaGroup(groupEl, deviceId, groupIndex)) return;
+    setModelFallback(groupEl, group, label, 'unavailable');
   });
+}
+
+function getCurrentMedia() {
+  if (!state.catalog || state.selectedId === null) return [];
+  const d = state.catalog.devices.find(x => x.id === state.selectedId);
+  return (d && Array.isArray(d.media)) ? d.media : [];
+}
+
+function selectMediaImage(groupEl, idx) {
+  const thumbs = Array.from(groupEl.querySelectorAll('.media-thumb'));
+  if (!thumbs.length || idx < 0 || idx >= thumbs.length) return;
+
+  groupEl.dataset.selected = String(idx);
+  const galleryEl = groupEl.querySelector('.media-gallery');
+  if (galleryEl) galleryEl.dataset.selected = String(idx);
+  thumbs.forEach((t, i) => {
+    const active = i === idx;
+    t.classList.toggle('active', active);
+    t.setAttribute('aria-current', active ? 'true' : 'false');
+  });
+
+  const stage = groupEl.querySelector('[data-stage]');
+  const activeImg = thumbs[idx].querySelector('img');
+  if (stage && activeImg) {
+    const nextImg = document.createElement('img');
+    nextImg.className = 'media-gallery-img';
+    nextImg.src = activeImg.src;
+    nextImg.alt = activeImg.alt || '';
+    nextImg.loading = 'eager';
+    nextImg.decoding = 'async';
+    stage.replaceChildren(nextImg);
+  }
+
+  groupEl.querySelectorAll('[data-count]').forEach(el => {
+    el.textContent = `${idx + 1} / ${thumbs.length}`;
+  });
+
+  const live = document.getElementById('live-region');
+  if (live) live.textContent = `Gambar ${idx + 1} dari ${thumbs.length}.`;
+}
+
+function handleMediaClick(e) {
+  const actionEl = e.target.closest('[data-action]');
+  if (!actionEl || !els.detailMedia.contains(actionEl)) return;
+
+  const groupEl = actionEl.closest('.media-group');
+  if (!groupEl || !els.detailMedia.contains(groupEl)) return;
+
+  const action = actionEl.dataset.action;
+  const groupIndex = Number(groupEl.dataset.group);
+  const media = getCurrentMedia();
+  const group = media[groupIndex];
+  if (!group) return;
+
+  if (action === 'thumb') {
+    selectMediaImage(groupEl, Number(actionEl.dataset.idx));
+  } else if (action === 'prev' || action === 'next') {
+    const count = groupEl.querySelectorAll('.media-thumb').length;
+    if (!count) return;
+    const current = Number(groupEl.dataset.selected || '0');
+    const delta = action === 'prev' ? -1 : 1;
+    selectMediaImage(groupEl, (current + delta + count) % count);
+  } else if (action === 'reset') {
+    const mv = groupEl.querySelector('model-viewer');
+    if (!mv) return;
+    try {
+      if (mv.dataset.defaultOrbit) mv.cameraOrbit = mv.dataset.defaultOrbit;
+      if (mv.dataset.defaultTarget) mv.cameraTarget = mv.dataset.defaultTarget;
+      if (typeof mv.resetTurntableRotation === 'function') mv.resetTurntableRotation();
+    } catch (e) { /* no-op */ }
+  } else if (action === 'rotate') {
+    const mv = groupEl.querySelector('model-viewer');
+    if (!mv) return;
+    const next = actionEl.dataset.on !== 'true';
+    actionEl.dataset.on = String(next);
+    actionEl.setAttribute('aria-pressed', String(next));
+    try { mv.autoRotate = next; } catch (err) { /* no-op */ }
+  } else if (action === 'fullscreen') {
+    const frame = groupEl.querySelector('.media-3d-frame');
+    if (!frame) return;
+    if (document.fullscreenElement) {
+      const p = document.exitFullscreen();
+      if (p && p.catch) p.catch(() => {});
+    } else if (typeof frame.requestFullscreen === 'function') {
+      const p = frame.requestFullscreen();
+      if (p && p.catch) p.catch(() => {});
+    }
+  }
+}
+
+function handleMediaKeydown(e) {
+  if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) return;
+  const groupEl = e.target.closest('.media-group');
+  const galleryEl = e.target.closest('.media-gallery');
+  if (!groupEl || !galleryEl || !els.detailMedia.contains(galleryEl)) return;
+
+  const count = groupEl.querySelectorAll('.media-thumb').length;
+  if (!count) return;
+
+  let idx = Number(groupEl.dataset.selected || '0');
+  if (e.key === 'ArrowLeft') idx = (idx - 1 + count) % count;
+  else if (e.key === 'Home') idx = 0;
+  else if (e.key === 'End') idx = count - 1;
+
+  e.preventDefault();
+  selectMediaImage(groupEl, idx);
+}
+
+function handleMediaImageError(e) {
+  const img = e.target;
+  if (!img || img.tagName !== 'IMG' || !els.detailMedia.contains(img)) return;
+
+  if (img.classList.contains('media-gallery-img')) {
+    const stage = img.closest('[data-stage]');
+    if (stage) stage.innerHTML = '<div class="media-gallery-empty">Gambar tidak tersedia</div>';
+  } else if (img.closest('.media-thumb')) {
+    const thumb = img.closest('.media-thumb');
+    thumb.classList.add('is-error');
+    thumb.title = 'Gambar tidak tersedia';
+  } else if (img.classList.contains('media-model-poster')) {
+    img.remove();
+  }
 }
 
 window.openDetail = function(id, pushState = true, opener = null) {
@@ -522,6 +917,7 @@ window.openDetail = function(id, pushState = true, opener = null) {
   document.getElementById('detail-purpose').textContent = d.purpose || d.summary;
 
   renderMedia(d);
+  renderModbus(d);
 
   const pcb = d.pcb || {};
   const pcbResolved = Boolean(pcb.number);
@@ -599,6 +995,7 @@ window.openDetail = function(id, pushState = true, opener = null) {
 }
 
 window.closeDetail = function() {
+  clearAllModelTimers();
   state.selectedId = null;
   els.drawer.classList.remove('open');
   els.drawer.setAttribute('aria-hidden', 'true');

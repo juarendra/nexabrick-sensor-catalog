@@ -1,6 +1,7 @@
 import { readFileSync, existsSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { isBadAssetPath } from './validate-catalog.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -22,27 +23,32 @@ function collectAssetPaths(mediaArray) {
   return paths;
 }
 
-// Check that every media asset referenced in the catalog actually exists on
-// disk under rootDir. Schema rules live in validate-catalog.mjs; this only
-// verifies file presence so a broken reference can't ship to the site.
+// Check that every media asset referenced in the catalog is safe and exists on
+// disk under rootDir. Schema rules live in validate-catalog.mjs; this rejects
+// absolute/external/traversal paths and verifies file presence.
 export function validateMediaFiles(catalog, rootDir) {
   const devices = Array.isArray(catalog?.devices) ? catalog.devices : [];
   let checked = 0;
   let mediaGroups = 0;
   const missing = [];
+  const badPaths = [];
   devices.forEach((d, i) => {
     if (!d || !Array.isArray(d.media) || d.media.length === 0) return;
     d.media.forEach(m => {
       mediaGroups++;
       for (const p of collectAssetPaths([m])) {
         checked++;
+        if (isBadAssetPath(p)) {
+          badPaths.push(`devices[${i}] (id ${d.id ?? '?'}): ${p}`);
+          continue;
+        }
         if (!existsSync(join(rootDir, p))) {
           missing.push(`devices[${i}] (id ${d.id ?? '?'}): ${p}`);
         }
       }
     });
   });
-  return { ok: missing.length === 0, checked, mediaGroups, missing };
+  return { ok: missing.length === 0 && badPaths.length === 0, checked, mediaGroups, missing, badPaths };
 }
 
 // CLI entry
@@ -57,9 +63,17 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   }
   const result = validateMediaFiles(catalog, ROOT);
   if (!result.ok) {
-    console.error(`\nMedia validation FAILED: ${result.missing.length} referenced file(s) missing on disk:`);
-    result.missing.forEach(m => console.error(`- ${m}`));
+    console.error('Media validation FAILED');
+    if (result.badPaths.length) {
+      console.error(`Unsafe asset paths: ${result.badPaths.length}`);
+      result.badPaths.forEach(p => console.error(`- ${p}`));
+    }
+    if (result.missing.length) {
+      console.error(`Missing assets: ${result.missing.length}`);
+      result.missing.forEach(p => console.error(`- ${p}`));
+    }
     process.exit(1);
   }
-  console.log(`Media validation passed: ${result.mediaGroups} media group(s), ${result.checked} asset reference(s) present on disk.`);
+  console.log('Media validation passed');
+  console.log(`Missing assets: ${result.missing.length}`);
 }

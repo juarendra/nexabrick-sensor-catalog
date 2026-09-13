@@ -71,7 +71,7 @@ test('validateMediaFiles ignores devices without media', (t) => {
 
 test('validateMediaFiles tolerates a null/empty catalog', (t) => {
   withTemp(t, (dir) => {
-    assert.deepEqual(validateMediaFiles(null, dir), { ok: true, checked: 0, mediaGroups: 0, missing: [] });
-    assert.deepEqual(validateMediaFiles({}, dir), { ok: true, checked: 0, mediaGroups: 0, missing: [] });
+    assert.deepEqual(validateMediaFiles(null, dir), { ok: true, checked: 0, mediaGroups: 0, missing: [], badPaths: [] });
+    assert.deepEqual(validateMediaFiles({}, dir), { ok: true, checked: 0, mediaGroups: 0, missing: [], badPaths: [] });
   });
 });

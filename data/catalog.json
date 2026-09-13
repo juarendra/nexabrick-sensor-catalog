@@ -299,7 +299,31 @@
         "confidence": "unresolved",
         "sourcePath": null,
         "note": "Belum ditemukan PCB bernomor yang dapat dipetakan secara andal."
-      }
+      },
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
+      ]
     },
     {
       "id": 1,
@@ -410,7 +434,90 @@
         "confidence": "unresolved",
         "sourcePath": null,
         "note": "Belum ditemukan PCB bernomor yang dapat dipetakan secara andal."
-      }
+      },
+      "modbus": {
+        "variant": "micro",
+        "deviceId": 1,
+        "base": 40001,
+        "slotStride": 12,
+        "description": "Register Modbus Nexabrick Micro untuk Environmental Sensor.",
+        "registers": [
+          {
+            "address": 40001,
+            "regs": 1,
+            "fc": 3,
+            "name": "temperature",
+            "dataType": "INT16 (signed) · 1 register · x100 -> degC  (0.01 C)",
+            "access": "R",
+            "unit": "degC",
+            "scale": 100
+          },
+          {
+            "address": 40002,
+            "regs": 1,
+            "fc": 3,
+            "name": "humidity",
+            "dataType": "UINT16 (unsigned) · 1 register · x100 -> %RH  (0.01 %)",
+            "access": "R",
+            "unit": "%RH",
+            "scale": 100
+          },
+          {
+            "address": 40003,
+            "regs": 2,
+            "fc": 3,
+            "name": "pressure",
+            "dataType": "UINT32 (unsigned) · 2 registers · word order low-first (CDAB) · Pa, low word first (CDAB)",
+            "access": "R",
+            "unit": "Pa",
+            "scale": null
+          },
+          {
+            "address": 40005,
+            "regs": 1,
+            "fc": 3,
+            "name": "gas_resistance",
+            "dataType": "UINT16 (unsigned) · 1 register · kOhm (gas_resistance / 1000, clamp 65535)",
+            "access": "R",
+            "unit": "kOhm",
+            "scale": null
+          },
+          {
+            "address": 40006,
+            "regs": 1,
+            "fc": 3,
+            "name": "valid",
+            "dataType": "UINT16 (unsigned) · 1 register · 1 = sample valid, 0 = read error",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          }
+        ]
+      },
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
+      ]
     },
     {
       "id": 2,
@@ -515,7 +622,70 @@
         "confidence": "unresolved",
         "sourcePath": null,
         "note": "Belum ditemukan PCB bernomor yang dapat dipetakan secara andal."
-      }
+      },
+      "modbus": {
+        "variant": "micro",
+        "deviceId": 2,
+        "base": 40001,
+        "slotStride": 12,
+        "description": "Register Modbus Nexabrick Micro untuk Temperature & Humidity.",
+        "registers": [
+          {
+            "address": 40001,
+            "regs": 1,
+            "fc": 3,
+            "name": "temperature",
+            "dataType": "INT16 (signed) · 1 register · x100 -> degC  (0.01 C)",
+            "access": "R",
+            "unit": "degC",
+            "scale": 100
+          },
+          {
+            "address": 40002,
+            "regs": 1,
+            "fc": 3,
+            "name": "humidity",
+            "dataType": "UINT16 (unsigned) · 1 register · x100 -> %RH  (0.01 %)",
+            "access": "R",
+            "unit": "%RH",
+            "scale": 100
+          },
+          {
+            "address": 40003,
+            "regs": 1,
+            "fc": 3,
+            "name": "valid",
+            "dataType": "UINT16 (unsigned) · 1 register · 1 = sample valid, 0 = read error",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          }
+        ]
+      },
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
+      ]
     },
     {
       "id": 3,
@@ -615,16 +785,18 @@
       },
       "media": [
         {
+          "id": "modular-6-terminal-block",
           "label": "Modular 6 Terminal Block",
           "variant": "micro-modular",
+          "description": "Referensi visual modul terminal enam kanal.",
           "images": [
             {
               "src": "media/Modular 6 Terminal Block/isometric_1.png",
-              "alt": "Modular 6 terminal block, isometric view 1 (unverified CAD reference)"
+              "alt": "Modular 6 Terminal Block tampak isometrik satu (referensi CAD belum diverifikasi)"
             },
             {
               "src": "media/Modular 6 Terminal Block/isometric_2.png",
-              "alt": "Modular 6 terminal block, isometric view 2 (unverified CAD reference)"
+              "alt": "Modular 6 Terminal Block tampak isometrik dua (referensi CAD belum diverifikasi)"
             }
           ],
           "model": {
@@ -634,25 +806,27 @@
           "cadDownloads": [
             {
               "label": "Download STEP",
-              "src": "media/Modular 6 Terminal Block/Modular 6 Terminal Block.step",
-              "format": "STEP"
+              "format": "STEP",
+              "src": "media/Modular 6 Terminal Block/Modular 6 Terminal Block.step"
             }
           ],
-          "confidence": "unresolved",
           "hardwareStatus": "pending",
-          "note": "User-provided CAD reference render. Not a production PCB and not a hardware qualification."
+          "confidence": "unresolved",
+          "note": "Model visual user-provided; belum menjadi bukti kualifikasi hardware."
         },
         {
+          "id": "nexabrick-micro-6-terminal-block",
           "label": "Nexabrick Micro 6 Terminal Block",
           "variant": "micro",
+          "description": "Referensi visual terminal enam kanal untuk Nexabrick Micro.",
           "images": [
             {
               "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
-              "alt": "Nexabrick Micro 6 terminal block, isometric view 1 (unverified CAD reference)"
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu (referensi CAD belum diverifikasi)"
             },
             {
               "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
-              "alt": "Nexabrick Micro 6 terminal block, isometric view 2 (unverified CAD reference)"
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua (referensi CAD belum diverifikasi)"
             }
           ],
           "model": {
@@ -662,20 +836,59 @@
           "cadDownloads": [
             {
               "label": "Download STEP",
-              "src": "media/Nexabrick Micro 6 Terminal Block/Nexabrick Micro 6 Terminal Block.step",
-              "format": "STEP"
+              "format": "STEP",
+              "src": "media/Nexabrick Micro 6 Terminal Block/Nexabrick Micro 6 Terminal Block.step"
             },
             {
               "label": "Download SketchUp (SKP)",
-              "src": "media/Nexabrick Micro 6 Terminal Block/Nexabrick Micro 6 Terminal Block.skp",
-              "format": "SKP"
+              "format": "SKP",
+              "src": "media/Nexabrick Micro 6 Terminal Block/Nexabrick Micro 6 Terminal Block.skp"
             }
           ],
-          "confidence": "unresolved",
           "hardwareStatus": "pending",
-          "note": "User-provided CAD reference render. Not a production PCB and not a hardware qualification."
+          "confidence": "unresolved",
+          "note": "Model visual user-provided; belum menjadi bukti kualifikasi hardware."
         }
-      ]
+      ],
+      "modbus": {
+        "variant": "micro",
+        "deviceId": 3,
+        "base": 40001,
+        "slotStride": 12,
+        "description": "Register Modbus Nexabrick Micro untuk Dry Contact Input.",
+        "registers": [
+          {
+            "address": 40001,
+            "regs": 1,
+            "fc": 3,
+            "name": "gpio_level",
+            "dataType": "UINT16 (unsigned) · 1 register · raw GPIO level (0/1)",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40002,
+            "regs": 1,
+            "fc": 3,
+            "name": "button_state",
+            "dataType": "UINT16 (unsigned) · 1 register · button_state_t event code (0=RELEASED, 1=PRESSED, ...)",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40003,
+            "regs": 1,
+            "fc": 3,
+            "name": "valid",
+            "dataType": "UINT16 (unsigned) · 1 register · 1 = sample valid",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          }
+        ]
+      }
     },
     {
       "id": 4,
@@ -786,7 +999,70 @@
         "confidence": "unresolved",
         "sourcePath": null,
         "note": "Belum ditemukan PCB bernomor yang dapat dipetakan secara andal."
-      }
+      },
+      "modbus": {
+        "variant": "micro",
+        "deviceId": 4,
+        "base": 40001,
+        "slotStride": 12,
+        "description": "Register Modbus Nexabrick Micro untuk Temperature & Humidity.",
+        "registers": [
+          {
+            "address": 40001,
+            "regs": 1,
+            "fc": 3,
+            "name": "temperature",
+            "dataType": "INT16 (signed) · 1 register · x10 -> degC  (0.1 C)",
+            "access": "R",
+            "unit": "degC",
+            "scale": 10
+          },
+          {
+            "address": 40002,
+            "regs": 1,
+            "fc": 3,
+            "name": "humidity",
+            "dataType": "UINT16 (unsigned) · 1 register · x10 -> %RH  (0.1 %)",
+            "access": "R",
+            "unit": "%RH",
+            "scale": 10
+          },
+          {
+            "address": 40003,
+            "regs": 1,
+            "fc": 3,
+            "name": "valid",
+            "dataType": "UINT16 (unsigned) · 1 register · 1 = sample valid, 0 = read error",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          }
+        ]
+      },
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
+      ]
     },
     {
       "id": 5,
@@ -883,7 +1159,70 @@
         "name": "Data Center Water Leak Rope Sensor",
         "confidence": "probable",
         "sourcePath": "#30 [1A SLOT] DATA CENTER WATER LEAK ROPE SENSOR/doc/registers.md"
-      }
+      },
+      "modbus": {
+        "variant": "micro",
+        "deviceId": 5,
+        "base": 40001,
+        "slotStride": 12,
+        "description": "Register Modbus Nexabrick Micro untuk Water Leak Input.",
+        "registers": [
+          {
+            "address": 40001,
+            "regs": 1,
+            "fc": 3,
+            "name": "gpio_level",
+            "dataType": "UINT16 (unsigned) · 1 register · raw GPIO level (0/1)",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40002,
+            "regs": 1,
+            "fc": 3,
+            "name": "button_state",
+            "dataType": "UINT16 (unsigned) · 1 register · button_state_t event code (0=RELEASED, 1=PRESSED, ...)",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40003,
+            "regs": 1,
+            "fc": 3,
+            "name": "valid",
+            "dataType": "UINT16 (unsigned) · 1 register · 1 = sample valid",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          }
+        ]
+      },
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
+      ]
     },
     {
       "id": 6,
@@ -983,7 +1322,70 @@
         "confidence": "unresolved",
         "sourcePath": null,
         "note": "Belum ditemukan PCB bernomor yang dapat dipetakan secara andal."
-      }
+      },
+      "modbus": {
+        "variant": "micro",
+        "deviceId": 6,
+        "base": 40001,
+        "slotStride": 12,
+        "description": "Register Modbus Nexabrick Micro untuk Motion Input.",
+        "registers": [
+          {
+            "address": 40001,
+            "regs": 1,
+            "fc": 3,
+            "name": "gpio_level",
+            "dataType": "UINT16 (unsigned) · 1 register · raw GPIO level (0/1)",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40002,
+            "regs": 1,
+            "fc": 3,
+            "name": "button_state",
+            "dataType": "UINT16 (unsigned) · 1 register · button_state_t event code (0=RELEASED, 1=PRESSED, ...)",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40003,
+            "regs": 1,
+            "fc": 3,
+            "name": "valid",
+            "dataType": "UINT16 (unsigned) · 1 register · 1 = sample valid",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          }
+        ]
+      },
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
+      ]
     },
     {
       "id": 7,
@@ -1111,7 +1513,120 @@
         "confidence": "unresolved",
         "sourcePath": null,
         "note": "Belum ditemukan PCB bernomor yang dapat dipetakan secara andal."
-      }
+      },
+      "modbus": {
+        "variant": "micro",
+        "deviceId": 7,
+        "base": 40001,
+        "slotStride": 12,
+        "description": "Register Modbus Nexabrick Micro untuk Inertial Measurement Unit (IMU).",
+        "registers": [
+          {
+            "address": 40001,
+            "regs": 1,
+            "fc": 3,
+            "name": "accel_x",
+            "dataType": "INT16 (signed) · 1 register · mg (accel_g x 1000)",
+            "access": "R",
+            "unit": "mg",
+            "scale": null
+          },
+          {
+            "address": 40002,
+            "regs": 1,
+            "fc": 3,
+            "name": "accel_y",
+            "dataType": "INT16 (signed) · 1 register · mg (accel_g x 1000)",
+            "access": "R",
+            "unit": "mg",
+            "scale": null
+          },
+          {
+            "address": 40003,
+            "regs": 1,
+            "fc": 3,
+            "name": "accel_z",
+            "dataType": "INT16 (signed) · 1 register · mg (accel_g x 1000)",
+            "access": "R",
+            "unit": "mg",
+            "scale": null
+          },
+          {
+            "address": 40004,
+            "regs": 1,
+            "fc": 3,
+            "name": "gyro_x",
+            "dataType": "INT16 (signed) · 1 register · 0.1 deg/s",
+            "access": "R",
+            "unit": "deg/s",
+            "scale": 10
+          },
+          {
+            "address": 40005,
+            "regs": 1,
+            "fc": 3,
+            "name": "gyro_y",
+            "dataType": "INT16 (signed) · 1 register · 0.1 deg/s",
+            "access": "R",
+            "unit": "deg/s",
+            "scale": 10
+          },
+          {
+            "address": 40006,
+            "regs": 1,
+            "fc": 3,
+            "name": "gyro_z",
+            "dataType": "INT16 (signed) · 1 register · 0.1 deg/s",
+            "access": "R",
+            "unit": "deg/s",
+            "scale": 10
+          },
+          {
+            "address": 40007,
+            "regs": 1,
+            "fc": 3,
+            "name": "temperature",
+            "dataType": "INT16 (signed) · 1 register · x10 -> degC  (0.1 C)",
+            "access": "R",
+            "unit": "degC",
+            "scale": 10
+          },
+          {
+            "address": 40008,
+            "regs": 1,
+            "fc": 3,
+            "name": "valid",
+            "dataType": "UINT16 (unsigned) · 1 register · 1 = sample valid, 0 = read error",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          }
+        ]
+      },
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
+      ]
     },
     {
       "id": 8,
@@ -1207,7 +1722,60 @@
         "confidence": "unresolved",
         "sourcePath": null,
         "note": "Belum ditemukan PCB bernomor yang dapat dipetakan secara andal."
-      }
+      },
+      "modbus": {
+        "variant": "micro",
+        "deviceId": 8,
+        "base": 40001,
+        "slotStride": 12,
+        "description": "Register Modbus Nexabrick Micro untuk Ambient Light Sensor.",
+        "registers": [
+          {
+            "address": 40001,
+            "regs": 1,
+            "fc": 3,
+            "name": "lux",
+            "dataType": "UINT16 (unsigned) · 1 register · x100 -> lux (saturates at 655 lux)",
+            "access": "R",
+            "unit": "lux",
+            "scale": 100
+          },
+          {
+            "address": 40002,
+            "regs": 1,
+            "fc": 3,
+            "name": "valid",
+            "dataType": "UINT16 (unsigned) · 1 register · 1 = sample valid, 0 = read error",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          }
+        ]
+      },
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
+      ]
     },
     {
       "id": 9,
@@ -1313,7 +1881,70 @@
         "name": "Data Center Temp Hum Sensor",
         "confidence": "probable",
         "sourcePath": "#92 [1B SLOT ]  DATA CENTER TEMP HUM SENSOR/sch-pcb/BOM/[BOM] #92 DATA CENTER TEMP HUM SENSOR.csv"
-      }
+      },
+      "modbus": {
+        "variant": "micro",
+        "deviceId": 9,
+        "base": 40001,
+        "slotStride": 12,
+        "description": "Register Modbus Nexabrick Micro untuk Temperature & Humidity.",
+        "registers": [
+          {
+            "address": 40001,
+            "regs": 1,
+            "fc": 3,
+            "name": "temperature",
+            "dataType": "INT16 (signed) · 1 register · x100 -> degC  (0.01 C)",
+            "access": "R",
+            "unit": "degC",
+            "scale": 100
+          },
+          {
+            "address": 40002,
+            "regs": 1,
+            "fc": 3,
+            "name": "humidity",
+            "dataType": "UINT16 (unsigned) · 1 register · x100 -> %RH  (0.01 %)",
+            "access": "R",
+            "unit": "%RH",
+            "scale": 100
+          },
+          {
+            "address": 40003,
+            "regs": 1,
+            "fc": 3,
+            "name": "valid",
+            "dataType": "UINT16 (unsigned) · 1 register · 1 = sample valid, 0 = read error",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          }
+        ]
+      },
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
+      ]
     },
     {
       "id": 10,
@@ -1416,7 +2047,70 @@
         "name": "Ambient Humidity Onboard Sensor",
         "confidence": "probable",
         "sourcePath": "#51 [1B SLOT ] AMBIENT HUMIDITY ONBOARD SENSOR/sch-pcb/BOM/Bill Of Materials #51 AMBIENT HUMIDITY ONBOARD SENSOR.csv"
-      }
+      },
+      "modbus": {
+        "variant": "micro",
+        "deviceId": 10,
+        "base": 40001,
+        "slotStride": 12,
+        "description": "Register Modbus Nexabrick Micro untuk Temperature & Humidity.",
+        "registers": [
+          {
+            "address": 40001,
+            "regs": 1,
+            "fc": 3,
+            "name": "temperature",
+            "dataType": "INT16 (signed) · 1 register · x100 -> degC  (0.01 C)",
+            "access": "R",
+            "unit": "degC",
+            "scale": 100
+          },
+          {
+            "address": 40002,
+            "regs": 1,
+            "fc": 3,
+            "name": "humidity",
+            "dataType": "UINT16 (unsigned) · 1 register · x100 -> %RH  (0.01 %)",
+            "access": "R",
+            "unit": "%RH",
+            "scale": 100
+          },
+          {
+            "address": 40003,
+            "regs": 1,
+            "fc": 3,
+            "name": "valid",
+            "dataType": "UINT16 (unsigned) · 1 register · 1 = sample valid, 0 = read error",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          }
+        ]
+      },
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
+      ]
     },
     {
       "id": 11,
@@ -1531,7 +2225,110 @@
         "confidence": "unresolved",
         "sourcePath": null,
         "note": "Belum ditemukan PCB bernomor yang dapat dipetakan secara andal."
-      }
+      },
+      "modbus": {
+        "variant": "micro",
+        "deviceId": 11,
+        "base": 40001,
+        "slotStride": 12,
+        "description": "Register Modbus Nexabrick Micro untuk Presence Radar.",
+        "registers": [
+          {
+            "address": 40001,
+            "regs": 1,
+            "fc": 3,
+            "name": "target_state",
+            "dataType": "UINT16 (unsigned) · 1 register · 0 = no target, 1 = target present",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40002,
+            "regs": 1,
+            "fc": 3,
+            "name": "moving_energy",
+            "dataType": "UINT16 (unsigned) · 1 register · moving-target energy (0-255)",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40003,
+            "regs": 1,
+            "fc": 3,
+            "name": "moving_distance",
+            "dataType": "UINT16 (unsigned) · 1 register · cm",
+            "access": "R",
+            "unit": "cm",
+            "scale": null
+          },
+          {
+            "address": 40004,
+            "regs": 1,
+            "fc": 3,
+            "name": "stationary_energy",
+            "dataType": "UINT16 (unsigned) · 1 register · stationary-target energy (0-255)",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40005,
+            "regs": 1,
+            "fc": 3,
+            "name": "stationary_distance",
+            "dataType": "UINT16 (unsigned) · 1 register · cm",
+            "access": "R",
+            "unit": "cm",
+            "scale": null
+          },
+          {
+            "address": 40006,
+            "regs": 1,
+            "fc": 3,
+            "name": "detection_distance",
+            "dataType": "UINT16 (unsigned) · 1 register · cm",
+            "access": "R",
+            "unit": "cm",
+            "scale": null
+          },
+          {
+            "address": 40007,
+            "regs": 1,
+            "fc": 3,
+            "name": "valid",
+            "dataType": "UINT16 (unsigned) · 1 register · 1 = sample valid, 0 = read error",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          }
+        ]
+      },
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
+      ]
     },
     {
       "id": 12,
@@ -1649,7 +2446,90 @@
         "confidence": "unresolved",
         "sourcePath": null,
         "note": "Belum ditemukan PCB bernomor yang dapat dipetakan secara andal."
-      }
+      },
+      "modbus": {
+        "variant": "micro",
+        "deviceId": 12,
+        "base": 40001,
+        "slotStride": 12,
+        "description": "Register Modbus Nexabrick Micro untuk Accelerometer.",
+        "registers": [
+          {
+            "address": 40001,
+            "regs": 1,
+            "fc": 3,
+            "name": "raw_x",
+            "dataType": "INT16 (signed) · 1 register · filtered 2 g axis X (raw counts)",
+            "access": "R",
+            "unit": "counts",
+            "scale": null
+          },
+          {
+            "address": 40002,
+            "regs": 1,
+            "fc": 3,
+            "name": "raw_y",
+            "dataType": "INT16 (signed) · 1 register · filtered 2 g axis Y (raw counts)",
+            "access": "R",
+            "unit": "counts",
+            "scale": null
+          },
+          {
+            "address": 40003,
+            "regs": 1,
+            "fc": 3,
+            "name": "raw_z",
+            "dataType": "INT16 (signed) · 1 register · filtered 2 g axis Z (raw counts)",
+            "access": "R",
+            "unit": "counts",
+            "scale": null
+          },
+          {
+            "address": 40004,
+            "regs": 1,
+            "fc": 3,
+            "name": "change",
+            "dataType": "UINT16 (unsigned) · 1 register · 1 = movement/change detected since last read",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40005,
+            "regs": 1,
+            "fc": 3,
+            "name": "valid",
+            "dataType": "UINT16 (unsigned) · 1 register · 1 = sample valid, 0 = read error",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          }
+        ]
+      },
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
+      ]
     },
     {
       "id": 13,
@@ -1754,7 +2634,70 @@
         "confidence": "unresolved",
         "sourcePath": null,
         "note": "Belum ditemukan PCB bernomor yang dapat dipetakan secara andal."
-      }
+      },
+      "modbus": {
+        "variant": "micro",
+        "deviceId": 13,
+        "base": 40001,
+        "slotStride": 12,
+        "description": "Register Modbus Nexabrick Micro untuk Pressure & Temperature.",
+        "registers": [
+          {
+            "address": 40001,
+            "regs": 2,
+            "fc": 3,
+            "name": "pressure",
+            "dataType": "INT32 (signed) · 2 registers · word order low-first (CDAB) · Pa, low word first (CDAB)",
+            "access": "R",
+            "unit": "Pa",
+            "scale": null
+          },
+          {
+            "address": 40003,
+            "regs": 1,
+            "fc": 3,
+            "name": "temperature",
+            "dataType": "INT16 (signed) · 1 register · x100 -> degC  (0.01 C)",
+            "access": "R",
+            "unit": "degC",
+            "scale": 100
+          },
+          {
+            "address": 40004,
+            "regs": 1,
+            "fc": 3,
+            "name": "valid",
+            "dataType": "UINT16 (unsigned) · 1 register · 1 = sample valid, 0 = read error",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          }
+        ]
+      },
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
+      ]
     },
     {
       "id": 14,
@@ -1864,7 +2807,60 @@
         "confidence": "unresolved",
         "sourcePath": null,
         "note": "Belum ditemukan PCB bernomor yang dapat dipetakan secara andal."
-      }
+      },
+      "modbus": {
+        "variant": "micro",
+        "deviceId": 14,
+        "base": 40001,
+        "slotStride": 12,
+        "description": "Register Modbus Nexabrick Micro untuk Airflow Sensor.",
+        "registers": [
+          {
+            "address": 40001,
+            "regs": 1,
+            "fc": 3,
+            "name": "velocity",
+            "dataType": "UINT16 (unsigned) · 1 register · x100 -> m/s  (0.01 m/s)",
+            "access": "R",
+            "unit": "m/s",
+            "scale": 100
+          },
+          {
+            "address": 40002,
+            "regs": 1,
+            "fc": 3,
+            "name": "valid",
+            "dataType": "UINT16 (unsigned) · 1 register · 1 = sample valid, 0 = read error",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          }
+        ]
+      },
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
+      ]
     },
     {
       "id": 15,
@@ -1974,7 +2970,100 @@
         "name": "Data Center Air Quality PM Sensor",
         "confidence": "probable",
         "sourcePath": "#94 [1B SLOT ]  DATA CENTER AIR QUALITY SENSORS PARTICULATE MATTER (PM) SENSOR/sch-pcb/BOM/[BOM] #94 DATA CENTER AIR QUALITY SENSORS PARTICULATE MATTER (PM)SENSOR.csv"
-      }
+      },
+      "modbus": {
+        "variant": "micro",
+        "deviceId": 15,
+        "base": 40001,
+        "slotStride": 12,
+        "description": "Register Modbus Nexabrick Micro untuk Particulate Matter Sensor.",
+        "registers": [
+          {
+            "address": 40001,
+            "regs": 1,
+            "fc": 3,
+            "name": "pm1_0",
+            "dataType": "UINT16 (unsigned) · 1 register · x100 -> ug/m3  (0.01 ug/m3)",
+            "access": "R",
+            "unit": "ug/m3",
+            "scale": 100
+          },
+          {
+            "address": 40002,
+            "regs": 1,
+            "fc": 3,
+            "name": "pm2_5",
+            "dataType": "UINT16 (unsigned) · 1 register · x100 -> ug/m3  (0.01 ug/m3)",
+            "access": "R",
+            "unit": "ug/m3",
+            "scale": 100
+          },
+          {
+            "address": 40003,
+            "regs": 1,
+            "fc": 3,
+            "name": "pm4_0",
+            "dataType": "UINT16 (unsigned) · 1 register · x100 -> ug/m3  (0.01 ug/m3)",
+            "access": "R",
+            "unit": "ug/m3",
+            "scale": 100
+          },
+          {
+            "address": 40004,
+            "regs": 1,
+            "fc": 3,
+            "name": "pm10_0",
+            "dataType": "UINT16 (unsigned) · 1 register · x100 -> ug/m3  (0.01 ug/m3)",
+            "access": "R",
+            "unit": "ug/m3",
+            "scale": 100
+          },
+          {
+            "address": 40005,
+            "regs": 1,
+            "fc": 3,
+            "name": "typical_particle_size",
+            "dataType": "UINT16 (unsigned) · 1 register · x10 -> um  (0.1 um)",
+            "access": "R",
+            "unit": "um",
+            "scale": 10
+          },
+          {
+            "address": 40006,
+            "regs": 1,
+            "fc": 3,
+            "name": "valid",
+            "dataType": "UINT16 (unsigned) · 1 register · 1 = sample valid, 0 = read error",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          }
+        ]
+      },
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
+      ]
     },
     {
       "id": 16,
@@ -2076,7 +3165,70 @@
         "name": "Data Center Air Pressure Sensor",
         "confidence": "probable",
         "sourcePath": "#96 [1A+1B SLOT] DATA CENTER AIR PRESSURE SENSOR/sch-pcb/BOM/[BOM] #96 [1A+1B SLOT] DATA CENTER AIR PRESSURE SENSOR.csv"
-      }
+      },
+      "modbus": {
+        "variant": "micro",
+        "deviceId": 16,
+        "base": 40001,
+        "slotStride": 12,
+        "description": "Register Modbus Nexabrick Micro untuk Differential Pressure.",
+        "registers": [
+          {
+            "address": 40001,
+            "regs": 1,
+            "fc": 3,
+            "name": "differential_pressure",
+            "dataType": "INT16 (signed) · 1 register · x10 -> Pa  (0.1 Pa)",
+            "access": "R",
+            "unit": "Pa",
+            "scale": 10
+          },
+          {
+            "address": 40002,
+            "regs": 1,
+            "fc": 3,
+            "name": "temperature",
+            "dataType": "INT16 (signed) · 1 register · x100 -> degC  (0.01 C)",
+            "access": "R",
+            "unit": "degC",
+            "scale": 100
+          },
+          {
+            "address": 40003,
+            "regs": 1,
+            "fc": 3,
+            "name": "valid",
+            "dataType": "UINT16 (unsigned) · 1 register · 1 = sample valid, 0 = read error",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          }
+        ]
+      },
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
+      ]
     },
     {
       "id": 17,
@@ -2182,7 +3334,80 @@
         "confidence": "probable",
         "sourcePath": "#53 [1B SLOT] 3-AXIS ACCELEROMETER/sch-pcb/BOM/Bill Of Materials #53 3-AXIS ACCELEROMETER.csv",
         "note": null
-      }
+      },
+      "modbus": {
+        "variant": "micro",
+        "deviceId": 17,
+        "base": 40001,
+        "slotStride": 12,
+        "description": "Register Modbus Nexabrick Micro untuk Accelerometer.",
+        "registers": [
+          {
+            "address": 40001,
+            "regs": 1,
+            "fc": 3,
+            "name": "x",
+            "dataType": "INT16 (signed) · 1 register · mg, axis X",
+            "access": "R",
+            "unit": "mg",
+            "scale": null
+          },
+          {
+            "address": 40002,
+            "regs": 1,
+            "fc": 3,
+            "name": "y",
+            "dataType": "INT16 (signed) · 1 register · mg, axis Y",
+            "access": "R",
+            "unit": "mg",
+            "scale": null
+          },
+          {
+            "address": 40003,
+            "regs": 1,
+            "fc": 3,
+            "name": "z",
+            "dataType": "INT16 (signed) · 1 register · mg, axis Z",
+            "access": "R",
+            "unit": "mg",
+            "scale": null
+          },
+          {
+            "address": 40004,
+            "regs": 1,
+            "fc": 3,
+            "name": "valid",
+            "dataType": "UINT16 (unsigned) · 1 register · 1 = sample valid, 0 = read error",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          }
+        ]
+      },
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
+      ]
     },
     {
       "id": 18,
@@ -2277,7 +3502,60 @@
         "name": "Data Center Air Flow Sensor",
         "confidence": "probable",
         "sourcePath": "#95 [1B SLOT ]  DATA CENTER AIR FLOW SENSOR/sch-pcb/BOM/[BOM] #95 DATA CENTER AIR FLOW SENSOR.csv"
-      }
+      },
+      "modbus": {
+        "variant": "micro",
+        "deviceId": 18,
+        "base": 40001,
+        "slotStride": 12,
+        "description": "Register Modbus Nexabrick Micro untuk Air Velocity Sensor.",
+        "registers": [
+          {
+            "address": 40001,
+            "regs": 1,
+            "fc": 3,
+            "name": "velocity",
+            "dataType": "UINT16 (unsigned) · 1 register · x100 -> m/s  (0.01 m/s)",
+            "access": "R",
+            "unit": "m/s",
+            "scale": 100
+          },
+          {
+            "address": 40002,
+            "regs": 1,
+            "fc": 3,
+            "name": "valid",
+            "dataType": "UINT16 (unsigned) · 1 register · 1 = sample valid, 0 = read error",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          }
+        ]
+      },
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
+      ]
     },
     {
       "id": 19,
@@ -2379,7 +3657,70 @@
         "name": "Ambient Pressure Onboard Sensor",
         "confidence": "probable",
         "sourcePath": "#52 [1B SLOT ] AMBIENT PRESSURE ONBOARD SENSOR/sch-pcb/BOM/Bill Of Materials #52 AMBIENT PRESSURE ONBOARD SENSOR.csv"
-      }
+      },
+      "modbus": {
+        "variant": "micro",
+        "deviceId": 19,
+        "base": 40001,
+        "slotStride": 12,
+        "description": "Register Modbus Nexabrick Micro untuk Barometric Pressure.",
+        "registers": [
+          {
+            "address": 40001,
+            "regs": 1,
+            "fc": 3,
+            "name": "temperature",
+            "dataType": "INT16 (signed) · 1 register · x100 -> degC  (0.01 C)",
+            "access": "R",
+            "unit": "degC",
+            "scale": 100
+          },
+          {
+            "address": 40002,
+            "regs": 2,
+            "fc": 3,
+            "name": "pressure",
+            "dataType": "UINT32 (unsigned) · 2 registers · word order low-first (CDAB) · Pa, low word first (CDAB)",
+            "access": "R",
+            "unit": "Pa",
+            "scale": null
+          },
+          {
+            "address": 40004,
+            "regs": 1,
+            "fc": 3,
+            "name": "valid",
+            "dataType": "UINT16 (unsigned) · 1 register · 1 = sample valid, 0 = read error",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          }
+        ]
+      },
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
+      ]
     },
     {
       "id": 20,
@@ -2492,7 +3833,150 @@
         "confidence": "unresolved",
         "sourcePath": null,
         "note": "Parent selector; pemetaan PCB per profil ada di perangkat 1001-1016."
-      }
+      },
+      "modbus": {
+        "variant": "micro",
+        "deviceId": 20,
+        "base": 40001,
+        "slotStride": 12,
+        "description": "Register Modbus Nexabrick Micro untuk Universal Smart I/O (Tibbit).",
+        "registers": [
+          {
+            "address": 40001,
+            "regs": 1,
+            "fc": 3,
+            "name": "module_code",
+            "dataType": "UINT16 (unsigned) · 1 register · module type code",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40002,
+            "regs": 1,
+            "fc": 3,
+            "name": "inputs",
+            "dataType": "UINT16 (unsigned) · 1 register · input state bitmask (state & ~dir_mask)",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40003,
+            "regs": 1,
+            "fc": 3,
+            "name": "outputs",
+            "dataType": "UINT16 (unsigned) · 1 register · output state bitmask (state & dir_mask)",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40004,
+            "regs": 1,
+            "fc": 3,
+            "name": "direction_mask",
+            "dataType": "UINT16 (unsigned) · 1 register · RW per-bit direction mask",
+            "access": "RW",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40005,
+            "regs": 1,
+            "fc": 3,
+            "name": "digital_output_cmd",
+            "dataType": "UINT16 (unsigned) · 1 register · RW digital output command bitmask",
+            "access": "RW",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40006,
+            "regs": 1,
+            "fc": 3,
+            "name": "value_ch1",
+            "dataType": "UINT16 (unsigned) · 1 register · RW/RO value channel (page*4 + 1)",
+            "access": "RW",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40007,
+            "regs": 1,
+            "fc": 3,
+            "name": "value_ch2",
+            "dataType": "UINT16 (unsigned) · 1 register · RW/RO value channel (page*4 + 2)",
+            "access": "RW",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40008,
+            "regs": 1,
+            "fc": 3,
+            "name": "value_ch3",
+            "dataType": "UINT16 (unsigned) · 1 register · RW/RO value channel (page*4 + 3)",
+            "access": "RW",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40009,
+            "regs": 1,
+            "fc": 3,
+            "name": "value_ch4",
+            "dataType": "UINT16 (unsigned) · 1 register · RW/RO value channel (page*4 + 4)",
+            "access": "RW",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40010,
+            "regs": 1,
+            "fc": 3,
+            "name": "status",
+            "dataType": "UINT16 (unsigned) · 1 register · low byte 0=invalid 1=valid; high byte error code",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40011,
+            "regs": 1,
+            "fc": 3,
+            "name": "value_page",
+            "dataType": "UINT16 (unsigned) · 1 register · RW page: 0 = channels 1-4, 1 = channels 5-8",
+            "access": "RW",
+            "unit": "",
+            "scale": null
+          }
+        ]
+      },
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
+      ]
     },
     {
       "id": 21,
@@ -2569,7 +4053,37 @@
         "name": "Ambient Light Onboard Sensor",
         "confidence": "probable",
         "sourcePath": "#48 [1B SLOT] AMBIENT LIGHT ONBOARD SENSOR/sch-pcb/BOM/Bill Of Materials #48 AMBIENT LIGHT SENSOR.csv"
-      }
+      },
+      "modbus": {
+        "variant": "micro",
+        "deviceId": 21,
+        "available": false,
+        "description": "Tidak ada register map Modbus untuk Nexabrick Micro (id 21)."
+      },
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
+      ]
     },
     {
       "id": 22,
@@ -2663,7 +4177,70 @@
         "confidence": "unresolved",
         "sourcePath": null,
         "note": "Belum ditemukan PCB bernomor yang dapat dipetakan secara andal."
-      }
+      },
+      "modbus": {
+        "variant": "micro",
+        "deviceId": 22,
+        "base": 40001,
+        "slotStride": 12,
+        "description": "Register Modbus Nexabrick Micro untuk Water Flow Sensor.",
+        "registers": [
+          {
+            "address": 40001,
+            "regs": 1,
+            "fc": 3,
+            "name": "flow_rate",
+            "dataType": "UINT16 (unsigned) · 1 register · x1000 -> L/s  (0..65.535 L/s)",
+            "access": "R",
+            "unit": "L/s",
+            "scale": 1000
+          },
+          {
+            "address": 40002,
+            "regs": 2,
+            "fc": 3,
+            "name": "volume",
+            "dataType": "UINT32 (unsigned) · 2 registers · word order low-first (CDAB) · x100 -> L, low word first (CDAB); 32-bit accumulator",
+            "access": "R",
+            "unit": "L",
+            "scale": 100
+          },
+          {
+            "address": 40004,
+            "regs": 1,
+            "fc": 3,
+            "name": "valid",
+            "dataType": "UINT16 (unsigned) · 1 register · 1 = sample valid, 0 = read error",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          }
+        ]
+      },
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
+      ]
     },
     {
       "id": 23,
@@ -2762,7 +4339,110 @@
         "confidence": "probable",
         "sourcePath": "#108 [1A+1B SLOT] ENERGY METER AC/sch-pcb/BOM/[BOM] #108 [1A+1B SLOT] ENERGY METER AC.csv",
         "note": null
-      }
+      },
+      "modbus": {
+        "variant": "micro",
+        "deviceId": 23,
+        "base": 40001,
+        "slotStride": 12,
+        "description": "Register Modbus Nexabrick Micro untuk Energy Meter.",
+        "registers": [
+          {
+            "address": 40001,
+            "regs": 1,
+            "fc": 3,
+            "name": "current",
+            "dataType": "UINT16 (unsigned) · 1 register · x100 -> A  (0.01 A)",
+            "access": "R",
+            "unit": "A",
+            "scale": 100
+          },
+          {
+            "address": 40002,
+            "regs": 1,
+            "fc": 3,
+            "name": "voltage",
+            "dataType": "UINT16 (unsigned) · 1 register · x10 -> V  (0.1 V)",
+            "access": "R",
+            "unit": "V",
+            "scale": 10
+          },
+          {
+            "address": 40003,
+            "regs": 1,
+            "fc": 3,
+            "name": "active_power",
+            "dataType": "UINT16 (unsigned) · 1 register · x10 -> W  (0.1 W)",
+            "access": "R",
+            "unit": "W",
+            "scale": 10
+          },
+          {
+            "address": 40004,
+            "regs": 1,
+            "fc": 3,
+            "name": "apparent_power",
+            "dataType": "UINT16 (unsigned) · 1 register · x10 -> VA  (0.1 VA)",
+            "access": "R",
+            "unit": "VA",
+            "scale": 10
+          },
+          {
+            "address": 40005,
+            "regs": 1,
+            "fc": 3,
+            "name": "power_factor",
+            "dataType": "UINT16 (unsigned) · 1 register · x1000 (0..1.000)",
+            "access": "R",
+            "unit": "",
+            "scale": 1000
+          },
+          {
+            "address": 40006,
+            "regs": 1,
+            "fc": 3,
+            "name": "frequency",
+            "dataType": "UINT16 (unsigned) · 1 register · x100 -> Hz  (0.01 Hz)",
+            "access": "R",
+            "unit": "Hz",
+            "scale": 100
+          },
+          {
+            "address": 40007,
+            "regs": 2,
+            "fc": 3,
+            "name": "energy",
+            "dataType": "UINT32 (unsigned) · 2 registers · word order low-first (CDAB) · Wh, low word first (CDAB)",
+            "access": "R",
+            "unit": "Wh",
+            "scale": null
+          }
+        ]
+      },
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
+      ]
     },
     {
       "id": 24,
@@ -2856,7 +4536,140 @@
         "confidence": "probable",
         "sourcePath": "#109 [1A+1B SLOT] ENERGY METER DC/sch-pcb/BOM/[BOM] #109 [1A+1B SLOT] ENERGY METER DC.csv",
         "note": null
-      }
+      },
+      "modbus": {
+        "variant": "micro",
+        "deviceId": 24,
+        "base": 40001,
+        "slotStride": 12,
+        "description": "Register Modbus Nexabrick Micro untuk Power Monitor.",
+        "registers": [
+          {
+            "address": 40001,
+            "regs": 1,
+            "fc": 3,
+            "name": "voltage",
+            "dataType": "INT16 (signed) · 1 register · x100 -> V  (0.01 V), 2's-complement",
+            "access": "R",
+            "unit": "V",
+            "scale": 100
+          },
+          {
+            "address": 40002,
+            "regs": 1,
+            "fc": 3,
+            "name": "current",
+            "dataType": "INT16 (signed) · 1 register · x100 -> A  (0.01 A), 2's-complement",
+            "access": "R",
+            "unit": "A",
+            "scale": 100
+          },
+          {
+            "address": 40003,
+            "regs": 1,
+            "fc": 3,
+            "name": "power",
+            "dataType": "INT16 (signed) · 1 register · x10 -> W  (0.1 W)",
+            "access": "R",
+            "unit": "W",
+            "scale": 10
+          },
+          {
+            "address": 40004,
+            "regs": 2,
+            "fc": 3,
+            "name": "energy",
+            "dataType": "UINT32 (unsigned) · 2 registers · word order low-first (CDAB) · Wh, low word first (CDAB)",
+            "access": "R",
+            "unit": "Wh",
+            "scale": null
+          },
+          {
+            "address": 40006,
+            "regs": 1,
+            "fc": 3,
+            "name": "charge",
+            "dataType": "INT16 (signed) · 1 register · x100 -> Ah  (0.01 Ah), 2's-complement",
+            "access": "R",
+            "unit": "Ah",
+            "scale": 100
+          },
+          {
+            "address": 40007,
+            "regs": 1,
+            "fc": 3,
+            "name": "temperature",
+            "dataType": "INT16 (signed) · 1 register · x10 -> degC  (0.1 C), 2's-complement",
+            "access": "R",
+            "unit": "degC",
+            "scale": 10
+          },
+          {
+            "address": 40008,
+            "regs": 1,
+            "fc": 3,
+            "name": "direction",
+            "dataType": "UINT16 (unsigned) · 1 register · +1 -> 0x0001, -1 -> 0xFFFF",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40009,
+            "regs": 1,
+            "fc": 3,
+            "name": "raw_diag",
+            "dataType": "UINT16 (unsigned) · 1 register · DIAG_ALRT register (raw)",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40010,
+            "regs": 1,
+            "fc": 3,
+            "name": "valid",
+            "dataType": "UINT16 (unsigned) · 1 register · 1 = sample valid, 0 = read error",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40011,
+            "regs": 1,
+            "fc": 3,
+            "name": "data_age",
+            "dataType": "UINT16 (unsigned) · 1 register · ms since last sample (low word)",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          }
+        ]
+      },
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
+      ]
     },
     {
       "id": 25,
@@ -2957,7 +4770,160 @@
         "confidence": "probable",
         "sourcePath": "#110 [1A+1B SLOT] TVOC  Indoor Air Quality (IAQ) Combo/sch-pcb/BOM/[BOM] #110 [1A+1B SLOT] TVOC  Indoor Air Quality (IAQ) Combo.csv",
         "note": "BOM PCB memuat SHT4x dan SGP41; SPS30 pada kontrak firmware kemungkinan perangkat eksternal."
-      }
+      },
+      "modbus": {
+        "variant": "micro",
+        "deviceId": 25,
+        "base": 40001,
+        "slotStride": 12,
+        "description": "Register Modbus Nexabrick Micro untuk Indoor Air Quality (IAQ) Combo.",
+        "registers": [
+          {
+            "address": 40001,
+            "regs": 1,
+            "fc": 3,
+            "name": "pm1_0",
+            "dataType": "UINT16 (unsigned) · 1 register · x100 -> ug/m3  (0.01 ug/m3)",
+            "access": "R",
+            "unit": "ug/m3",
+            "scale": 100
+          },
+          {
+            "address": 40002,
+            "regs": 1,
+            "fc": 3,
+            "name": "pm2_5",
+            "dataType": "UINT16 (unsigned) · 1 register · x100 -> ug/m3  (0.01 ug/m3)",
+            "access": "R",
+            "unit": "ug/m3",
+            "scale": 100
+          },
+          {
+            "address": 40003,
+            "regs": 1,
+            "fc": 3,
+            "name": "pm4_0",
+            "dataType": "UINT16 (unsigned) · 1 register · x100 -> ug/m3  (0.01 ug/m3)",
+            "access": "R",
+            "unit": "ug/m3",
+            "scale": 100
+          },
+          {
+            "address": 40004,
+            "regs": 1,
+            "fc": 3,
+            "name": "pm10_0",
+            "dataType": "UINT16 (unsigned) · 1 register · x100 -> ug/m3  (0.01 ug/m3)",
+            "access": "R",
+            "unit": "ug/m3",
+            "scale": 100
+          },
+          {
+            "address": 40005,
+            "regs": 1,
+            "fc": 3,
+            "name": "typical_particle_size",
+            "dataType": "UINT16 (unsigned) · 1 register · x10 -> um  (0.1 um)",
+            "access": "R",
+            "unit": "um",
+            "scale": 10
+          },
+          {
+            "address": 40006,
+            "regs": 1,
+            "fc": 3,
+            "name": "temperature",
+            "dataType": "INT16 (signed) · 1 register · x100 -> degC  (0.01 C)",
+            "access": "R",
+            "unit": "degC",
+            "scale": 100
+          },
+          {
+            "address": 40007,
+            "regs": 1,
+            "fc": 3,
+            "name": "humidity",
+            "dataType": "UINT16 (unsigned) · 1 register · x100 -> %RH  (0.01 %)",
+            "access": "R",
+            "unit": "%RH",
+            "scale": 100
+          },
+          {
+            "address": 40008,
+            "regs": 1,
+            "fc": 3,
+            "name": "voc_raw",
+            "dataType": "UINT16 (unsigned) · 1 register · SRAW_VOC raw",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40009,
+            "regs": 1,
+            "fc": 3,
+            "name": "nox_raw",
+            "dataType": "UINT16 (unsigned) · 1 register · SRAW_NOX raw",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40010,
+            "regs": 1,
+            "fc": 3,
+            "name": "voc_index",
+            "dataType": "UINT16 (unsigned) · 1 register · 1-500 (SGP41 VOC Index)",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40011,
+            "regs": 1,
+            "fc": 3,
+            "name": "nox_index",
+            "dataType": "UINT16 (unsigned) · 1 register · 1-500 (SGP41 NOx Index)",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40012,
+            "regs": 1,
+            "fc": 3,
+            "name": "status",
+            "dataType": "UINT16 (unsigned) · 1 register · bit0 sps30_valid, bit1 sht40_valid, bit2 sgp41_valid, bit3 sgp41_conditioning",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          }
+        ]
+      },
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
+      ]
     },
     {
       "id": 26,
@@ -3053,7 +5019,160 @@
         "confidence": "confirmed",
         "sourcePath": "#111 [1A+1B SLOT] Corrosion  Condensation Sensor/sch-pcb/BOM/[BOM] #111 [1A+1B SLOT] Corrosion  Condensation Sensor.csv",
         "note": null
-      }
+      },
+      "modbus": {
+        "variant": "micro",
+        "deviceId": 26,
+        "base": 40001,
+        "slotStride": 12,
+        "description": "Register Modbus Nexabrick Micro untuk Corrosion & Condensation.",
+        "registers": [
+          {
+            "address": 40001,
+            "regs": 1,
+            "fc": 3,
+            "name": "sht_temperature",
+            "dataType": "INT16 (signed) · 1 register · x100 -> degC  (0.01 C)",
+            "access": "R",
+            "unit": "degC",
+            "scale": 100
+          },
+          {
+            "address": 40002,
+            "regs": 1,
+            "fc": 3,
+            "name": "sht_humidity",
+            "dataType": "UINT16 (unsigned) · 1 register · x100 -> %RH  (0.01 %)",
+            "access": "R",
+            "unit": "%RH",
+            "scale": 100
+          },
+          {
+            "address": 40003,
+            "regs": 1,
+            "fc": 3,
+            "name": "ntc_temperature",
+            "dataType": "INT16 (signed) · 1 register · x100 -> degC  (0.01 C)",
+            "access": "R",
+            "unit": "degC",
+            "scale": 100
+          },
+          {
+            "address": 40004,
+            "regs": 1,
+            "fc": 3,
+            "name": "ntc_resistance",
+            "dataType": "UINT16 (unsigned) · 1 register · ohm (clipped to 65535)",
+            "access": "R",
+            "unit": "ohm",
+            "scale": null
+          },
+          {
+            "address": 40005,
+            "regs": 1,
+            "fc": 3,
+            "name": "ain0_voltage",
+            "dataType": "UINT16 (unsigned) · 1 register · x1000 -> mV",
+            "access": "R",
+            "unit": "mV",
+            "scale": 1000
+          },
+          {
+            "address": 40006,
+            "regs": 1,
+            "fc": 3,
+            "name": "wet_ain1_voltage",
+            "dataType": "UINT16 (unsigned) · 1 register · x1000 -> mV",
+            "access": "R",
+            "unit": "mV",
+            "scale": 1000
+          },
+          {
+            "address": 40007,
+            "regs": 1,
+            "fc": 3,
+            "name": "wet_ain2_voltage",
+            "dataType": "UINT16 (unsigned) · 1 register · x1000 -> mV",
+            "access": "R",
+            "unit": "mV",
+            "scale": 1000
+          },
+          {
+            "address": 40008,
+            "regs": 1,
+            "fc": 3,
+            "name": "wet_delta_voltage",
+            "dataType": "UINT16 (unsigned) · 1 register · x1000 -> mV",
+            "access": "R",
+            "unit": "mV",
+            "scale": 1000
+          },
+          {
+            "address": 40009,
+            "regs": 1,
+            "fc": 3,
+            "name": "wet_gpio_state",
+            "dataType": "UINT16 (unsigned) · 1 register · PCA9536 P3..P0 bitmask",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40010,
+            "regs": 1,
+            "fc": 3,
+            "name": "corrosion_index",
+            "dataType": "UINT16 (unsigned) · 1 register · 0..1000",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40011,
+            "regs": 1,
+            "fc": 3,
+            "name": "status",
+            "dataType": "UINT16 (unsigned) · 1 register · bit0 valid, bit1 condensation_alert",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40012,
+            "regs": 1,
+            "fc": 3,
+            "name": "reserved",
+            "dataType": "UINT16 (unsigned) · 1 register · reserved (0)",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          }
+        ]
+      },
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
+      ]
     },
     {
       "id": 27,
@@ -3132,7 +5251,120 @@
         "confidence": "confirmed",
         "sourcePath": "#112 [1A+1B SLOT] LOAD CELL SENSOR/sch-pcb/BOM/[BOM] #112 [1A+1B SLOT] LOAD CELL SENSOR.csv",
         "note": "PCB yang sama melayani 4-Wire dan 6-Wire (ID 27 dan 28) berdasarkan konfigurasi kabel eksternal."
-      }
+      },
+      "modbus": {
+        "variant": "micro",
+        "deviceId": 27,
+        "base": 40001,
+        "slotStride": 12,
+        "description": "Register Modbus Nexabrick Micro untuk 4-Wire Load Cell.",
+        "registers": [
+          {
+            "address": 40001,
+            "regs": 1,
+            "fc": 3,
+            "name": "weight",
+            "dataType": "INT16 (signed) · 1 register · x100 (0.01 unit), 2's-complement",
+            "access": "R",
+            "unit": "",
+            "scale": 100
+          },
+          {
+            "address": 40002,
+            "regs": 1,
+            "fc": 3,
+            "name": "weight_pct",
+            "dataType": "UINT16 (unsigned) · 1 register · x100 -> %  (0.01 %)",
+            "access": "R",
+            "unit": "%",
+            "scale": 100
+          },
+          {
+            "address": 40003,
+            "regs": 1,
+            "fc": 3,
+            "name": "mv_per_v",
+            "dataType": "INT16 (signed) · 1 register · x1000 (0.001 mV/V), 2's-complement",
+            "access": "R",
+            "unit": "mV/V",
+            "scale": 1000
+          },
+          {
+            "address": 40004,
+            "regs": 2,
+            "fc": 3,
+            "name": "raw_code",
+            "dataType": "INT32 (signed) · 2 registers · word order low-first (CDAB) · raw ADC code, low word first (CDAB)",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40006,
+            "regs": 2,
+            "fc": 3,
+            "name": "tare_offset",
+            "dataType": "INT32 (signed) · 2 registers · word order low-first (CDAB) · tare offset, low word first (CDAB)",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40008,
+            "regs": 1,
+            "fc": 3,
+            "name": "status",
+            "dataType": "UINT16 (unsigned) · 1 register · bit0 valid, bit1 overload, bit2 stable, bit3 cal_valid, bit4 wire6",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40009,
+            "regs": 1,
+            "fc": 3,
+            "name": "data_age",
+            "dataType": "UINT16 (unsigned) · 1 register · ms since last sample (low word)",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40010,
+            "regs": 1,
+            "fc": 3,
+            "name": "reserved",
+            "dataType": "UINT16 (unsigned) · 1 register · reserved (0)",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          }
+        ]
+      },
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
+      ]
     },
     {
       "id": 28,
@@ -3201,7 +5433,120 @@
         "confidence": "confirmed",
         "sourcePath": "#112 [1A+1B SLOT] LOAD CELL SENSOR/sch-pcb/BOM/[BOM] #112 [1A+1B SLOT] LOAD CELL SENSOR.csv",
         "note": "Berbagi PCB yang sama dengan ID 27."
-      }
+      },
+      "modbus": {
+        "variant": "micro",
+        "deviceId": 28,
+        "base": 40001,
+        "slotStride": 12,
+        "description": "Register Modbus Nexabrick Micro untuk 6-Wire Load Cell.",
+        "registers": [
+          {
+            "address": 40001,
+            "regs": 1,
+            "fc": 3,
+            "name": "weight",
+            "dataType": "INT16 (signed) · 1 register · x100 (0.01 unit), 2's-complement",
+            "access": "R",
+            "unit": "",
+            "scale": 100
+          },
+          {
+            "address": 40002,
+            "regs": 1,
+            "fc": 3,
+            "name": "weight_pct",
+            "dataType": "UINT16 (unsigned) · 1 register · x100 -> %  (0.01 %)",
+            "access": "R",
+            "unit": "%",
+            "scale": 100
+          },
+          {
+            "address": 40003,
+            "regs": 1,
+            "fc": 3,
+            "name": "mv_per_v",
+            "dataType": "INT16 (signed) · 1 register · x1000 (0.001 mV/V), 2's-complement",
+            "access": "R",
+            "unit": "mV/V",
+            "scale": 1000
+          },
+          {
+            "address": 40004,
+            "regs": 2,
+            "fc": 3,
+            "name": "raw_code",
+            "dataType": "INT32 (signed) · 2 registers · word order low-first (CDAB) · raw ADC code, low word first (CDAB)",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40006,
+            "regs": 2,
+            "fc": 3,
+            "name": "tare_offset",
+            "dataType": "INT32 (signed) · 2 registers · word order low-first (CDAB) · tare offset, low word first (CDAB)",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40008,
+            "regs": 1,
+            "fc": 3,
+            "name": "status",
+            "dataType": "UINT16 (unsigned) · 1 register · bit0 valid, bit1 overload, bit2 stable, bit3 cal_valid, bit4 wire6 (set for 6-wire)",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40009,
+            "regs": 1,
+            "fc": 3,
+            "name": "data_age",
+            "dataType": "UINT16 (unsigned) · 1 register · ms since last sample (low word)",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40010,
+            "regs": 1,
+            "fc": 3,
+            "name": "reserved",
+            "dataType": "UINT16 (unsigned) · 1 register · reserved (0)",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          }
+        ]
+      },
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
+      ]
     },
     {
       "id": 29,
@@ -3285,7 +5630,90 @@
         "confidence": "confirmed",
         "sourcePath": "#113 [1A+1B SLOT] SMOKE DETECTOR/sch-pcb/BOM/[BOM] #113 [1A+1B SLOT] SMOKE DETECTOR.csv",
         "note": null
-      }
+      },
+      "modbus": {
+        "variant": "micro",
+        "deviceId": 29,
+        "base": 40001,
+        "slotStride": 12,
+        "description": "Register Modbus Nexabrick Micro untuk Optical Smoke Detector.",
+        "registers": [
+          {
+            "address": 40001,
+            "regs": 1,
+            "fc": 3,
+            "name": "slotA_avg",
+            "dataType": "UINT16 (unsigned) · 1 register · slot A average counts (blue scatter, smoke signal)",
+            "access": "R",
+            "unit": "counts",
+            "scale": null
+          },
+          {
+            "address": 40002,
+            "regs": 1,
+            "fc": 3,
+            "name": "slotB_avg",
+            "dataType": "UINT16 (unsigned) · 1 register · slot B average counts (IR reference)",
+            "access": "R",
+            "unit": "counts",
+            "scale": null
+          },
+          {
+            "address": 40003,
+            "regs": 1,
+            "fc": 3,
+            "name": "smoke_level",
+            "dataType": "UINT16 (unsigned) · 1 register · counts above clean-air baseline (clamp 65535)",
+            "access": "R",
+            "unit": "counts",
+            "scale": null
+          },
+          {
+            "address": 40004,
+            "regs": 1,
+            "fc": 3,
+            "name": "alarm",
+            "dataType": "UINT16 (unsigned) · 1 register · 0/1 alarm flag",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40005,
+            "regs": 1,
+            "fc": 3,
+            "name": "valid",
+            "dataType": "UINT16 (unsigned) · 1 register · 1 = sample valid, 0 = read error",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          }
+        ]
+      },
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
+      ]
     },
     {
       "id": 30,
@@ -3369,7 +5797,100 @@
         "confidence": "confirmed",
         "sourcePath": "#114 [1A+1B SLOT] LIQUID LEVEL SENSOR/sch-pcb/BOM/[BOM] #114 [1A+1B SLOT] LIQUID LEVEL SENSOR.csv",
         "note": null
-      }
+      },
+      "modbus": {
+        "variant": "micro",
+        "deviceId": 30,
+        "base": 40001,
+        "slotStride": 12,
+        "description": "Register Modbus Nexabrick Micro untuk Liquid Level Sensor.",
+        "registers": [
+          {
+            "address": 40001,
+            "regs": 1,
+            "fc": 3,
+            "name": "cin1_level",
+            "dataType": "INT16 (signed) · 1 register · x100 -> pF (signed)",
+            "access": "R",
+            "unit": "pF",
+            "scale": 100
+          },
+          {
+            "address": 40002,
+            "regs": 1,
+            "fc": 3,
+            "name": "cin2_ref_liq",
+            "dataType": "INT16 (signed) · 1 register · x100 -> pF (signed)",
+            "access": "R",
+            "unit": "pF",
+            "scale": 100
+          },
+          {
+            "address": 40003,
+            "regs": 1,
+            "fc": 3,
+            "name": "cin3_ref_env",
+            "dataType": "INT16 (signed) · 1 register · x100 -> pF (signed)",
+            "access": "R",
+            "unit": "pF",
+            "scale": 100
+          },
+          {
+            "address": 40004,
+            "regs": 1,
+            "fc": 3,
+            "name": "cin4_aux",
+            "dataType": "INT16 (signed) · 1 register · x100 -> pF (signed)",
+            "access": "R",
+            "unit": "pF",
+            "scale": 100
+          },
+          {
+            "address": 40005,
+            "regs": 1,
+            "fc": 3,
+            "name": "liquid_level",
+            "dataType": "UINT16 (unsigned) · 1 register · x100 -> %  (0..10000 = 0..100.00 %)",
+            "access": "R",
+            "unit": "%",
+            "scale": 100
+          },
+          {
+            "address": 40006,
+            "regs": 1,
+            "fc": 3,
+            "name": "valid",
+            "dataType": "UINT16 (unsigned) · 1 register · bit0 valid, bit1 level_valid; 0 on read error",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          }
+        ]
+      },
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
+      ]
     },
     {
       "id": 31,
@@ -3443,7 +5964,70 @@
         "confidence": "probable",
         "sourcePath": "#115 [1A+1B SLOT] LIQUID LEVEL ULTRASONIC SENSOR/sch-pcb/BOM/[BOM] #115 [1A+1B SLOT] LIQUID LEVEL ULTRASONIC SENSOR.csv",
         "note": "Eksternal probe A02YYUW. PCB hanya menangani isolator UART ADuM1201."
-      }
+      },
+      "modbus": {
+        "variant": "micro",
+        "deviceId": 31,
+        "base": 40001,
+        "slotStride": 12,
+        "description": "Register Modbus Nexabrick Micro untuk Ultrasonic Distance.",
+        "registers": [
+          {
+            "address": 40001,
+            "regs": 1,
+            "fc": 3,
+            "name": "distance_mm",
+            "dataType": "UINT16 (unsigned) · 1 register · mm",
+            "access": "R",
+            "unit": "mm",
+            "scale": null
+          },
+          {
+            "address": 40002,
+            "regs": 1,
+            "fc": 3,
+            "name": "in_range",
+            "dataType": "UINT16 (unsigned) · 1 register · 1 = 30..4500 mm in range, 0 = out of range",
+            "access": "R",
+            "unit": "mm",
+            "scale": null
+          },
+          {
+            "address": 40003,
+            "regs": 1,
+            "fc": 3,
+            "name": "valid",
+            "dataType": "UINT16 (unsigned) · 1 register · 1 = sample valid, 0 = read error or bad checksum",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          }
+        ]
+      },
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
+      ]
     },
     {
       "id": 32,
@@ -3542,7 +6126,80 @@
         "confidence": "confirmed",
         "sourcePath": "#116 [1A+1B SLOT] NOISE ACOUSTIC SENSOR/sch-pcb/BOM/[BOM] #116 [1A+1B SLOT] NOISE ACOUSTIC SENSOR.csv",
         "note": null
-      }
+      },
+      "modbus": {
+        "variant": "micro",
+        "deviceId": 32,
+        "base": 40001,
+        "slotStride": 12,
+        "description": "Register Modbus Nexabrick Micro untuk Noise / Acoustic Module.",
+        "registers": [
+          {
+            "address": 40001,
+            "regs": 1,
+            "fc": 3,
+            "name": "db_spl",
+            "dataType": "UINT16 (unsigned) · 1 register · x10 -> dB SPL  (0.1 dB)",
+            "access": "R",
+            "unit": "dB SPL",
+            "scale": 10
+          },
+          {
+            "address": 40002,
+            "regs": 1,
+            "fc": 3,
+            "name": "peak_db",
+            "dataType": "UINT16 (unsigned) · 1 register · x10 -> dB SPL  (0.1 dB)",
+            "access": "R",
+            "unit": "dB SPL",
+            "scale": 10
+          },
+          {
+            "address": 40003,
+            "regs": 1,
+            "fc": 3,
+            "name": "alert",
+            "dataType": "UINT16 (unsigned) · 1 register · 1 = over the slot's threshold",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40004,
+            "regs": 1,
+            "fc": 3,
+            "name": "valid",
+            "dataType": "UINT16 (unsigned) · 1 register · 1 = sample valid, 0 = read error",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          }
+        ]
+      },
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
+      ]
     },
     {
       "id": 33,
@@ -3627,7 +6284,90 @@
         "confidence": "confirmed",
         "sourcePath": "#117 [1A+1B SLOT] REAL TVOC  ZE40B-TVOC/sch-pcb/BOM/[BOM] #117 [1A+1B SLOT] REAL TVOC  ZE40B-TVOC.csv",
         "note": null
-      }
+      },
+      "modbus": {
+        "variant": "micro",
+        "deviceId": 33,
+        "base": 40001,
+        "slotStride": 12,
+        "description": "Register Modbus Nexabrick Micro untuk Real TVOC Combo.",
+        "registers": [
+          {
+            "address": 40001,
+            "regs": 1,
+            "fc": 3,
+            "name": "tvoc_ppb",
+            "dataType": "UINT16 (unsigned) · 1 register · ppb",
+            "access": "R",
+            "unit": "ppb",
+            "scale": null
+          },
+          {
+            "address": 40002,
+            "regs": 1,
+            "fc": 3,
+            "name": "tvoc_valid",
+            "dataType": "UINT16 (unsigned) · 1 register · 1 = TVOC sample valid",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40003,
+            "regs": 1,
+            "fc": 3,
+            "name": "temperature",
+            "dataType": "INT16 (signed) · 1 register · x100 -> degC  (0.01 C, SHT41)",
+            "access": "R",
+            "unit": "degC",
+            "scale": 100
+          },
+          {
+            "address": 40004,
+            "regs": 1,
+            "fc": 3,
+            "name": "humidity",
+            "dataType": "UINT16 (unsigned) · 1 register · x100 -> %RH  (0.01 %, SHT41)",
+            "access": "R",
+            "unit": "%RH",
+            "scale": 100
+          },
+          {
+            "address": 40005,
+            "regs": 1,
+            "fc": 3,
+            "name": "sht_valid",
+            "dataType": "UINT16 (unsigned) · 1 register · 1 = SHT41 sample valid",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          }
+        ]
+      },
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
+      ]
     },
     {
       "id": 34,
@@ -3701,7 +6441,110 @@
         "confidence": "unresolved",
         "sourcePath": null,
         "note": "Kemungkinan di PCB #99 namun BOM hardware tidak menuliskan MR24HPC1 melainkan 102010388."
-      }
+      },
+      "modbus": {
+        "variant": "micro",
+        "deviceId": 34,
+        "base": 40001,
+        "slotStride": 12,
+        "description": "Register Modbus Nexabrick Micro untuk Human Presence (UART).",
+        "registers": [
+          {
+            "address": 40001,
+            "regs": 1,
+            "fc": 3,
+            "name": "target_state",
+            "dataType": "UINT16 (unsigned) · 1 register · 0 = no target, 1 = target present",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40002,
+            "regs": 1,
+            "fc": 3,
+            "name": "moving_energy",
+            "dataType": "UINT16 (unsigned) · 1 register · moving-target energy",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40003,
+            "regs": 1,
+            "fc": 3,
+            "name": "moving_distance",
+            "dataType": "UINT16 (unsigned) · 1 register · cm",
+            "access": "R",
+            "unit": "cm",
+            "scale": null
+          },
+          {
+            "address": 40004,
+            "regs": 1,
+            "fc": 3,
+            "name": "stationary_energy",
+            "dataType": "UINT16 (unsigned) · 1 register · stationary-target energy",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40005,
+            "regs": 1,
+            "fc": 3,
+            "name": "stationary_distance",
+            "dataType": "UINT16 (unsigned) · 1 register · cm",
+            "access": "R",
+            "unit": "cm",
+            "scale": null
+          },
+          {
+            "address": 40006,
+            "regs": 1,
+            "fc": 3,
+            "name": "detection_distance",
+            "dataType": "UINT16 (unsigned) · 1 register · cm",
+            "access": "R",
+            "unit": "cm",
+            "scale": null
+          },
+          {
+            "address": 40007,
+            "regs": 1,
+            "fc": 3,
+            "name": "valid",
+            "dataType": "UINT16 (unsigned) · 1 register · 1 = sample valid, 0 = read error",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          }
+        ]
+      },
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
+      ]
     },
     {
       "id": 35,
@@ -3777,7 +6620,110 @@
         "confidence": "unresolved",
         "sourcePath": null,
         "note": "Belum ditemukan dokumentasi board spesifik I2C bridge ini."
-      }
+      },
+      "modbus": {
+        "variant": "micro",
+        "deviceId": 35,
+        "base": 40001,
+        "slotStride": 12,
+        "description": "Register Modbus Nexabrick Micro untuk Human Presence (I2C).",
+        "registers": [
+          {
+            "address": 40001,
+            "regs": 1,
+            "fc": 3,
+            "name": "target_state",
+            "dataType": "UINT16 (unsigned) · 1 register · 0 = no target, 1 = target present",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40002,
+            "regs": 1,
+            "fc": 3,
+            "name": "moving_energy",
+            "dataType": "UINT16 (unsigned) · 1 register · moving-target energy",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40003,
+            "regs": 1,
+            "fc": 3,
+            "name": "moving_distance",
+            "dataType": "UINT16 (unsigned) · 1 register · cm",
+            "access": "R",
+            "unit": "cm",
+            "scale": null
+          },
+          {
+            "address": 40004,
+            "regs": 1,
+            "fc": 3,
+            "name": "stationary_energy",
+            "dataType": "UINT16 (unsigned) · 1 register · stationary-target energy",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40005,
+            "regs": 1,
+            "fc": 3,
+            "name": "stationary_distance",
+            "dataType": "UINT16 (unsigned) · 1 register · cm",
+            "access": "R",
+            "unit": "cm",
+            "scale": null
+          },
+          {
+            "address": 40006,
+            "regs": 1,
+            "fc": 3,
+            "name": "detection_distance",
+            "dataType": "UINT16 (unsigned) · 1 register · cm",
+            "access": "R",
+            "unit": "cm",
+            "scale": null
+          },
+          {
+            "address": 40007,
+            "regs": 1,
+            "fc": 3,
+            "name": "valid",
+            "dataType": "UINT16 (unsigned) · 1 register · 1 = sample valid, 0 = read error",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          }
+        ]
+      },
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
+      ]
     },
     {
       "id": 36,
@@ -3846,7 +6792,60 @@
         "confidence": "unresolved",
         "sourcePath": null,
         "note": "Hanya interface data; LED strip berada di eksternal board."
-      }
+      },
+      "modbus": {
+        "variant": "micro",
+        "deviceId": 36,
+        "base": 40001,
+        "slotStride": 12,
+        "description": "Register Modbus Nexabrick Micro untuk RGB LED Strip.",
+        "registers": [
+          {
+            "address": 40001,
+            "regs": 1,
+            "fc": 3,
+            "name": "led_state",
+            "dataType": "UINT16 (unsigned) · 1 register · preset 0-3 (3 = default/green); RW, firmware echoes applied state",
+            "access": "RW",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40002,
+            "regs": 1,
+            "fc": 3,
+            "name": "led_count",
+            "dataType": "UINT16 (unsigned) · 1 register · 1..LED_NUM (clamped); RW, firmware echoes applied count",
+            "access": "RW",
+            "unit": "",
+            "scale": null
+          }
+        ]
+      },
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
+      ]
     },
     {
       "id": 37,
@@ -3957,7 +6956,90 @@
         "confidence": "probable",
         "sourcePath": "#93 [1B SLOT ]  DATA CENTER VIBRATION SENSOR/sch-pcb/BOM/[BOM] #93 DATA CENTER VIBRATION SENSOR.csv",
         "note": null
-      }
+      },
+      "modbus": {
+        "variant": "micro",
+        "deviceId": 37,
+        "base": 40001,
+        "slotStride": 12,
+        "description": "Register Modbus Nexabrick Micro untuk Vibration Sensor.",
+        "registers": [
+          {
+            "address": 40001,
+            "regs": 1,
+            "fc": 3,
+            "name": "raw_x",
+            "dataType": "INT16 (signed) · 1 register · raw counts (4096 = 1 g), two's-complement",
+            "access": "R",
+            "unit": "counts",
+            "scale": null
+          },
+          {
+            "address": 40002,
+            "regs": 1,
+            "fc": 3,
+            "name": "raw_y",
+            "dataType": "INT16 (signed) · 1 register · raw counts (4096 = 1 g), two's-complement",
+            "access": "R",
+            "unit": "counts",
+            "scale": null
+          },
+          {
+            "address": 40003,
+            "regs": 1,
+            "fc": 3,
+            "name": "raw_z",
+            "dataType": "INT16 (signed) · 1 register · raw counts (4096 = 1 g), two's-complement",
+            "access": "R",
+            "unit": "counts",
+            "scale": null
+          },
+          {
+            "address": 40004,
+            "regs": 1,
+            "fc": 3,
+            "name": "vib",
+            "dataType": "UINT16 (unsigned) · 1 register · 1 = vibration detected",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40005,
+            "regs": 1,
+            "fc": 3,
+            "name": "valid",
+            "dataType": "UINT16 (unsigned) · 1 register · 1 = data OK",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          }
+        ]
+      },
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
+      ]
     },
     {
       "id": 38,
@@ -4061,7 +7143,150 @@
         "name": "Thermal Sensor for Busbar",
         "confidence": "confirmed",
         "sourcePath": "#118 [1A+1B SLOT] THERMAL SENSOR FOR BUSBAR/sch-pcb/KICAD/Modular PCB Tipe AB.kicad_sch"
-      }
+      },
+      "modbus": {
+        "variant": "micro",
+        "deviceId": 38,
+        "base": 40001,
+        "slotStride": 12,
+        "description": "Register Modbus Nexabrick Micro untuk Thermal Busbar.",
+        "registers": [
+          {
+            "address": 40001,
+            "regs": 1,
+            "fc": 3,
+            "name": "object_t0",
+            "dataType": "INT16 (signed) · 1 register · x100 -> degC  (0.01 C)",
+            "access": "R",
+            "unit": "degC",
+            "scale": 100
+          },
+          {
+            "address": 40002,
+            "regs": 1,
+            "fc": 3,
+            "name": "object_t1",
+            "dataType": "INT16 (signed) · 1 register · x100 -> degC  (0.01 C)",
+            "access": "R",
+            "unit": "degC",
+            "scale": 100
+          },
+          {
+            "address": 40003,
+            "regs": 1,
+            "fc": 3,
+            "name": "object_t2",
+            "dataType": "INT16 (signed) · 1 register · x100 -> degC  (0.01 C)",
+            "access": "R",
+            "unit": "degC",
+            "scale": 100
+          },
+          {
+            "address": 40004,
+            "regs": 1,
+            "fc": 3,
+            "name": "object_t3",
+            "dataType": "INT16 (signed) · 1 register · x100 -> degC  (0.01 C)",
+            "access": "R",
+            "unit": "degC",
+            "scale": 100
+          },
+          {
+            "address": 40005,
+            "regs": 1,
+            "fc": 3,
+            "name": "ambient_t0",
+            "dataType": "INT16 (signed) · 1 register · x100 -> degC  (0.01 C)",
+            "access": "R",
+            "unit": "degC",
+            "scale": 100
+          },
+          {
+            "address": 40006,
+            "regs": 1,
+            "fc": 3,
+            "name": "ambient_t1",
+            "dataType": "INT16 (signed) · 1 register · x100 -> degC  (0.01 C)",
+            "access": "R",
+            "unit": "degC",
+            "scale": 100
+          },
+          {
+            "address": 40007,
+            "regs": 1,
+            "fc": 3,
+            "name": "ambient_t2",
+            "dataType": "INT16 (signed) · 1 register · x100 -> degC  (0.01 C)",
+            "access": "R",
+            "unit": "degC",
+            "scale": 100
+          },
+          {
+            "address": 40008,
+            "regs": 1,
+            "fc": 3,
+            "name": "ambient_t3",
+            "dataType": "INT16 (signed) · 1 register · x100 -> degC  (0.01 C)",
+            "access": "R",
+            "unit": "degC",
+            "scale": 100
+          },
+          {
+            "address": 40009,
+            "regs": 1,
+            "fc": 3,
+            "name": "max_valid_object_t",
+            "dataType": "INT16 (signed) · 1 register · x100 -> degC  (0.01 C)",
+            "access": "R",
+            "unit": "degC",
+            "scale": 100
+          },
+          {
+            "address": 40010,
+            "regs": 1,
+            "fc": 3,
+            "name": "status",
+            "dataType": "UINT16 (unsigned) · 1 register · bitmask (per-object/ambient valid + fault flags)",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          },
+          {
+            "address": 40011,
+            "regs": 1,
+            "fc": 3,
+            "name": "reserved",
+            "dataType": "UINT16 (unsigned) · 1 register · unused (0)",
+            "access": "R",
+            "unit": "",
+            "scale": null
+          }
+        ]
+      },
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
+      ]
     },
     {
       "id": 1001,
@@ -4147,7 +7372,31 @@
         "name": "FOUR_3V3_GPIO",
         "confidence": "confirmed",
         "sourcePath": "#01 [1A SLOT] FOUR_3V3_GPIO/doc/registers.md"
-      }
+      },
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
+      ]
     },
     {
       "id": 1002,
@@ -4238,7 +7487,31 @@
         "name": "TWO ISOLATED OPEN COLLECTOR OUTPUT POS",
         "confidence": "confirmed",
         "sourcePath": "#02 [1A SLOT] TWO ISOLATED OPEN COLLECTOR OUTPUT POS/doc/registers.md"
-      }
+      },
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
+      ]
     },
     {
       "id": 1003,
@@ -4329,7 +7602,31 @@
         "name": "FOUR DRY CONTACTS INPUTS",
         "confidence": "confirmed",
         "sourcePath": "#04 [1A SLOT] FOUR DRY CONTACTS INPUTS/doc/registers.md"
-      }
+      },
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
+      ]
     },
     {
       "id": 1004,
@@ -4420,7 +7717,31 @@
         "name": "FOUR ISOLATED INPUTS COMM_CATHODE",
         "confidence": "confirmed",
         "sourcePath": "#06 [1A SLOT] FOUR ISOLATED INPUTS COMM_CATHODE/doc/registers.md"
-      }
+      },
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
+      ]
     },
     {
       "id": 1005,
@@ -4505,7 +7826,31 @@
         "name": "TWO LOW-POWER RELAY",
         "confidence": "confirmed",
         "sourcePath": "#09 [1A SLOT] TWO LOW-POWER RELAY/doc/registers.md"
-      }
+      },
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
+      ]
     },
     {
       "id": 1006,
@@ -4582,7 +7927,31 @@
         "name": "FOUR PWM OPEN DRAIN 24V_3A",
         "confidence": "confirmed",
         "sourcePath": "#12 [1A SLOT] FOUR PWM OPEN DRAIN 24V_3A/doc/registers.md"
-      }
+      },
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
+      ]
     },
     {
       "id": 1007,
@@ -4635,6 +8004,30 @@
       "evidence": [],
       "aliases": [
         "Tibbit #03"
+      ],
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
       ]
     },
     {
@@ -4688,6 +8081,30 @@
       "evidence": [],
       "aliases": [
         "Tibbit #05"
+      ],
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
       ]
     },
     {
@@ -4741,6 +8158,30 @@
       "evidence": [],
       "aliases": [
         "Tibbit #07"
+      ],
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
       ]
     },
     {
@@ -4794,6 +8235,30 @@
       "evidence": [],
       "aliases": [
         "Tibbit #08"
+      ],
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
       ]
     },
     {
@@ -4847,6 +8312,30 @@
       "evidence": [],
       "aliases": [
         "Tibbit #10"
+      ],
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
       ]
     },
     {
@@ -4900,6 +8389,30 @@
       "evidence": [],
       "aliases": [
         "Tibbit #45"
+      ],
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
       ]
     },
     {
@@ -4953,6 +8466,30 @@
       "evidence": [],
       "aliases": [
         "Tibbit #55"
+      ],
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
       ]
     },
     {
@@ -5006,6 +8543,30 @@
       "evidence": [],
       "aliases": [
         "Tibbit #56"
+      ],
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
       ]
     },
     {
@@ -5059,6 +8620,30 @@
       "evidence": [],
       "aliases": [
         "Tibbit #80"
+      ],
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
       ]
     },
     {
@@ -5112,6 +8697,30 @@
       "evidence": [],
       "aliases": [
         "Tibbit #81"
+      ],
+      "media": [
+        {
+          "label": "Nexabrick Micro 6 Terminal Block",
+          "variant": "micro",
+          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "images": [
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+            },
+            {
+              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
+              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
+            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+        }
       ]
     }
   ]

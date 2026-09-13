@@ -39,6 +39,7 @@ const ALLOWED_MEDIA_HARDWARE_STATUS = new Set(['pending', 'not-qualified', 'hard
 export function isBadAssetPath(p) {
   if (typeof p !== 'string' || p.length === 0) return true;
   if (p.startsWith('/') || p.startsWith('\\')) return true;
+  if (p.includes('\\')) return true;
   if (p.includes('..')) return true;
   if (/^[a-z][a-z0-9+.-]*:/i.test(p)) return true;
   return false;
@@ -113,6 +114,7 @@ export function validateCatalog(catalog) {
   }
   const ids = new Set();
   const slugs = new Set();
+  const seenMediaIds = new Set();
   let lastId = -1;
 
   catalog.devices.forEach((d, i) => {
@@ -287,16 +289,31 @@ export function validateCatalog(catalog) {
         const mp = `${path}.media[${j}]`;
         if (!m || typeof m !== 'object') { fail(mp, 'Media entry must be an object'); return; }
         if (typeof m.label !== 'string' || !m.label) fail(mp, 'Missing label');
+        if (m.id !== undefined) {
+          if (typeof m.id !== 'string' || !/^[a-z0-9-]+$/.test(m.id)) fail(`${mp}.id`, 'id must be a kebab-case string when present');
+          else if (seenMediaIds.has(m.id)) fail(`${mp}.id`, `Duplicate media id ${m.id}`);
+          else seenMediaIds.add(m.id);
+        }
+        if (m.description !== undefined && typeof m.description !== 'string') fail(`${mp}.description`, 'Must be a string when present');
         if (typeof m.variant !== 'string' || !m.variant) fail(`${mp}.variant`, 'Missing variant');
         else if (!knownVariants.has(m.variant)) fail(`${mp}.variant`, `Unknown variant key ${m.variant}`);
+        if (typeof m.hardwareStatus !== 'string' || !ALLOWED_MEDIA_HARDWARE_STATUS.has(m.hardwareStatus)) fail(`${mp}.hardwareStatus`, `Missing or invalid hardwareStatus ${m.hardwareStatus}`);
+        if (typeof m.confidence !== 'string' || !ALLOWED_MEDIA_CONFIDENCE.has(m.confidence)) fail(`${mp}.confidence`, `Missing or invalid confidence ${m.confidence}`);
+
+        const imageRefs = new Set();
+        const cadRefs = new Set();
         if (m.images !== undefined) {
           if (!Array.isArray(m.images)) fail(`${mp}.images`, 'Must be an array');
           else m.images.forEach((img, k) => {
             const ip = `${mp}.images[${k}]`;
             if (!img || typeof img !== 'object') { fail(ip, 'Image must be an object'); return; }
             if (typeof img.src !== 'string' || !img.src) fail(`${ip}.src`, 'Missing src');
-            else if (isBadAssetPath(img.src)) fail(`${ip}.src`, 'Must be a repo-relative path (no absolute/external)');
-            else if (!MEDIA_IMAGE_EXT.has(extname(img.src).toLowerCase())) fail(`${ip}.src`, `Not an allowed image type (${extname(img.src)})`);
+            else {
+              if (isBadAssetPath(img.src)) fail(`${ip}.src`, 'Must be a repo-relative path (no absolute/external)');
+              else if (!MEDIA_IMAGE_EXT.has(extname(img.src).toLowerCase())) fail(`${ip}.src`, `Not an allowed image type (${extname(img.src)})`);
+              else if (imageRefs.has(img.src)) fail(`${ip}.src`, 'Duplicate image reference');
+              else imageRefs.add(img.src);
+            }
             if (typeof img.alt !== 'string' || !img.alt) fail(`${ip}.alt`, 'Missing alt text');
           });
         }
@@ -320,17 +337,35 @@ export function validateCatalog(catalog) {
             if (!dl || typeof dl !== 'object') { fail(dp, 'Download must be an object'); return; }
             if (typeof dl.label !== 'string' || !dl.label) fail(`${dp}.label`, 'Missing label');
             if (typeof dl.src !== 'string' || !dl.src) fail(`${dp}.src`, 'Missing src');
-            else if (isBadAssetPath(dl.src)) fail(`${dp}.src`, 'Must be a repo-relative path (no absolute/external)');
-            else if (!MEDIA_CAD_EXT.has(extname(dl.src).toLowerCase())) fail(`${dp}.src`, `Not an allowed CAD type (${extname(dl.src)})`);
+            else {
+              if (isBadAssetPath(dl.src)) fail(`${dp}.src`, 'Must be a repo-relative path (no absolute/external)');
+              else if (!MEDIA_CAD_EXT.has(extname(dl.src).toLowerCase())) fail(`${dp}.src`, `Not an allowed CAD type (${extname(dl.src)})`);
+              else if (cadRefs.has(dl.src)) fail(`${dp}.src`, 'Duplicate CAD download reference');
+              else cadRefs.add(dl.src);
+            }
             if (dl.format !== undefined && typeof dl.format !== 'string') fail(`${dp}.format`, 'Must be a string');
           });
         }
-        if (m.confidence !== undefined && !ALLOWED_MEDIA_CONFIDENCE.has(m.confidence)) fail(`${mp}.confidence`, `Invalid confidence ${m.confidence}`);
-        if (m.hardwareStatus !== undefined && !ALLOWED_MEDIA_HARDWARE_STATUS.has(m.hardwareStatus)) fail(`${mp}.hardwareStatus`, `Invalid hardwareStatus ${m.hardwareStatus}`);
         if (m.note !== undefined && typeof m.note !== 'string') fail(`${mp}.note`, 'Must be a string');
       });
     }
   });
+
+  // 4b. Dry Contact Input (ID 3) must expose both terminal-block media groups.
+  const dryContact = catalog.devices.find(d => d.id === 3);
+  if (!dryContact) {
+    fail('devices[id=3]', 'Dry Contact Input device ID 3 must exist');
+  } else if (!Array.isArray(dryContact.media) || dryContact.media.length === 0) {
+    fail('devices[id=3].media', 'Must contain the terminal-block media groups');
+  } else {
+    const mediaLabels = dryContact.media.map(m => (m && m.label) || '');
+    if (!mediaLabels.includes('Modular 6 Terminal Block')) {
+      fail('devices[id=3].media', 'Missing expected "Modular 6 Terminal Block" media group');
+    }
+    if (!mediaLabels.includes('Nexabrick Micro 6 Terminal Block')) {
+      fail('devices[id=3].media', 'Missing expected "Nexabrick Micro 6 Terminal Block" media group');
+    }
+  }
 
   // 5. Auxiliary systems
   if (catalog.auxiliarySystems !== undefined) {
