@@ -68,21 +68,27 @@ Setiap perangkat **bisa** punya blok `media` opsional di `catalog.json` yang men
 ```json
 "media": [
   {
+    "id": "modular-6-terminal-block",
     "label": "Nama varian",
     "variant": "micro",
+    "description": "Referensi visual singkat untuk grup media ini.",
     "images": [{ "src": "media/<folder>/foto.png", "alt": "Deskripsi" }],
     "model": { "src": "media/<folder>/model.glb", "poster": "media/<folder>/foto.png" },
     "cadDownloads": [{ "label": "Download STEP", "src": "media/<folder>/file.step", "format": "STEP" }],
     "confidence": "unresolved",
-    "hardwareStatus": "pending"
+    "hardwareStatus": "pending",
+    "note": "Model visual user-provided; belum menjadi bukti kualifikasi hardware."
   }
 ]
 ```
 
-- `src` harus path relatif dari root repo (tanpa `http(s)://`, tanpa path absolut). Folder boleh mengandung spasi — URL di-encode otomatis per-segmen saat dirender.
+- `id` opsional, tetapi bila diisi harus unik dan kebab-case.
+- `hardwareStatus` dan `confidence` wajib ada pada setiap grup media.
+- `src` harus path relatif dari root repo (tanpa `http(s)://`, tanpa path absolut, tanpa backslash, tanpa traversal). Folder boleh mengandung spasi — URL di-encode otomatis per-segmen saat dirender.
 - Format gambar: `.png .jpg .jpeg .webp`. Format model 3D: `.glb .gltf`. Format CAD download: `.step .stp .skp .iges`.
 - `hardwareStatus`: `pending | not-qualified | hardware-verified | unresolved`. Media tidak boleh mengklaim `hardware-verified` tanpa bukti hardware.
-- Viewer 3D memakai `<model-viewer>` (CDN, versi di-pin) dengan fallback ke poster + download bila CDN tak tersedia.
+- Viewer 3D memakai `<model-viewer>` (CDN, versi di-pin) yang dimuat satu kali secara lazy. Bila CDN/model gagal, UI tetap menampilkan poster, tombol download GLB, dan file CAD.
+- Panel media menampilkan model 3D di samping galeri gambar. Galeri memakai preview besar, thumbnail, previous/next, counter, `aria-current`, keyboard Arrow/Home/End, dan lazy loading.
 
 ### Menghasilkan model GLB dari CAD
 Browser tidak bisa merender `.step`/`.skp` secara langsung, jadi file CAD diproses menjadi `model.glb` (self-contained, < 10 MB disarankan) yang dipakai viewer, sementara file CAD asli tetap disediakan sebagai download. Pipeline referensi (cadquery/OCP + Blender headless):
@@ -91,10 +97,11 @@ Browser tidak bisa merender `.step`/`.skp` secara langsung, jadi file CAD dipros
 
 ### Validasi
 ```bash
-node scripts/validate-catalog.mjs   # skema + aturan media (path relatif, ekstensi, status)
-node scripts/validate-media.mjs     # semua file yang dirujuk benar-benar ada di disk
+node scripts/validate-catalog.mjs   # skema + aturan media (path relatif, ekstensi, status, ID media)
+node scripts/validate-media.mjs     # semua file yang dirujuk aman dan benar-benar ada di disk
+node --test tests/*.test.mjs        # unit test katalog, media path, dan helper UI
 ```
-CI menjalankan keduanya plus suite test. `validate-media.mjs` memastikan tidak ada referensi media mati yang ter-deploy.
+CI menjalankan validator, media validator, dan suite test. `validate-media.mjs` menolak path absolut, path traversal, URL eksternal, dan referensi media mati sebelum deployment.
 
 ---
 
