@@ -684,6 +684,28 @@
           "hardwareStatus": "pending",
           "confidence": "unresolved",
           "note": "Model enclosure Nexabrick Micro Open Enclosure (ekspor 3MF dari Fusion 360); dipakai sebagai referensi visual untuk sensor Temperature & Humidity dan Barometric Pressure."
+        },
+        {
+          "label": "Modular Open Enclosure",
+          "variant": "micro-modular",
+          "description": "Referensi visual enclosure Modular (open enclosure).",
+          "images": [
+            {
+              "src": "media/Modular Open Enclosure/isometric_1.png",
+              "alt": "Modular Open Enclosure tampak isometrik satu"
+            },
+            {
+              "src": "media/Modular Open Enclosure/isometric_2.png",
+              "alt": "Modular Open Enclosure tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Modular Open Enclosure/model.glb",
+            "poster": "media/Modular Open Enclosure/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Modular open (ekspor 3MF dari Fusion 360); model visual kedua di samping Nexabrick Micro Open Enclosure."
         }
       ]
     },
@@ -1061,6 +1083,28 @@
           "hardwareStatus": "pending",
           "confidence": "unresolved",
           "note": "Model enclosure Nexabrick Micro Open Enclosure (ekspor 3MF dari Fusion 360); dipakai sebagai referensi visual untuk sensor Temperature & Humidity dan Barometric Pressure."
+        },
+        {
+          "label": "Modular Open Enclosure",
+          "variant": "micro-modular",
+          "description": "Referensi visual enclosure Modular (open enclosure).",
+          "images": [
+            {
+              "src": "media/Modular Open Enclosure/isometric_1.png",
+              "alt": "Modular Open Enclosure tampak isometrik satu"
+            },
+            {
+              "src": "media/Modular Open Enclosure/isometric_2.png",
+              "alt": "Modular Open Enclosure tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Modular Open Enclosure/model.glb",
+            "poster": "media/Modular Open Enclosure/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Modular open (ekspor 3MF dari Fusion 360); model visual kedua di samping Nexabrick Micro Open Enclosure."
         }
       ]
     },
@@ -1943,6 +1987,28 @@
           "hardwareStatus": "pending",
           "confidence": "unresolved",
           "note": "Model enclosure Nexabrick Micro Open Enclosure (ekspor 3MF dari Fusion 360); dipakai sebagai referensi visual untuk sensor Temperature & Humidity dan Barometric Pressure."
+        },
+        {
+          "label": "Modular Open Enclosure",
+          "variant": "micro-modular",
+          "description": "Referensi visual enclosure Modular (open enclosure).",
+          "images": [
+            {
+              "src": "media/Modular Open Enclosure/isometric_1.png",
+              "alt": "Modular Open Enclosure tampak isometrik satu"
+            },
+            {
+              "src": "media/Modular Open Enclosure/isometric_2.png",
+              "alt": "Modular Open Enclosure tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Modular Open Enclosure/model.glb",
+            "poster": "media/Modular Open Enclosure/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Modular open (ekspor 3MF dari Fusion 360); model visual kedua di samping Nexabrick Micro Open Enclosure."
         }
       ]
     },
@@ -2109,6 +2175,28 @@
           "hardwareStatus": "pending",
           "confidence": "unresolved",
           "note": "Model enclosure Nexabrick Micro Open Enclosure (ekspor 3MF dari Fusion 360); dipakai sebagai referensi visual untuk sensor Temperature & Humidity dan Barometric Pressure."
+        },
+        {
+          "label": "Modular Open Enclosure",
+          "variant": "micro-modular",
+          "description": "Referensi visual enclosure Modular (open enclosure).",
+          "images": [
+            {
+              "src": "media/Modular Open Enclosure/isometric_1.png",
+              "alt": "Modular Open Enclosure tampak isometrik satu"
+            },
+            {
+              "src": "media/Modular Open Enclosure/isometric_2.png",
+              "alt": "Modular Open Enclosure tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Modular Open Enclosure/model.glb",
+            "poster": "media/Modular Open Enclosure/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Modular open (ekspor 3MF dari Fusion 360); model visual kedua di samping Nexabrick Micro Open Enclosure."
         }
       ]
     },
@@ -3719,6 +3807,28 @@
           "hardwareStatus": "pending",
           "confidence": "unresolved",
           "note": "Model enclosure Nexabrick Micro Open Enclosure (ekspor 3MF dari Fusion 360); dipakai sebagai referensi visual untuk sensor Temperature & Humidity dan Barometric Pressure."
+        },
+        {
+          "label": "Modular Open Enclosure",
+          "variant": "micro-modular",
+          "description": "Referensi visual enclosure Modular (open enclosure).",
+          "images": [
+            {
+              "src": "media/Modular Open Enclosure/isometric_1.png",
+              "alt": "Modular Open Enclosure tampak isometrik satu"
+            },
+            {
+              "src": "media/Modular Open Enclosure/isometric_2.png",
+              "alt": "Modular Open Enclosure tampak isometrik dua"
+            }
+          ],
+          "model": {
+            "src": "media/Modular Open Enclosure/model.glb",
+            "poster": "media/Modular Open Enclosure/isometric_1.png"
+          },
+          "hardwareStatus": "pending",
+          "confidence": "unresolved",
+          "note": "Model enclosure Modular open (ekspor 3MF dari Fusion 360); model visual kedua di samping Nexabrick Micro Open Enclosure."
         }
       ]
     },
