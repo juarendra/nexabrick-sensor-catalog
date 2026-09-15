@@ -4410,7 +4410,16 @@
       ],
       "variantSupport": {
         "micro": {
-          "status": "unsupported"
+          "status": "active",
+          "task": "readingSensorRN8209D",
+          "component": "components/rn8209d",
+          "mqttDeviceName": "Sensor_Energy_RN8209D",
+          "interfaces": [
+            {
+              "bus": "UART",
+              "address": "9600 8E2"
+            }
+          ]
         },
         "micro-rnd": {
           "status": "active",
@@ -4441,6 +4450,11 @@
           "type": "firmware",
           "path": "Nexabrick Micro RND/main/slave.cpp",
           "lines": "1678-1736"
+        },
+        {
+          "type": "firmware",
+          "path": "Nexabrick Micro/main/slave.cpp",
+          "lines": "874-941"
         }
       ],
       "pcb": {
@@ -4607,7 +4621,16 @@
       ],
       "variantSupport": {
         "micro": {
-          "status": "unsupported"
+          "status": "active",
+          "task": "readingSensorINA228",
+          "component": "components/ina228",
+          "mqttDeviceName": "Sensor_Power_INA228",
+          "interfaces": [
+            {
+              "bus": "I2C",
+              "address": "0x40"
+            }
+          ]
         },
         "micro-rnd": {
           "status": "active",
@@ -4638,6 +4661,11 @@
           "type": "firmware",
           "path": "Nexabrick Micro RND/main/slave.cpp",
           "lines": "1738-1856"
+        },
+        {
+          "type": "firmware",
+          "path": "Nexabrick Micro/main/slave.cpp",
+          "lines": "942-1067"
         }
       ],
       "pcb": {
@@ -4836,7 +4864,16 @@
       ],
       "variantSupport": {
         "micro": {
-          "status": "unsupported"
+          "status": "active",
+          "task": "readingSensorIAQCombo",
+          "component": "components/iaq_combo",
+          "mqttDeviceName": "Sensor_IAQ_Combo",
+          "interfaces": [
+            {
+              "bus": "I2C",
+              "address": "0x69 + 0x44 + 0x59"
+            }
+          ]
         },
         "micro-rnd": {
           "status": "active",
@@ -4872,6 +4909,11 @@
           "type": "header",
           "path": "Nexabrick Micro RND/components/iaq_combo/iaq_combo.h",
           "lines": "4"
+        },
+        {
+          "type": "firmware",
+          "path": "Nexabrick Micro/main/slave.cpp",
+          "lines": "1068-1201"
         }
       ],
       "pcb": {
@@ -5085,7 +5127,16 @@
       ],
       "variantSupport": {
         "micro": {
-          "status": "unsupported"
+          "status": "active",
+          "task": "readingSensorCorrosionCondensation",
+          "component": "components/corrosion_condensation",
+          "mqttDeviceName": "Sensor_Corrosion_Condensation_111",
+          "interfaces": [
+            {
+              "bus": "I2C",
+              "address": "0x40 + 0x41 + 0x44"
+            }
+          ]
         },
         "micro-rnd": {
           "status": "active",
@@ -5121,6 +5172,11 @@
           "type": "header",
           "path": "Nexabrick Micro RND/components/corrosion_condensation/corrosion_condensation.h",
           "lines": "14"
+        },
+        {
+          "type": "firmware",
+          "path": "Nexabrick Micro/main/slave.cpp",
+          "lines": "1202-1325"
         }
       ],
       "pcb": {
@@ -5322,7 +5378,16 @@
       ],
       "variantSupport": {
         "micro": {
-          "status": "unsupported"
+          "status": "active",
+          "task": "readingSensorLoadCell4Wire",
+          "component": "components/loadcell_ads122c04",
+          "mqttDeviceName": "Sensor_LoadCell_4Wire_112",
+          "interfaces": [
+            {
+              "bus": "I2C",
+              "address": "0x40"
+            }
+          ]
         },
         "micro-rnd": {
           "status": "active",
@@ -5353,6 +5418,11 @@
           "type": "firmware",
           "path": "Nexabrick Micro RND/main/slave.cpp",
           "lines": "2099-2244"
+        },
+        {
+          "type": "firmware",
+          "path": "Nexabrick Micro/main/slave.cpp",
+          "lines": "1472-1477"
         }
       ],
       "pcb": {
@@ -5504,7 +5574,16 @@
       ],
       "variantSupport": {
         "micro": {
-          "status": "unsupported"
+          "status": "active",
+          "task": "readingSensorLoadCell6Wire",
+          "component": "components/loadcell_ads122c04",
+          "mqttDeviceName": "Sensor_LoadCell_6Wire_112",
+          "interfaces": [
+            {
+              "bus": "I2C",
+              "address": "0x40"
+            }
+          ]
         },
         "micro-rnd": {
           "status": "active",
@@ -5535,6 +5614,11 @@
           "type": "firmware",
           "path": "Nexabrick Micro RND/main/slave.cpp",
           "lines": "2099-2244"
+        },
+        {
+          "type": "firmware",
+          "path": "Nexabrick Micro/main/slave.cpp",
+          "lines": "1478-1491"
         }
       ],
       "pcb": {
@@ -5701,7 +5785,16 @@
       ],
       "variantSupport": {
         "micro": {
-          "status": "unsupported"
+          "status": "active",
+          "task": "readingSensorADPD188BI",
+          "component": "components/adpd188bi",
+          "mqttDeviceName": "Sensor_ADPD188BI",
+          "interfaces": [
+            {
+              "bus": "I2C",
+              "address": "0x64"
+            }
+          ]
         },
         "micro-rnd": {
           "status": "active",
@@ -5732,6 +5825,11 @@
           "type": "firmware",
           "path": "Nexabrick Micro RND/main/slave.cpp",
           "lines": "2411-2474"
+        },
+        {
+          "type": "firmware",
+          "path": "Nexabrick Micro/main/slave.cpp",
+          "lines": "1492-1572"
         }
       ],
       "pcb": {
@@ -5868,7 +5966,16 @@
       ],
       "variantSupport": {
         "micro": {
-          "status": "unsupported"
+          "status": "active",
+          "task": "readingSensorFDC1004",
+          "component": "components/fdc1004",
+          "mqttDeviceName": "Sensor_FDC1004_Level",
+          "interfaces": [
+            {
+              "bus": "I2C",
+              "address": "0x50"
+            }
+          ]
         },
         "micro-rnd": {
           "status": "active",
@@ -5899,6 +6006,11 @@
           "type": "firmware",
           "path": "Nexabrick Micro RND/main/slave.cpp",
           "lines": "2485-2545"
+        },
+        {
+          "type": "firmware",
+          "path": "Nexabrick Micro/main/slave.cpp",
+          "lines": "1573-1647"
         }
       ],
       "pcb": {
@@ -6035,7 +6147,16 @@
       ],
       "variantSupport": {
         "micro": {
-          "status": "unsupported"
+          "status": "active",
+          "task": "readingSensorA02YYUW",
+          "component": "components/a02yyuw",
+          "mqttDeviceName": "Sensor_A02YYUW",
+          "interfaces": [
+            {
+              "bus": "UART",
+              "address": "9600"
+            }
+          ]
         },
         "micro-rnd": {
           "status": "active",
@@ -6066,6 +6187,11 @@
           "type": "firmware",
           "path": "Nexabrick Micro RND/main/slave.cpp",
           "lines": "2554-2598"
+        },
+        {
+          "type": "firmware",
+          "path": "Nexabrick Micro/main/slave.cpp",
+          "lines": "1648-1707"
         }
       ],
       "pcb": {
@@ -6183,7 +6309,16 @@
       ],
       "variantSupport": {
         "micro": {
-          "status": "unsupported"
+          "status": "active",
+          "task": "readingSensorNoiseAcoustic",
+          "component": "components/noise_acoustic",
+          "mqttDeviceName": "Sensor_Noise",
+          "interfaces": [
+            {
+              "bus": "UART",
+              "address": "115200"
+            }
+          ]
         },
         "micro-rnd": {
           "status": "active",
@@ -6228,6 +6363,11 @@
           "type": "firmware",
           "path": "Nexabrick Micro Modular/#116 [1A+1B SLOT] NOISE ACOUSTIC SENSOR/src/app.c",
           "lines": "1-100"
+        },
+        {
+          "type": "firmware",
+          "path": "Nexabrick Micro/main/slave.cpp",
+          "lines": "1708-1772"
         }
       ],
       "pcb": {
@@ -6355,7 +6495,16 @@
       ],
       "variantSupport": {
         "micro": {
-          "status": "unsupported"
+          "status": "active",
+          "task": "readingSensorRealTVOC",
+          "component": "components/ze40b_tvoc",
+          "mqttDeviceName": "Sensor_RealTVOC",
+          "interfaces": [
+            {
+              "bus": "UART+I2C",
+              "address": "9600"
+            }
+          ]
         },
         "micro-rnd": {
           "status": "active",
@@ -6386,6 +6535,11 @@
           "type": "firmware",
           "path": "Nexabrick Micro RND/main/slave.cpp",
           "lines": "2784-2847"
+        },
+        {
+          "type": "firmware",
+          "path": "Nexabrick Micro/main/slave.cpp",
+          "lines": "1773-1855"
         }
       ],
       "pcb": {
