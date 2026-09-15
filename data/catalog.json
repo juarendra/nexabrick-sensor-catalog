@@ -664,26 +664,26 @@
       },
       "media": [
         {
-          "label": "Nexabrick Micro 6 Terminal Block",
+          "label": "Nexabrick Micro Open Enclosure",
           "variant": "micro",
-          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "description": "Referensi visual enclosure Nexabrick Micro (open enclosure).",
           "images": [
             {
-              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
-              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+              "src": "media/Nexabrick Micro Open Enclosure/isometric_1.png",
+              "alt": "Nexabrick Micro Open Enclosure tampak isometrik satu"
             },
             {
-              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
-              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+              "src": "media/Nexabrick Micro Open Enclosure/isometric_2.png",
+              "alt": "Nexabrick Micro Open Enclosure tampak isometrik dua"
             }
           ],
           "model": {
-            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
-            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+            "src": "media/Nexabrick Micro Open Enclosure/model.glb",
+            "poster": "media/Nexabrick Micro Open Enclosure/isometric_1.png"
           },
           "hardwareStatus": "pending",
           "confidence": "unresolved",
-          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+          "note": "Model enclosure Nexabrick Micro Open Enclosure (ekspor 3MF dari Fusion 360); dipakai sebagai referensi visual untuk sensor Temperature & Humidity dan Barometric Pressure."
         }
       ]
     },
@@ -1041,26 +1041,26 @@
       },
       "media": [
         {
-          "label": "Nexabrick Micro 6 Terminal Block",
+          "label": "Nexabrick Micro Open Enclosure",
           "variant": "micro",
-          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "description": "Referensi visual enclosure Nexabrick Micro (open enclosure).",
           "images": [
             {
-              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
-              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+              "src": "media/Nexabrick Micro Open Enclosure/isometric_1.png",
+              "alt": "Nexabrick Micro Open Enclosure tampak isometrik satu"
             },
             {
-              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
-              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+              "src": "media/Nexabrick Micro Open Enclosure/isometric_2.png",
+              "alt": "Nexabrick Micro Open Enclosure tampak isometrik dua"
             }
           ],
           "model": {
-            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
-            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+            "src": "media/Nexabrick Micro Open Enclosure/model.glb",
+            "poster": "media/Nexabrick Micro Open Enclosure/isometric_1.png"
           },
           "hardwareStatus": "pending",
           "confidence": "unresolved",
-          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+          "note": "Model enclosure Nexabrick Micro Open Enclosure (ekspor 3MF dari Fusion 360); dipakai sebagai referensi visual untuk sensor Temperature & Humidity dan Barometric Pressure."
         }
       ]
     },
@@ -1923,26 +1923,26 @@
       },
       "media": [
         {
-          "label": "Nexabrick Micro 6 Terminal Block",
+          "label": "Nexabrick Micro Open Enclosure",
           "variant": "micro",
-          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "description": "Referensi visual enclosure Nexabrick Micro (open enclosure).",
           "images": [
             {
-              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
-              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+              "src": "media/Nexabrick Micro Open Enclosure/isometric_1.png",
+              "alt": "Nexabrick Micro Open Enclosure tampak isometrik satu"
             },
             {
-              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
-              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+              "src": "media/Nexabrick Micro Open Enclosure/isometric_2.png",
+              "alt": "Nexabrick Micro Open Enclosure tampak isometrik dua"
             }
           ],
           "model": {
-            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
-            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+            "src": "media/Nexabrick Micro Open Enclosure/model.glb",
+            "poster": "media/Nexabrick Micro Open Enclosure/isometric_1.png"
           },
           "hardwareStatus": "pending",
           "confidence": "unresolved",
-          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+          "note": "Model enclosure Nexabrick Micro Open Enclosure (ekspor 3MF dari Fusion 360); dipakai sebagai referensi visual untuk sensor Temperature & Humidity dan Barometric Pressure."
         }
       ]
     },
@@ -2089,26 +2089,26 @@
       },
       "media": [
         {
-          "label": "Nexabrick Micro 6 Terminal Block",
+          "label": "Nexabrick Micro Open Enclosure",
           "variant": "micro",
-          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "description": "Referensi visual enclosure Nexabrick Micro (open enclosure).",
           "images": [
             {
-              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
-              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+              "src": "media/Nexabrick Micro Open Enclosure/isometric_1.png",
+              "alt": "Nexabrick Micro Open Enclosure tampak isometrik satu"
             },
             {
-              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
-              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+              "src": "media/Nexabrick Micro Open Enclosure/isometric_2.png",
+              "alt": "Nexabrick Micro Open Enclosure tampak isometrik dua"
             }
           ],
           "model": {
-            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
-            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+            "src": "media/Nexabrick Micro Open Enclosure/model.glb",
+            "poster": "media/Nexabrick Micro Open Enclosure/isometric_1.png"
           },
           "hardwareStatus": "pending",
           "confidence": "unresolved",
-          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+          "note": "Model enclosure Nexabrick Micro Open Enclosure (ekspor 3MF dari Fusion 360); dipakai sebagai referensi visual untuk sensor Temperature & Humidity dan Barometric Pressure."
         }
       ]
     },
@@ -3699,26 +3699,26 @@
       },
       "media": [
         {
-          "label": "Nexabrick Micro 6 Terminal Block",
+          "label": "Nexabrick Micro Open Enclosure",
           "variant": "micro",
-          "description": "Referensi visual enclosure Nexabrick Micro (terminal enam kanal).",
+          "description": "Referensi visual enclosure Nexabrick Micro (open enclosure).",
           "images": [
             {
-              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png",
-              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik satu"
+              "src": "media/Nexabrick Micro Open Enclosure/isometric_1.png",
+              "alt": "Nexabrick Micro Open Enclosure tampak isometrik satu"
             },
             {
-              "src": "media/Nexabrick Micro 6 Terminal Block/isometric_2.png",
-              "alt": "Nexabrick Micro 6 Terminal Block tampak isometrik dua"
+              "src": "media/Nexabrick Micro Open Enclosure/isometric_2.png",
+              "alt": "Nexabrick Micro Open Enclosure tampak isometrik dua"
             }
           ],
           "model": {
-            "src": "media/Nexabrick Micro 6 Terminal Block/model.glb",
-            "poster": "media/Nexabrick Micro 6 Terminal Block/isometric_1.png"
+            "src": "media/Nexabrick Micro Open Enclosure/model.glb",
+            "poster": "media/Nexabrick Micro Open Enclosure/isometric_1.png"
           },
           "hardwareStatus": "pending",
           "confidence": "unresolved",
-          "note": "Model enclosure Nexabrick Micro bersama (dipinjam dari sensor Dry Contact Input); dipakai sebagai referensi visual untuk semua sensor."
+          "note": "Model enclosure Nexabrick Micro Open Enclosure (ekspor 3MF dari Fusion 360); dipakai sebagai referensi visual untuk sensor Temperature & Humidity dan Barometric Pressure."
         }
       ]
     },
